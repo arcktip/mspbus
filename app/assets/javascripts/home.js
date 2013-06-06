@@ -17,6 +17,9 @@ $(window).resize(function() {
 });
 
 $(document).ready(function() {
+
+  var home_view = new HomeView();
+
   if( $('#view-map').css('display') !== 'none' ) {
     initialize(center.lat, center.lon);
     add_markers(markers, stop_ids);

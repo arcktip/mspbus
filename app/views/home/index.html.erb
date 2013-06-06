@@ -1,10 +1,10 @@
 <!--<button id="btn-current-location-small" class="btn btn-info btn-address pull-right"><i class="icon-circle-blank"></i> Update my location</button>-->
 
 <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
-  <li class="active">
+  <li class="active" id="table-list-item">
     <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> Table</a>
   </li>
-  <li>
+  <li id="map-list-item">
     <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
   </li>
 </ul>
@@ -96,22 +96,65 @@
   var stop_ids = <%= @stops.results.map { |i| i['stop_id'].to_i }.to_json %>;
   var center   = {lat:<%= @lat %>, lon:<%= @lon %>};
 
-  $("#view-table-btn").click( function() {
-    $("#viewchanger li").removeClass("active");
-    $("#view-table-btn").parent().addClass("active");
-    $(".views").hide();
-    $("#view-table").show();
+  var HomeView = Backbone.View.extend({
+
+    el: '.app-container',
+
+    events: {
+      "click #view-table-btn": "show_table",
+      "click #view-map-btn": "show_map"
+    },
+
+    initialize: function() {
+
+      // Cache selectors for other actions.
+      this.viewchanger = this.$el.find('#viewchanger');
+      this.views = this.$el.find('.views');
+      this.view_table = this.$el.find('#view-table');
+      this.view_map = this.$el.find('#view-map');
+      this.table_list_item = this.$el.find('#table-list-item');
+      this.map_list_item = this.$el.find('#map-list-item');
+
+      // We are on a small screen, should determine view to show.
+      if ( matchMedia('only screen and (max-width: 767px)').matches ) {
+        this.determine_view();
+      }
+    },
+
+    determine_view: function() {
+      if ( $.cookie('home_current_view') === 'map_list_item' ) {
+        this.show_map();
+      } else {
+        this.show_table();
+      }
+    },
+
+    show_table: function() {
+      this.viewchanger.find("li").removeClass("active");
+      this.table_list_item.addClass("active");
+
+      this.view_map.hide();
+      this.view_table.show();
+      $.cookie('home_current_view', 'table_list_item');
+    },
+
+    show_map: function() {
+      this.viewchanger.find("li").removeClass("active");
+      this.map_list_item.addClass("active");
+      
+      this.view_table.hide();
+      this.view_map.show();
+
+      initialize(center.lat, center.lon);
+      add_markers(markers, stop_ids);
+      initialize.ran=true;
+      google.maps.event.trigger(map, "resize");
+      $.cookie('home_current_view', 'map_list_item');
+    }
+
+
   });
-  $("#view-map-btn").click( function() {
-    $("#viewchanger li").removeClass("active");
-    $("#view-map-btn").parent().addClass("active");
-    $(".views").hide();
-    $("#view-map").show();
-    initialize(center.lat, center.lon);
-    add_markers(markers, stop_ids);
-    initialize.ran=true;
-    google.maps.event.trigger(map, "resize");
-  });
+
 </script>
 
 <%= javascript_include_tag "home" %>
