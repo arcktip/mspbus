@@ -6,6 +6,7 @@ set :use_sudo, false
 
 desc "Run on development server" 
 task :development do
+  set :rails_env,   "development"
   set :deploy_to, "/var/www/mspbus-dev"
 end
 
