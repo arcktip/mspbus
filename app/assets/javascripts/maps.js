@@ -121,6 +121,13 @@ function add_markers(markers, stop_ids) {
     });
 	  google.maps.event.addListener(marker, 'mouseover', function() {
       hover_on_marker(stop_ids[index]);
+      this.setOptions({zIndex:10});
+      this.setIcon("/assets/bus-stop-hover.png");
+    });  
+    google.maps.event.addListener(marker, "mouseout", function() {  
+      this.setOptions({zIndex:this.get("myZIndex")});  
+      this.setOptions({zIndex:1});
+      this.setIcon("/assets/bus-stop.png");
 	  });
 	  // Hide tooltip on mouseout event.
 	  google.maps.event.addListener(marker, 'mouseout', function() {
