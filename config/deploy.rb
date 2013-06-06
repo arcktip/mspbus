@@ -2,8 +2,16 @@ set :application, "MSP Bus"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
-set :deploy_to, "/var/www/mspbus"
 set :use_sudo, false
+
+desc "Run on development server" 
+task :development do
+  set :deploy_to, "/var/www/mspbus-dev"
+end
+
+task :production do
+  set :deploy_to, "/var/www/mspbus"
+end
 
 role :web, "debian2.brobston.com"
 role :app, "debian2.brobston.com"
