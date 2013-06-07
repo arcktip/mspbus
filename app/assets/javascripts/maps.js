@@ -1,5 +1,4 @@
 var map;
-var map_markers=[];
 var bus_markers=[];
 
 function update_bus_locations(){
@@ -10,8 +9,8 @@ function update_bus_locations(){
 
   var bus_list=[];
 
-  _.each(map_markers, function(marker) {
-    BusETA(marker.stopid, function(data) {
+  _.each(stops, function(stop) {
+    BusETA(stop.id, function(data) {
       _.each(data, function(obj) {
         if(obj.VehicleLongitude==0) return;
 
@@ -32,7 +31,7 @@ function update_bus_locations(){
           draggable: false,
           icon: icon,
           animation: google.maps.Animation.DROP,
-          stopid:marker.stopid
+          stopid:stop.id
         });
         bus_markers.push(bus);
 	      google.maps.event.addListener(bus, 'mouseover', function() {
@@ -56,7 +55,7 @@ function add_stop(lat,lng,stopid){
     animation: google.maps.Animation.DROP,
     stopid:stopid
   });
-  map_markers.push(marker);
+
   google.maps.event.addListener(marker, 'click', function() { 
     BusETA(stopid, function(data) {
       data=process_eta_data(data);
@@ -66,20 +65,25 @@ function add_stop(lat,lng,stopid){
       infobox.open(map,marker);
     });
   });
+
   google.maps.event.addListener(marker, 'mouseover', function() {
     hover_on_marker(stopid);
     this.setOptions({zIndex:10});
     this.setIcon("/assets/bus-stop-hover.png");
-  });  
+  });
+
   google.maps.event.addListener(marker, "mouseout", function() {  
     this.setOptions({zIndex:this.get("myZIndex")});  
     this.setOptions({zIndex:1});
     this.setIcon("/assets/bus-stop.png");
   });
+
   // Hide tooltip on mouseout event.
   google.maps.event.addListener(marker, 'mouseout', function() {
     $("#maptt").html("");
   });
+
+  return marker;
 }
 
 function map_bounds_changed(){
@@ -145,7 +149,7 @@ function hover_on_marker(stopid) {
 }
 
 //  google.maps.event.addDomListener(window, 'load', initialize);
-function add_markers(markers, stop_ids) {
+function add_markers(stops) {
   if (initialize.ran==true)
     return;
 
@@ -153,7 +157,7 @@ function add_markers(markers, stop_ids) {
     size: new google.maps.Size(200, 50)
   });
 
-  _.each(markers, function(item, index) { add_stop(item[1], item[0], stop_ids[index]); });
+  _.each(stops, function(stop) { stop.marker=add_stop(stop.lat, stop.lon, stop.id); });
 
   google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
 
