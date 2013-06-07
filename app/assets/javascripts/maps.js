@@ -47,6 +47,9 @@ function update_bus_locations(){
 }
 
 function add_stop(lat,lng,stopid){
+  if(_.find(stops, function(stop) { return stop.id==stopid && typeof(stop.marker)!=='undefined'; }))
+    return;
+
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat,lng),
     map: map,
