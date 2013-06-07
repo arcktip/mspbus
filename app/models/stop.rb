@@ -42,6 +42,7 @@ class Stop < ActiveRecord::Base
   def self.get_stop_by_bounds(n, s, e, w)
     tire.search do
       query { all }
+      size 100
       filter :geo_bounding_box, location: {top_left:"#{n},#{w}", bottom_right:"#{s},#{e}"}
     end
   end
