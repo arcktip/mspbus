@@ -118,12 +118,8 @@ function map_bounds_changed(){
     var sw=bounds.getSouthWest();
     var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
     $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
-      console.log(data);
       _.each(data, function(obj) { add_stop(obj); });
     });
-    console.log(bounds);
-    console.log(boundsobj);
-    
   }, 200);
 }
 
