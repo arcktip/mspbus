@@ -75,9 +75,9 @@ function add_stop(new_stop){
   });
 
   google.maps.event.addListener(marker, 'click', function() { 
-    BusETA(stopid, function(data) {
+    BusETA(new_stop.id, function(data) {
       data=process_eta_data(data);
-      data+='<br><a href="/stop/'  + stopid + '">Full stop info</a>';
+      data+='<br><a href="/stop/'  + new_stop.id + '">Full stop info</a>';
       data='<div class="infocontents">'+data+'</div>';
       infobox.setContent(data);
       infobox.open(map,marker);
