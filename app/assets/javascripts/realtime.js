@@ -69,6 +69,7 @@ $(document).ready(function() {
     var geocoder = new google.maps.Geocoder();
     // from http://www.mngeo.state.mn.us/chouse/coordinates.html
     var bounds = new google.maps.LatLngBounds(
+      //These bounds are definitely large enough for the whole Twin Cities area
       new google.maps.LatLng(44.47,-94.01),
       new google.maps.LatLng(45.42,-92.73)
     );
