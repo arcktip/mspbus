@@ -47,6 +47,23 @@ function update_bus_locations(){
   });
 }
 
+function map_bounds_changed(){
+  if(typeof(map_bounds_changed.timer)!=='undefined')
+    clearTimeout(map_bounds_changed.timer);
+  map_bounds_changed.timer = setTimeout(function() {
+    var bounds=map.getBounds();
+    var ne=bounds.getNorthEast();
+    var sw=bounds.getSouthWest();
+    var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
+    $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
+      console.log(data);
+    });
+    console.log(bounds);
+    console.log(boundsobj);
+    
+  }, 200);
+}
+
 function initialize(lat,lon) {
   if (initialize.ran==true)
     return;
@@ -133,6 +150,7 @@ function add_markers(markers, stop_ids) {
 	  google.maps.event.addListener(marker, 'mouseout', function() {
       $("#maptt").html("");
 	  });
+    google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
   });
 
   var yah_marker = new google.maps.Marker({
