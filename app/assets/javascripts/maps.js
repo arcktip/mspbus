@@ -70,7 +70,7 @@ function add_stop(new_stop){
     map: map,
     draggable: false,
     icon: '/assets/bus-stop.png',
-    animation: google.maps.Animation.DROP,
+    //animation: google.maps.Animation.DROP,
     stopid:new_stop.id
   });
 
@@ -184,7 +184,7 @@ function add_markers(stops) {
     position: new google.maps.LatLng(initialize.lat,initialize.lon),
     map: map,
     draggable: false,
-    icon: '/assets/you-are-here.png',
-    animation: google.maps.Animation.DROP
+    icon: '/assets/you-are-here.png'
+    //,animation: google.maps.Animation.DROP
   });
 }
