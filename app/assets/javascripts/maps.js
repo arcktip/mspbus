@@ -1,6 +1,10 @@
 var map;
 var bus_markers=[];
 
+var infobox = new google.maps.InfoWindow({
+  size: new google.maps.Size(200, 50)
+});
+
 function update_bus_locations(){
   _.each(bus_markers, function(bus) {
     bus.setMap(null);
@@ -46,17 +50,28 @@ function update_bus_locations(){
   });
 }
 
-function add_stop(lat,lng,stopid){
-  if(_.find(stops, function(stop) { return stop.id==stopid && typeof(stop.marker)!=='undefined'; }))
-    return;
+function add_stop(new_stop){
+  //Search stops array to see if an object for this stop is already present
+  var look_up=false;
+  for(i in stops){
+    if( stops[i].id == new_stop.id ){
+      look_up=i;
+      break;
+    }
+  }
 
+  //Does a marker for this stop already exist on the map?
+  if(look_up!==false && typeof(stops[look_up].marker)!=='undefined')
+    return; //Yes, it already has a marker. Don't make another!
+
+  //Make a new marker
   var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(lat,lng),
+    position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
     map: map,
     draggable: false,
     icon: '/assets/bus-stop.png',
     animation: google.maps.Animation.DROP,
-    stopid:stopid
+    stopid:new_stop.id
   });
 
   google.maps.event.addListener(marker, 'click', function() { 
@@ -70,7 +85,7 @@ function add_stop(lat,lng,stopid){
   });
 
   google.maps.event.addListener(marker, 'mouseover', function() {
-    hover_on_marker(stopid);
+    hover_on_marker(new_stop.id);
     this.setOptions({zIndex:10});
     this.setIcon("/assets/bus-stop-hover.png");
   });
@@ -86,7 +101,12 @@ function add_stop(lat,lng,stopid){
     $("#maptt").html("");
   });
 
-  return marker;
+  if(look_up) //Already present in stops array
+    stops[look_up].marker=marker
+  else {  //The stop is not in the array, so add it
+    new_stop.marker=marker;
+    stops.push(new_stop);
+  }
 }
 
 function map_bounds_changed(){
@@ -99,7 +119,7 @@ function map_bounds_changed(){
     var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
     $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
       console.log(data);
-      _.each(data, function(obj) { add_stop(obj.location[1], obj.location[0], obj.id); });
+      _.each(data, function(obj) { add_stop(obj); });
     });
     console.log(bounds);
     console.log(boundsobj);
@@ -156,11 +176,7 @@ function add_markers(stops) {
   if (initialize.ran==true)
     return;
 
-  var infobox = new google.maps.InfoWindow({
-    size: new google.maps.Size(200, 50)
-  });
-
-  _.each(stops, function(stop) { stop.marker=add_stop(stop.lat, stop.lon, stop.id); });
+  _.each(stops, function(stop) { add_stop(stop); });
 
   google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
 

@@ -4,6 +4,8 @@ class StopController < ApplicationController
   end
   def bounds
     @stop = Stop.get_stop_by_bounds(params[:n], params[:s], params[:e], params[:w])
+    @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }
+
     respond_to do |format|
       format.json { render :json => @stop }
     end
