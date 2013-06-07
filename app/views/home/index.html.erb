@@ -13,6 +13,10 @@
   <div class="alert alert-info">No stops found.</div>
 <% end %>
 
+<% if not @inbounds %>
+  <div class="alert alert-info">Bad geolocation, please use the search bar to locate yourself.</div>
+<% end %>
+
 <div class="container">     
     <div class="row">
 <div id="view-table" class="span6 views">
