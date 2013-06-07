@@ -47,6 +47,41 @@ function update_bus_locations(){
   });
 }
 
+function add_stop(lat,lng,stopid){
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(lat,lng),
+    map: map,
+    draggable: false,
+    icon: '/assets/bus-stop.png',
+    animation: google.maps.Animation.DROP,
+    stopid:stopid
+  });
+  map_markers.push(marker);
+  google.maps.event.addListener(marker, 'click', function() { 
+    BusETA(stopid, function(data) {
+      data=process_eta_data(data);
+      data+='<br><a href="/stop/'  + stopid + '">Full stop info</a>';
+      data='<div class="infocontents">'+data+'</div>';
+      infobox.setContent(data);
+      infobox.open(map,marker);
+    });
+  });
+  google.maps.event.addListener(marker, 'mouseover', function() {
+    hover_on_marker(stopid);
+    this.setOptions({zIndex:10});
+    this.setIcon("/assets/bus-stop-hover.png");
+  });  
+  google.maps.event.addListener(marker, "mouseout", function() {  
+    this.setOptions({zIndex:this.get("myZIndex")});  
+    this.setOptions({zIndex:1});
+    this.setIcon("/assets/bus-stop.png");
+  });
+  // Hide tooltip on mouseout event.
+  google.maps.event.addListener(marker, 'mouseout', function() {
+    $("#maptt").html("");
+  });
+}
+
 function map_bounds_changed(){
   if(typeof(map_bounds_changed.timer)!=='undefined')
     clearTimeout(map_bounds_changed.timer);
@@ -57,6 +92,7 @@ function map_bounds_changed(){
     var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
     $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
       console.log(data);
+      _.each(data, function(obj) { add_stop(obj.location[1], obj.location[0], obj.id); });
     });
     console.log(bounds);
     console.log(boundsobj);
@@ -117,41 +153,9 @@ function add_markers(markers, stop_ids) {
     size: new google.maps.Size(200, 50)
   });
 
-  _.each(markers, function(item, index) {
-    var marker = new google.maps.Marker({
-      position: new google.maps.LatLng(item[1], item[0]),
-      map: map,
-      draggable: false,
-      icon: '/assets/bus-stop.png',
-      animation: google.maps.Animation.DROP,
-      stopid:stop_ids[index]
-    });
-    map_markers.push(marker);
-    google.maps.event.addListener(marker, 'click', function() { 
-      BusETA(stop_ids[index], function(data) {
-        data=process_eta_data(data);
-        data+='<br><a href="/stop/'  + stop_ids[index] + '">Full stop info</a>';
-        data='<div class="infocontents">'+data+'</div>';
-        infobox.setContent(data);
-        infobox.open(map,marker);
-      });
-    });
-	  google.maps.event.addListener(marker, 'mouseover', function() {
-      hover_on_marker(stop_ids[index]);
-      this.setOptions({zIndex:10});
-      this.setIcon("/assets/bus-stop-hover.png");
-    });  
-    google.maps.event.addListener(marker, "mouseout", function() {  
-      this.setOptions({zIndex:this.get("myZIndex")});  
-      this.setOptions({zIndex:1});
-      this.setIcon("/assets/bus-stop.png");
-	  });
-	  // Hide tooltip on mouseout event.
-	  google.maps.event.addListener(marker, 'mouseout', function() {
-      $("#maptt").html("");
-	  });
-    google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
-  });
+  _.each(markers, function(item, index) { add_stop(item[1], item[0], stop_ids[index]); });
+
+  google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
 
   var yah_marker = new google.maps.Marker({
     position: new google.maps.LatLng(initialize.lat,initialize.lon),
