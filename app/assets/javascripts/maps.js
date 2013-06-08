@@ -112,17 +112,21 @@ function add_stop(new_stop){
 }
 
 function map_bounds_changed(){
-  if(typeof(map_bounds_changed.timer)!=='undefined')
-    clearTimeout(map_bounds_changed.timer);
-  map_bounds_changed.timer = setTimeout(function() {
-    var bounds=map.getBounds();
-    var ne=bounds.getNorthEast();
-    var sw=bounds.getSouthWest();
-    var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
-    $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
-      _.each(data, function(obj) { add_stop(obj); });
-    });
-  }, 200);
+  var bounds=map.getBounds();
+  var ne=bounds.getNorthEast();
+  var sw=bounds.getSouthWest();
+  var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
+  _.each(stops, function(stop) {
+    if(typeof(stop.marker)!=='undefined'){
+      google.maps.event.clearInstanceListeners(stop.marker);
+      stop.marker.setMap(null);
+      delete stop.marker;
+    }
+  });
+  stops=_.filter(stops, function(stop) { return !stop.in_table && typeof(stop.marker)==='undefined'; });
+  $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
+    _.each(data, function(obj) { add_stop(obj); });
+  });
 }
 
 function initialize(lat,lon) {
@@ -176,7 +180,8 @@ function add_markers(stops) {
 
   _.each(stops, function(stop) { add_stop(stop); });
 
-  google.maps.event.addListener(map,"bounds_changed",map_bounds_changed);
+  //idle event fires once when the user stops panning/zooming
+  google.maps.event.addListener(map,"idle",map_bounds_changed);
 
   var yah_marker = new google.maps.Marker({
     position: new google.maps.LatLng(initialize.lat,initialize.lon),
