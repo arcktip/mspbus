@@ -36,7 +36,8 @@ function update_bus_locations(){
           draggable: false,
           icon: icon,
           animation: google.maps.Animation.DROP,
-          stopid:stop.id
+          stopid:stop.id,
+          zIndex:0
         });
         bus_markers.push(bus);
 	      google.maps.event.addListener(bus, 'mouseover', function() {
