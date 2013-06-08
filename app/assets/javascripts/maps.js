@@ -15,6 +15,7 @@ function update_bus_locations(){
 
   _.each(stops, function(stop) {
     BusETA(stop.id, function(data) {
+      $("#" + stop.id).html(process_eta_data(data));
       _.each(data, function(obj) {
         if(obj.VehicleLongitude==0) return;
 
