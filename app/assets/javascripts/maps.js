@@ -156,27 +156,13 @@ function initialize(lat,lon) {
 }
 
 function hover_on_marker(stopid) {
-  if(typeof hover_on_marker.etas === 'undefined')
-    hover_on_marker.etas={};
-
-  if(typeof hover_on_marker.etas[stopid] === 'undefined'){
-    if(!$("#" + stopid).length){
-      BusETA(stopid, function(data) {
-          data=process_eta_data(data);
-          if(data.length!=0){
-            hover_on_marker.etas[stopid]=data;
-            $('#maptt').html(hover_on_marker.etas[stopid]);
-          }
-        }
-      );
-    } else {
-      hover_on_marker.etas[stopid]=$("#" + stopid).html();
-    }
-  }
-
-  $('#maptt').html(hover_on_marker.etas[stopid]);
-
-//  $("#maptt").html($("#" + stopid).children().clone());
+  BusETA(stopid, function(data) {
+    data=process_eta_data(data);
+    if(data.length!=0)
+      $('#maptt').html(data);
+    else
+      $('#maptt').html('<span class="label" style="background-color:black">No Data</span>');
+  });
 }
 
 //  google.maps.event.addDomListener(window, 'load', initialize);
