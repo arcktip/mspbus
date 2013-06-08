@@ -116,14 +116,20 @@ function map_bounds_changed(){
   var ne=bounds.getNorthEast();
   var sw=bounds.getSouthWest();
   var boundsobj={n:ne.lat(),s:sw.lat(),e:ne.lng(),w:sw.lng()};
-  _.each(stops, function(stop) {
-    if(typeof(stop.marker)!=='undefined'){
+
+  //Clear all the stop markers which are not currently visible
+  _.each(stops, function(stop, index) {
+    if(typeof(stop.marker)!=='undefined' && !bounds.contains(stop.marker.getPosition())){
       google.maps.event.clearInstanceListeners(stop.marker);
       stop.marker.setMap(null);
-      delete stop.marker;
+      delete stops[index].marker;
     }
   });
-  stops=_.filter(stops, function(stop) { return !stop.in_table && typeof(stop.marker)==='undefined'; });
+
+  //Clear stops from the list which are not visible and not in the table
+  stops=_.filter(stops, function(stop) { return stop.in_table || typeof(stop.marker)!=='undefined'; });
+
+  //Get locations of stops which are visible
   $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
     _.each(data, function(obj) { add_stop(obj); });
   });
