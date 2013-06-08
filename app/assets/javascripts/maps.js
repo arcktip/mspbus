@@ -71,7 +71,8 @@ function add_stop(new_stop){
     draggable: false,
     icon: '/assets/bus-stop.png',
     //animation: google.maps.Animation.DROP,
-    stopid:new_stop.id
+    stopid:new_stop.id,
+    zIndex:1
   });
 
   google.maps.event.addListener(marker, 'click', function() { 
