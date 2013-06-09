@@ -17,6 +17,8 @@ var HomeView = Backbone.View.extend({
     this.table_list_item = this.$el.find('#table-list-item');
     this.map_list_item = this.$el.find('#map-list-item');
 
+    this.update_screen_size();
+
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       this.determine_view();
@@ -52,32 +54,50 @@ var HomeView = Backbone.View.extend({
     initialize.ran=true;
     google.maps.event.trigger(map, "resize");
     $.cookie('home_current_view', 'map_list_item');
+  },
+
+  resize_helper: function() {
+    google.maps.event.trigger(map, "resize");
+
+    if (this.screen_width==screen.height && this.screen_height==screen.width){
+      this.update_screen_size();
+      return;
+    }
+    this.update_screen_size();
+
+    if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
+      $('#view-map').hide();
+      $('#view-table').removeClass('span6');
+      $('#view-table').addClass('span12');
+      $('#view-map').removeClass('span6');
+      $('#view-map').addClass('span12');
+    } else {
+      $('#view-map').show();
+      $('#view-table').show();
+      $('#view-table').removeClass('span12');
+      $('#view-table').addClass('span6');
+      $('#view-map').removeClass('span12');
+      $('#view-map').addClass('span6');
+    }
+  },
+
+  resize: function() {
+    clearInterval(this.debouncer);
+    this.debouncer = setInterval(this.resize, 100);
+  },
+
+  update_screen_size: function() {
+    this.screen_width =screen.width;
+    this.screen_height=screen.height;
   }
 
-
-});
-
-$(window).resize(function() {
-  google.maps.event.trigger(map, "resize");
-  if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-    $('#view-map').hide();
-    $('#view-table').removeClass('span6');
-    $('#view-table').addClass('span12');
-    $('#view-map').removeClass('span6');
-    $('#view-map').addClass('span12');
-  } else {
-    $('#view-map').show();
-    $('#view-table').show();
-    $('#view-table').removeClass('span12');
-    $('#view-table').addClass('span6');
-    $('#view-map').removeClass('span12');
-    $('#view-map').addClass('span6');
-  }
 });
 
 $(document).ready(function() {
 
   var home_view = new HomeView();
+
+  $(window).resize(home_view.resize.bind(home_view));
 
   if( $('#view-map').css('display') !== 'none' ) {
     initialize(center.lat, center.lon);
