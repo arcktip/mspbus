@@ -4,6 +4,8 @@ set :scm, :git
 
 set :use_sudo, false
 
+set :group_writable, true
+
 desc "Run on development server" 
 task :development do
   set :rails_env,   "development"
