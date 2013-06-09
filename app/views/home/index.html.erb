@@ -13,6 +13,10 @@
   <div class="alert alert-info">No stops found.</div>
 <% end %>
 
+<% if not @inbounds %>
+  <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
+<% end %>
+
 <div class="container">     
     <div class="row">
 <div id="view-table" class="span6 views">
@@ -92,8 +96,8 @@
 <%= javascript_include_tag "maps" %>
 
 <script>
-  var markers  = <%= @stops.results.map { |i| i['location'] }.to_json %>;
-  var stop_ids = <%= @stops.results.map { |i| i['stop_id'].to_i }.to_json %>;
+  var stops = <%= @stops.results.first(10).map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }.to_json.html_safe %>;
+
   var center   = {lat:<%= @lat %>, lon:<%= @lon %>};
 
   var HomeView = Backbone.View.extend({
@@ -146,7 +150,7 @@
       this.view_map.show();
 
       initialize(center.lat, center.lon);
-      add_markers(markers, stop_ids);
+      add_markers(stops);
       initialize.ran=true;
       google.maps.event.trigger(map, "resize");
       $.cookie('home_current_view', 'map_list_item');

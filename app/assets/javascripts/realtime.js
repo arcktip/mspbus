@@ -1,7 +1,7 @@
 ///////////////////////
 //Generate ETA labels
 
-var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.DepartureText %></i></span> <% }); %>');
+var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
 
 // Callback on realtime model.
 function process_eta_data(data) {
@@ -13,11 +13,11 @@ function process_eta_data(data) {
         obj=process_eta(obj);
 
         if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.DepartureText='&ndash; ' + Math.round(obj.dtime)+' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+          obj.dText='&ndash; ' + Math.round(obj.dtime)+' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
         else if(obj.dtime>=20)
-          obj.DepartureText='';
+          obj.dText='';
         else
-          obj.DepartureText='&ndash; ' + obj.DepartureText;
+          obj.dText='&ndash; ' + obj.DepartureText;
 
         return obj;
       }
@@ -69,6 +69,7 @@ $(document).ready(function() {
     var geocoder = new google.maps.Geocoder();
     // from http://www.mngeo.state.mn.us/chouse/coordinates.html
     var bounds = new google.maps.LatLngBounds(
+      //These bounds are definitely large enough for the whole Twin Cities area
       new google.maps.LatLng(44.47,-94.01),
       new google.maps.LatLng(45.42,-92.73)
     );
