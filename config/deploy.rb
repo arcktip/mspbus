@@ -32,6 +32,7 @@ after "deploy:restart", "deploy:cleanup"
 
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
+  run "newgrp mspbus"
   task :start do ; end
   task :stop do ; end
   desc "Symlinks the database.yml"
