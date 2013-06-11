@@ -23,6 +23,11 @@ role :db,  "debian2.brobston.com", :primary => true
 after 'deploy:update_code', 'deploy:symlink_db'
 after "deploy:restart", "deploy:cleanup"
 
+after "deploy:setup", :setup_group
+task :setup_group do
+  run "chown -R :mspbus #{deploy_to} && chmod -R g+s #{deploy_to}"
+end
+
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
 
