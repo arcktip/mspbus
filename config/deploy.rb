@@ -24,7 +24,7 @@ after 'deploy:update_code', 'deploy:symlink_db', :setup_group
 after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
-  run "chgrp mspbus #{deploy_to} -R"
+  run "#{sudo} chgrp mspbus #{deploy_to} -R"
 end
 
 # if you're still using the script/reaper helper you will need
