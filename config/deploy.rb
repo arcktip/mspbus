@@ -3,6 +3,7 @@ set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
 set :use_sudo, false
+set :group_writable, true
 
 desc "Run on development server" 
 task :development do
