@@ -1,4 +1,5 @@
 set :application, "MSP Bus"
+default_run_options[:pty] = true
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
