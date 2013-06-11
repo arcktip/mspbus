@@ -3,49 +3,58 @@
 
 var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
 
-// Callback on realtime model.
-function process_eta_data(data) {
-  if(data.length==0) {
-    data="";
-  } else {
-    data=_.map(data,
-      function(obj) {
-        obj=process_eta(obj);
+/*
+|----------------------------------------------------------------------------------------------------
+| RealTimeView
+|----------------------------------------------------------------------------------------------------
+*/
 
-        if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.dText='&ndash; ' + Math.round(obj.dtime)+' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
-        else if(obj.dtime>=20)
-          obj.dText='';
-        else
-          obj.dText='&ndash; ' + obj.DepartureText;
+var RealTimeView = Backbone.View.extend({
 
-        return obj;
-      }
-    );
+  template: eta_label_template,
+  
+  initialize: function() {
+    _.bindAll(this);
+    this.collection = new BusETACollection(this.el.id);
+  },
 
-    data=_.sortBy(data,function(obj) { return obj.arrtime; });
-    data=data.slice(0,5);
-    data=eta_label_template({ data: data });
+  render: function() {
+    if( this.collection.models.length === 0 ) {
+      this.$el.parent().parent().hide();
+    } else {
+      this.$el.html(this.template({ data: this.collection.toJSON() }));
+    }
+  },
+
+  update: function(callback) {
+    var self = this;
+    this.collection.fetch({ success: function() {
+      self.process_data();
+      if(callback) { callback(); }
+    } });
+  },
+
+  process_data: function() {
+    this.collection.process_models(5);
+    this.render();
   }
-  return data;
-}
+});
 
+/*
+|----------------------------------------------------------------------------------------------------
+| Main DOM Ready
+|----------------------------------------------------------------------------------------------------
+*/
 
+var views = {};
 
 $(document).ready(function() {
 
   // Loop over stops and get realtime data
   $(".real-time").each(function(index, item) {
-    BusETA(item.id, function(data) {
-        data=process_eta_data(data);
-        if(data.length==0)
-          $("#" + item.id).parent().parent().hide();
-        else
-          $("#" + item.id).html(data);
-      }
-    );
+    views[item.id] = new RealTimeView({ el: item });
+    views[item.id].update();
   });
-  
 
   function got_coordiates(position) {
     $.cookie('lat', position.coords.latitude, { expires: 1 });

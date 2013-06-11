@@ -9,6 +9,8 @@ var HomeView = Backbone.View.extend({
 
   initialize: function() {
 
+    this.map_view = new MapView();
+    
     // Cache selectors for other actions.
     this.viewchanger = this.$el.find('#viewchanger');
     this.views = this.$el.find('.views');
@@ -22,6 +24,12 @@ var HomeView = Backbone.View.extend({
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       this.determine_view();
+    } else {
+      if( $('#view-map').css('display') !== 'none' ) {
+        this.map_view.init(center);
+        this.map_view.add_markers(stops);
+        this.map_view.ran = true;
+      }
     }
   },
 
@@ -49,9 +57,10 @@ var HomeView = Backbone.View.extend({
     this.view_table.hide();
     this.view_map.show();
 
-    initialize(center.lat, center.lon);
-    add_markers(stops);
-    initialize.ran=true;
+    this.map_view.init(center);
+    this.map_view.add_markers(stops);
+    his.map_view.ran = true;
+
     google.maps.event.trigger(map, "resize");
     $.cookie('home_current_view', 'map_list_item');
   },
@@ -87,8 +96,8 @@ var HomeView = Backbone.View.extend({
   },
 
   update_screen_size: function() {
-    this.screen_width =screen.width;
-    this.screen_height=screen.height;
+    this.screen_width = screen.width;
+    this.screen_height = screen.height;
   }
 
 });
@@ -96,12 +105,5 @@ var HomeView = Backbone.View.extend({
 $(document).ready(function() {
 
   var home_view = new HomeView();
-
   $(window).resize(home_view.resize.bind(home_view));
-
-  if( $('#view-map').css('display') !== 'none' ) {
-    initialize(center.lat, center.lon);
-    add_markers(stops);
-    initialize.ran=true;
-  }
 });

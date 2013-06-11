@@ -1,59 +1,112 @@
-function BusETA(stopid, success) {
-  var now=new Date().getTime()/1000;
-  stopid=stopid.toString();
+/*
+|----------------------------------------------------------------------------------------------------
+| BusETAModel
+|----------------------------------------------------------------------------------------------------
+*/
 
-  //Check cache to see if we already have this
-  if(typeof(BusETA.datas[stopid])!=='undefined' && now-BusETA.datas[stopid].ts<45)
-    success(BusETA.datas[stopid].data);
+var BusETAModel = Backbone.Model.extend({
 
-  $.getJSON( 'http://svc.metrotransit.org/NexTrip/'+stopid+'?callback=?&format=json', '', 
-    function(data, textStatus, jqXHR){
-      BusETA.datas[stopid]={ts:now, data:data};
-      success(data);
+  initialize: function() {},
+
+  set_dtext: function() {
+    var dtime = this.get('dtime');
+    var dtext = this.get('DepartureText');
+
+    if(dtime < 20 && dtext.indexOf(":") !== -1)
+      dtext = '&ndash; ' + Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+    else if(dtime >= 20)
+      dtext = '';
+    else
+      dtext = '&ndash; ' + this.get('DepartureText');
+
+    this.set('dtext', dtext);
+  },
+  
+  set_direction_class: function() {
+    var route = this.get('RouteDirection');
+    
+    if(route === 'SOUTHBOUND') {
+      this.set('direction', 'icon-arrow-down');
+    } else if(route === 'NORTHBOUND') {
+      this.set('direction', 'icon-arrow-up');
+    } else if(route === 'EASTBOUND') {
+      this.set('direction', 'icon-arrow-right');
+    } else if(route === 'WESTBOUND') {
+      this.set('direction', 'icon-arrow-left');
     }
-  );
-}
-BusETA.datas={};
+  },
 
+  set_priority: function() {
+    var eta = this.get('dtime');
 
-function get_direction_class(route) {
-  if(route === 'SOUTHBOUND') {
-    return 'icon-arrow-down';
-  } else if(route === 'NORTHBOUND') {
-    return 'icon-arrow-up';
-  } else if(route === 'EASTBOUND') {
-    return 'icon-arrow-right';
-  } else if(route === 'WESTBOUND') {
-    return 'icon-arrow-left';
+    if(eta < 5)
+      this.set('priority', "#B94A48");
+    else if (eta < 15)
+      this.set('priority', "#F89406");
+    else if (eta < 20)
+      this.set('priority', "#468847");
+    else
+      this.set('priority', "#000080");
+  
+  },
+
+  set_departure_text: function() {
+    var departure_text = this.get('DepartureText');
+
+    if(departure_text === 'Due') {
+      this.set('DepartureText', 'Now')
+    }
+
+  },
+
+  process_eta: function() {
+    var departure_time = this.get('DepartureTime');
+
+    var seconds = departure_time.substr(6,10);
+    var offset = departure_time.substr(19,3);
+    var arrtime = moment(seconds, "X");
+    var ctime = moment();
+    var dtime = (arrtime - ctime ) / 1000 / 60; //Convert to minutes
+
+    this.set('arrtime', arrtime);
+    this.set('dtime', dtime);
+    this.set_priority();
+    this.set_departure_text();
+    this.set_direction_class();
+    this.set_dtext();
   }
-}
 
-function get_priority(eta) {
-  if(eta<5)
-    return "#B94A48";
-  else if (eta<15)
-    return "#F89406";
-  else if (eta<20)
-    return "#468847";
-  else
-    return "#000080";
-}
+});
 
-function process_eta(obj) {
-  var seconds=obj.DepartureTime.substr(6,10);
-  var offset=obj.DepartureTime.substr(19,3);
+/*
+|----------------------------------------------------------------------------------------------------
+| BusETACollection
+|----------------------------------------------------------------------------------------------------
+*/
 
-  obj.arrtime=moment(seconds, "X");
-  var ctime=moment();
+var BusETACollection = Backbone.Collection.extend({
 
-  obj.dtime=(obj.arrtime-ctime)/1000/60; //Convert to minutes
+  stop_id: null,
+  model: BusETAModel,
+  
+  url: function() {
+    return 'http://svc.metrotransit.org/NexTrip/' + this.stop_id + '?callback=?&format=json';
+  },
 
-  obj.priority=get_priority(obj.dtime);
+  initialize: function(id) {
+    this.stop_id = id;
+  },
 
-  if(obj.DepartureText=="Due")
-    obj.DepartureText="Now";
+  process_models: function(num_models) {
+    this.map(function(model) {
+      model.process_eta();
+    });
+    this.sortBy(function(model) { return model.get('arrtime'); });
+    this.models = this.models.slice(0,num_models);
+  }
 
-  obj.direction = get_direction_class(obj.RouteDirection);
+});
 
-  return obj;
-}
+BusETACollection.comparator = function(bus_eta) {
+  return bus_eta.get('arrtime');
+};
