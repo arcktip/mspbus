@@ -6,19 +6,27 @@
   <meta name="description" content="Real-time bus arrival information for Minneapolis/St. Paul buses" />
   <meta name="keywords" content="msp bus, mspbus, minneapolis bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times, bus times" />
 <% if @stop.nil? %>
-  <title>Real-time bus arrival info - mspbus.org</title>
-  <meta property="og:title" content="mspbus.org" />
-  <meta property="og:type"  content="website" />
-  <meta property="og:description"  content="Real-time bus arrival information for Minneapolis/St. Paul buses" />
-  <meta property="og:url"   content="http://mspbus.org/" />
-  <meta property="og:image" content="http://mspbus.org/assets/logo-med.png" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="Content-Language" content="en">
+<meta name="description" content="MSP Bus provides real-time arrival information for Minneapolis/St. Paul buses near you, right now" />
+<meta name="keywords" content="msp bus, mspbus, minneapolis bus, mpls bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times" />
+<title>MSP Bus - Real-time bus arrival info</title>
+<meta property="og:title" content="MSP Bus - Real-time bus arrival info" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="MSP Bus provides real-time arrival information for Minneapolis/St. Paul buses near you, right now" />
+<meta property="og:url" content="mspbus.org/" />
+<meta property="og:image" content="mspbus.org/assets/logo-med.png" />
 <% else %>
-  <title><%= @stop.stop_name %> real-time arrivals - mspbus.org</title>
-  <meta property="og:title" content="<%= raw strip_tags(@stop.stop_name) %>: Real-time bus arrivals" />
-  <meta property="og:type"  content="website" />
-  <meta property="og:description"  content="Real-time bus arrival information for <%= raw strip_tags(@stop.stop_name) %>" />
-  <meta property="og:url"   content="http://<%= request.host_with_port %><%= request.fullpath %>" />
-  <meta property="og:image" content="http://mspbus.org/assets/logo-med.png" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="Content-Language" content="en">
+<meta name="description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
+<meta name="keywords" content="msp bus, mspbus, minneapolis bus, mpls bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times" />
+<title><%= @stop.stop_name %>: Real-time bus arrivals - mspbus.org</title>
+<meta property="og:title" content="[stop name] Real-time bus arrivals - mspbus.org" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
+<meta property="og:url" content="mspbus.org/stop/[stop#]" />
+<meta property="og:image" c<%= @stop.stop_name %>ontent="mspbus.org/assets/logo-med.png" />
 <% end %>
 
 

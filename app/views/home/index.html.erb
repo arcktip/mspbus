@@ -30,7 +30,7 @@
           <div style="position:absolute;right:5px">
             <%= 
             if (stop.sort[0].nil?)
-              ""rake environment tire:import CLASS='Stop' FORCE=true
+              ""
             elsif (stop.sort[0]>2)
               stop.sort[0].round().to_s+" mi"      
             elsif(stop.sort[0]>0.5) then
