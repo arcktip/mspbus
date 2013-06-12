@@ -1,2 +1,31 @@
+<div class="container">     
+    <div class="row">
+
+<div id="fbtext" class="span6">
 <h3>Feedback</h3>
-<p>Found a bug? Want to see a new feature? Love the site? Hate the site? Something else? -- <a href="mailto:mspbus@gmail.com">mspbus@gmail.com</a></p>
+<p>Found a bug? Want to see a new feature? Love the site? Hate the site? Something else?</p>
+<p> -- <a href="mailto:mspbus@gmail.com">mspbus@gmail.com</a></p>
+</div>
+
+<div id="fbtwitter" class="span6">
+<a class="twitter-timeline" href="https://twitter.com/search?q=mspbus" data-widget-id="343002635726639104">Tweets about "mspbus"</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+</div>
+</div>
+
+<script>
+$(window).resize(function() {
+  if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
+    $('#view-table').removeClass('span6');
+    $('#view-table').addClass('span12');
+    $('#view-map').removeClass('span6');
+    $('#view-map').addClass('span12');
+  } else {
+    $('#view-table').removeClass('span12');
+    $('#view-table').addClass('span6');
+    $('#view-map').removeClass('span12');
+    $('#view-map').addClass('span6');
+  }
+});
+</script>

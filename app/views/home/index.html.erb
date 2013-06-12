@@ -3,10 +3,10 @@
 
 
 <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
-  <li class="active">
+  <li class="active" id="table-list-item">
     <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> Table</a>
   </li>
-  <li>
+  <li id="map-list-item">
     <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
   </li>
 </ul>
@@ -14,7 +14,14 @@
 <% if @stops.results.empty? %>
   <div class="alert alert-info">No stops found.</div>
 <% end %>
-<div id="view-table" class="views">
+
+<% if not @inbounds %>
+  <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
+<% end %>
+
+<div class="container">     
+    <div class="row">
+<div id="view-table" class="span6 views">
 
   <div class="btn-group btn-group-vertical" style="width:100%;">
     <% @stops.results.first(10).each do |stop| %>
@@ -40,23 +47,16 @@
   </div>
   <div style="margin-top:1em;">
     <b>Arriving in:</b><br>
-    <span class="label label-important">0&ndash;5 Min</span>
-    <span class="label label-warning">5&ndash;12 Min</span>
-    <span class="label label-success">12&ndash;20 Min</span>
-    <span class="label label-info">&gt;20 Min</span>
-    <span class="label"><i class="icon-question-sign"></i> = Real-time unavailable</span>
+    <%= render 'shared/arriving' %>
   </div>
-  <div style="margin-top:1em;">
-      <b>Locations:</b><br>
-      <span class="label"><i class="icon-arrow-up"></i> = NORTHBOUND</span>
-      <span class="label"><i class="icon-arrow-down"></i> = SOUTHBOUND</span>
-      <span class="label"><i class="icon-arrow-right"></i> = EASTBOUND</span>
-      <span class="label"><i class="icon-arrow-left"></i> = WESTBOUND</span>
-    </div>
+  <%= render 'shared/locations' %>
 </div>
 
-<div id="view-map" class="views" style="display:none">
-  <div style="height:500px" id="map-canvas"></div>
+<div id="view-map" class="span6 views">
+  <div id="map-canvas"></div>
+  <div id="maptt"></div>
+</div>
+</div>
 </div>
 
 <div class="modal hide fade" id="ask">
@@ -71,20 +71,16 @@
 
     <div style="margin-top:1em;">
       <b>Buses arriving in:</b><br>
-      <span class="label label-important">0&ndash;5 Min</span>
-      <span class="label label-warning">5&ndash;12 Min</span>
-      <span class="label label-success">12&ndash;20 Min</span>
-      <span class="label label-info">&gt;20 Min</span>
-      <span class="label"><i class="icon-question-sign"></i> = Real-time unavailable</span>
+      <%= render 'shared/arriving' %>
     </div>
-
+    <%= render 'shared/locations' %>
   </div>
  </div>
 
 <div class="modal hide fade" id="error">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><i class="icon-truck"></i>&nbsp;MSP Bus</h3>
+    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
     <p>Location settings are disabled. Please set your location below:</p>
@@ -102,22 +98,9 @@
 <%= javascript_include_tag "maps" %>
 
 <script>
-  var markers = <%= @stops.results.map { |i| i['location'] }.to_json %>;
-  var stop_ids = <%= @stops.results.map { |i| i['stop_id'].to_i }.to_json %>;
+  var stops = <%= @stops.results.first(10).map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }.to_json.html_safe %>;
 
-  $("#view-table-btn").click( function() {
-    $("#viewchanger li").removeClass("active");
-    $("#view-table-btn").parent().addClass("active");
-    $(".views").hide();
-    $("#view-table").show();
-  });
-  $("#view-map-btn").click( function() {
-    $("#viewchanger li").removeClass("active");
-    $("#view-map-btn").parent().addClass("active");
-    $(".views").hide();
-    $("#view-map").show();
-    initialize(<%= @lat %>, <%= @lon %>);
-    add_markers(markers);
-    initialize.ran=true;
-  });
+  var center   = {lat:<%= @lat %>, lon:<%= @lon %>};
 </script>
+
+<%= javascript_include_tag "home" %>
