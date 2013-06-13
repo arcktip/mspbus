@@ -77,6 +77,8 @@ $(document).ready(function() {
       if (status == google.maps.GeocoderStatus.OK && results[0]) {
         $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
         $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
+      }else{
+      	error_on_coordinates();
       }
       event.target.submit();
     });
@@ -86,6 +88,8 @@ $(document).ready(function() {
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(got_coordiates, error_on_coordinates);
+    }else{
+    	error_on_coordinates();
     }
   });
 

@@ -62,18 +62,18 @@
 <div class="modal hide fade" id="ask">
   <div class="modal-header">
     <button type="button" class="close" id="ask-btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
+    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus - Find Stops Near You</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <p>Real-time bus arrival info for the Minneapolis/St. Paul area.</p>
-    <p>Please allow location access to find stops near you.</p>
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Allow</button>
-
+    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Allow Location Access</button>
+	<div style="text-align:left;">
     <div style="margin-top:1em;">
-      <b>Buses arriving in:</b><br>
+    	<h4>LEGEND:</h4>
+      <b>Arriving in:</b><br>
       <%= render 'shared/arriving' %>
     </div>
     <%= render 'shared/locations' %>
+    </div>
   </div>
  </div>
 
@@ -83,7 +83,7 @@
     <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <p>Location settings are disabled. Please set your location below:</p>
+    <p>Location settings are disabled, or something went wrong! Please set your location below:</p>
       <form class="fallback-form" action="/">
         <div class="input-append"><input type="text" name="q" placeholder="1007 W Franklin" value="<%= params[:q] %>"/><button class="btn add-on"> <i class="icon-search"></i></button>
       </div></form>
