@@ -62,17 +62,15 @@
 <div class="modal hide fade" id="ask">
   <div class="modal-header">
     <button type="button" class="close" id="ask-btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus - Find Stops Near You</h3>
+    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Real-time bus arrivals</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Allow Location Access</button>
+    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Use My Location</button>
 	<div style="text-align:left;">
-    <div style="margin-top:1em;">
-    	<h4>LEGEND:</h4>
+    	<span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
       <b>Arriving in:</b><br>
       <%= render 'shared/arriving' %>
-    </div>
-    <%= render 'shared/locations' %>
+      <%= render 'shared/locations' %>
     </div>
   </div>
  </div>
