@@ -1,8 +1,10 @@
 <!--<button id="btn-current-location-small" class="btn btn-info btn-address pull-right"><i class="icon-circle-blank"></i> Update my location</button>-->
 
+
+
 <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
   <li class="active" id="table-list-item">
-    <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> Table</a>
+    <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
   </li>
   <li id="map-list-item">
     <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
@@ -44,6 +46,7 @@
       <% end %>
   </div>
   <div style="margin-top:1em;">
+    <span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
     <b>Arriving in:</b><br>
     <%= render 'shared/arriving' %>
   </div>
@@ -60,18 +63,16 @@
 <div class="modal hide fade" id="ask">
   <div class="modal-header">
     <button type="button" class="close" id="ask-btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
+    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Real-time bus arrivals</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <p>Real-time bus arrival info for the Minneapolis/St. Paul area.</p>
-    <p>Please allow location access to find stops near you.</p>
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Allow</button>
-
-    <div style="margin-top:1em;">
-      <b>Buses arriving in:</b><br>
+    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Use My Location</button>
+	<div style="text-align:left;">
+    	<span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
+      <b>Arriving in:</b><br>
       <%= render 'shared/arriving' %>
+      <%= render 'shared/locations' %>
     </div>
-    <%= render 'shared/locations' %>
   </div>
  </div>
 
@@ -81,7 +82,7 @@
     <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <p>Location settings are disabled. Please set your location below:</p>
+    <p>Location settings are disabled, or something went wrong! Please set your location below:</p>
       <form class="fallback-form" action="/">
         <div class="input-append"><input type="text" name="q" placeholder="1007 W Franklin" value="<%= params[:q] %>"/><button class="btn add-on"> <i class="icon-search"></i></button>
       </div></form>
@@ -99,66 +100,6 @@
   var stops = <%= @stops.results.first(10).map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }.to_json.html_safe %>;
 
   var center   = {lat:<%= @lat %>, lon:<%= @lon %>};
-
-  var HomeView = Backbone.View.extend({
-
-    el: '.app-container',
-
-    events: {
-      "click #view-table-btn": "show_table",
-      "click #view-map-btn": "show_map"
-    },
-
-    initialize: function() {
-
-      // Cache selectors for other actions.
-      this.viewchanger = this.$el.find('#viewchanger');
-      this.views = this.$el.find('.views');
-      this.view_table = this.$el.find('#view-table');
-      this.view_map = this.$el.find('#view-map');
-      this.table_list_item = this.$el.find('#table-list-item');
-      this.map_list_item = this.$el.find('#map-list-item');
-
-      // We are on a small screen, should determine view to show.
-      if ( matchMedia('only screen and (max-width: 767px)').matches ) {
-        this.determine_view();
-      }
-    },
-
-    determine_view: function() {
-      if ( $.cookie('home_current_view') === 'map_list_item' ) {
-        this.show_map();
-      } else {
-        this.show_table();
-      }
-    },
-
-    show_table: function() {
-      this.viewchanger.find("li").removeClass("active");
-      this.table_list_item.addClass("active");
-
-      this.view_map.hide();
-      this.view_table.show();
-      $.cookie('home_current_view', 'table_list_item');
-    },
-
-    show_map: function() {
-      this.viewchanger.find("li").removeClass("active");
-      this.map_list_item.addClass("active");
-      
-      this.view_table.hide();
-      this.view_map.show();
-
-      initialize(center.lat, center.lon);
-      add_markers(stops);
-      initialize.ran=true;
-      google.maps.event.trigger(map, "resize");
-      $.cookie('home_current_view', 'map_list_item');
-    }
-
-
-  });
-
 </script>
 
 <%= javascript_include_tag "home" %>

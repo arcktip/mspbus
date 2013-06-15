@@ -3,6 +3,7 @@ set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
 set :use_sudo, false
+set :group_writable, true
 
 set :group_writable, true
 
@@ -24,11 +25,16 @@ role :db,  "debian2.brobston.com", :primary => true
 after 'deploy:update_code', 'deploy:symlink_db'
 after "deploy:restart", "deploy:cleanup"
 
+# task :setup_group do
+#   run "chgrp mspbus #{deploy_to} -R"
+# end
+
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
 
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
+  run "newgrp mspbus"
   task :start do ; end
   task :stop do ; end
   desc "Symlinks the database.yml"
