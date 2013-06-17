@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
+<head>
 <% if @stop.nil? %>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <meta http-equiv="Content-Language" content="en">
@@ -17,11 +18,11 @@
 <meta http-equiv="Content-Language" content="en">
 <meta name="description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
 <meta name="keywords" content="msp bus, mspbus, minneapolis bus, mpls bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times" />
-<title>[stop name] real-time bus arrivals - mspbus.org</title>
-<meta property="og:title" content="[stop name] Real-time bus arrivals - mspbus.org" />
+<title><%= @stop.stop_name %> real-time bus arrivals - mspbus.org</title>
+<meta property="og:title" content="<%= @stop.stop_name %> Real-time bus arrivals - mspbus.org" />
 <meta property="og:type" content="website" />
-<meta property="og:description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
-<meta property="og:url" content="mspbus.org/stop/[stop#]" />
+<meta property="og:description" content="Real-time bus arrivals for <%= @stop.stop_name %> in Minneapolis/St. Paul" />
+<meta property="og:url" content="mspbus.org/stop/<%= @stop.stop_id %>" />
 <meta property="og:image" content="mspbus.org/assets/logo-med.png" />
 <% end %>
 
