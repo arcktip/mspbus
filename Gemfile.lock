@@ -58,6 +58,7 @@ GEM
     pg (0.15.1)
     pg (0.15.1-x86-mingw32)
     polyglot (0.3.3)
+    polylines (0.1.1)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -125,6 +126,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
   pg
+  polylines
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
   therubyracer

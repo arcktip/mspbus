@@ -1,7 +1,7 @@
 ///////////////////////
 //Generate ETA labels
 
-var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
+var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>" data-route="<%= item.Route %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
 
 /*
 |----------------------------------------------------------------------------------------------------
@@ -26,12 +26,16 @@ var RealTimeView = Backbone.View.extend({
     }
   },
 
-  update: function(callback) {
+  update: function(callback, new_model) {
     var self = this;
-    this.collection.fetch({ success: function() {
-      self.process_data();
+    if( !new_model || this.collection.models.length === 0 ) {
+      this.collection.fetch({ success: function() {
+        self.process_data();
+        if(callback) { callback(); }
+      } });
+    } else {
       if(callback) { callback(); }
-    } });
+    }
   },
 
   process_data: function() {
@@ -52,6 +56,7 @@ $(document).ready(function() {
 
   // Loop over stops and get realtime data
   $(".real-time").each(function(index, item) {
+    console.log(item);
     views[item.id] = new RealTimeView({ el: item });
     views[item.id].update();
   });

@@ -31,6 +31,15 @@ var MapView = Backbone.View.extend({
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
 
+    var polyOptions = {
+      strokeColor: '#08c',
+      strokeOpacity: 0.8,
+      strokeWeight: 6
+    }
+
+    this.poly = new google.maps.Polyline(polyOptions);
+    this.poly.setMap(this.map);
+
     window.setTimeout(this.update_bus_locations, 3000);
     window.setInterval(this.update_bus_locations, 60000);
     
@@ -79,21 +88,21 @@ var MapView = Backbone.View.extend({
     for(var i=0, len=stops.length; i < len; i++) {
       var stop = stops[i];
       var view = views[stop.id];
-      
-      view.collection.each(function(model) {
-        console.log(model);
-        if(model.get('VehicleLongitude') === 0) return;
-        
-        self.create_bus_marker(stop.id, model);
-      });
-      view.update();
+      if (view) {
+        view.collection.each(function(model) {
+          if(model.get('VehicleLongitude') === 0) return;
+          
+          self.create_bus_marker(stop.id, model);
+        });
+        view.update();
+      }
     }
 
   },
 
   hover_on_marker: function(stopid) {
     var view = views[stopid], self = this;
-    console.log(view);
+    
     view.update(function() {
       if(view.collection.models.length !== 0)
         self.mapElement.html(self.$el.html());
@@ -137,6 +146,7 @@ var MapView = Backbone.View.extend({
       return; //Yes, it already has a marker. Don't make another!
 
     //Make a new marker
+    
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
@@ -147,37 +157,45 @@ var MapView = Backbone.View.extend({
       zIndex: 1
     });
 
-    views[new_stop.id] = new RealTimeView({ id: new_stop.id });
+    if (!views[new_stop.id]) {
+      views[new_stop.id] = new RealTimeView({ id: new_stop.id });
+    }
 
-    google.maps.event.addListener(marker, 'click', function() { 
+    google.maps.event.addListener(marker, 'click', function() {
+      
       var view = views[new_stop.id];
-
+      console.log(view);
       view.update(function() {
-        var data = view.$el.html();
 
+        var data = view.$el.html();
         data += '<br><a href="/stop/'  + new_stop.id + '">Full stop info</a>';
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
         self.infobox.open(self.map, marker);
-      });
+        $('.infocontents').on('click', 'span', function() {
+          // Refactor into new map.
+          var route_id = $(this).data('route');
+          self.get_closest_trip(new_stop.id, route_id);
+        })
+      }, true);
     });
 
-    google.maps.event.addListener(marker, 'mouseover', function() {
-      self.hover_on_marker(new_stop.id);
-      this.setOptions({zIndex:10});
-      this.setIcon("/assets/bus-stop-hover.png");
-    });
+    // google.maps.event.addListener(marker, 'mouseover', function() {
+    //   self.hover_on_marker(new_stop.id);
+    //   this.setOptions({zIndex:10});
+    //   this.setIcon("/assets/bus-stop-hover.png");
+    // });
 
-    google.maps.event.addListener(marker, "mouseout", function() {  
-      this.setOptions({zIndex:this.get("myZIndex")});  
-      this.setOptions({zIndex:1});
-      this.setIcon("/assets/bus-stop.png");
-    });
+    // google.maps.event.addListener(marker, "mouseout", function() {  
+    //   this.setOptions({zIndex:this.get("myZIndex")});  
+    //   this.setOptions({zIndex:1});
+    //   this.setIcon("/assets/bus-stop.png");
+    // });
 
-    // Hide tooltip on mouseout event.
-    google.maps.event.addListener(marker, 'mouseout', function() {
-      self.mapElement.html("");
-    });
+    // // Hide tooltip on mouseout event.
+    // google.maps.event.addListener(marker, 'mouseout', function() {
+    //   self.mapElement.html("");
+    // });
 
     if(look_up) //Already present in stops array
       stops[look_up].marker=marker
@@ -185,6 +203,20 @@ var MapView = Backbone.View.extend({
       new_stop.marker=marker;
       stops.push(new_stop);
     }
+  },
+
+  get_closest_trip: function(stop_id, route_id) {
+    var self = this;
+    $.get('/stop/closest_trip', {stop_id: stop_id, route: route_id }, function(data, textStatus, jqXHR) {
+      if(data[0]) {
+        self.add_path(data[0].encoded_shape);
+      }
+    });
+  },
+
+  add_path: function(path) {
+    var decodedSets = google.maps.geometry.encoding.decodePath(path); 
+    this.poly.setPath(decodedSets);
   },
 
   clear_bus_markers: function() {
