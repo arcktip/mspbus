@@ -12,14 +12,14 @@ var BusETAModel = Backbone.Model.extend({
     var dtime = this.get('dtime');
     var dtext = this.get('DepartureText');
 
-    if(dtime < 20 && dtext.indexOf(":") !== -1)
+    if(dtime < 20 && dtext.indexOf(":") !== -1) {
       dtext = '&ndash; ' + Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
-    else if(dtime >= 20)
+    } else if(dtime >= 20) {
       dtext = '';
-    else
+    } else {
       dtext = '&ndash; ' + this.get('DepartureText');
-
-    this.set('dtext', dtext);
+    }
+    this.set('dText', dtext);
   },
   
   set_direction_class: function() {
@@ -110,6 +110,6 @@ var BusETACollection = Backbone.Collection.extend({
 
 });
 
-BusETACollection.comparator = function(bus_eta) {
-  return bus_eta.get('arrtime');
-};
+// BusETACollection.comparator = function(bus_eta) {
+//   return bus_eta.get('arrtime');
+// };

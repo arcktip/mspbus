@@ -30,7 +30,7 @@ var RealTimeView = Backbone.View.extend({
     var self = this;
     if( !new_model || this.collection.models.length === 0 ) {
       this.collection.fetch({ success: function() {
-        self.process_data();
+        self.process_data(5);
         if(callback) { callback(); }
       } });
     } else {
@@ -56,7 +56,6 @@ $(document).ready(function() {
 
   // Loop over stops and get realtime data
   $(".real-time").each(function(index, item) {
-    console.log(item);
     views[item.id] = new RealTimeView({ el: item });
     views[item.id].update();
   });

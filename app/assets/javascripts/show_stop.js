@@ -24,8 +24,6 @@ var StopView = Backbone.View.extend({
 
   render: function() {
 
-
-
     if ( view.collection.models.length === 0 ) {
       this.$el.parent().html("No buses found.");
       return;
