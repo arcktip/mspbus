@@ -93,8 +93,8 @@ var BusETACollection = Backbone.Collection.extend({
     return 'http://svc.metrotransit.org/NexTrip/' + this.stop_id + '?callback=?&format=json';
   },
 
-  initialize: function(id) {
-    this.stop_id = id;
+  initialize: function() {
+    //this.stop_id = id;
   },
 
   process_models: function(num_models) {

@@ -19,7 +19,8 @@ var StopView = Backbone.View.extend({
   
   initialize: function() {
     _.bindAll(this);
-    this.collection = new BusETACollection(this.el.id);
+    this.collection = new BusETACollection();
+    this.collection.stop_id = this.el.id;
   },
 
   render: function() {

@@ -15,11 +15,12 @@ var RealTimeView = Backbone.View.extend({
   
   initialize: function() {
     _.bindAll(this);
-    this.collection = new BusETACollection(this.el.id);
+    this.collection = new BusETACollection();
+    this.collection.stop_id = this.el.id;
   },
 
   render: function() {
-    if( this.collection.models.length === 0 ) {
+    if( this.collection.length === 0 ) {
       this.$el.parent().parent().hide();
     } else {
       this.$el.html(this.template({ data: this.collection.toJSON() }));
@@ -28,7 +29,8 @@ var RealTimeView = Backbone.View.extend({
 
   update: function(callback, new_model) {
     var self = this;
-    if( !new_model || this.collection.models.length === 0 ) {
+    
+    if( !new_model || this.collection.length === 0 ) {
       this.collection.fetch({ success: function() {
         self.process_data(5);
         if(callback) { callback(); }
