@@ -11,7 +11,7 @@
 <thead>
   <tr style="font-weight:bold"><td>Rt</td><td>Description</td><td>Arrival</td></tr>
 </thead>
-<tbody id="result">
+<tbody id="<%= params[:id] %>" class="result">
 </tbody>
 </table>
 <div style="margin-top:1em;">
@@ -19,7 +19,7 @@
   <%= render 'shared/arriving' %>
 </div>
 <%= render 'shared/locations' %>
-
+<%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "show_stop" %>
 
 <% end %>

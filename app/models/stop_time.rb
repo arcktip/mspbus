@@ -5,7 +5,7 @@ class StopTime < ActiveRecord::Base
     service_ids = Calendar.get_service_ids
     
     #sql = "trips.service_id in (?) and stop_times.stop_id = ? and trips.route_id = ? and arrival_time::time >= CURRENT_TIME"
-    sql = "trips.service_id in (#{service_ids.collect{ |c| "?" }.join(',') }) and stop_times.stop_id = ? and trips.route_id = ? and arrival_time::time >= CURRENT_TIME"
+    sql = "trips.service_id in (#{service_ids.collect{ |c| "?" }.join(',') }) and stop_times.stop_id = ? and trips.route_id = ? and arrival_time >= CURRENT_TIME::varchar"
   
     select('trips.shape_id as shape_id, stop_times.trip_id')
     .joins('inner join trips on trips.trip_id = stop_times.trip_id')

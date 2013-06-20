@@ -102,7 +102,10 @@ var BusETACollection = Backbone.Collection.extend({
       model.process_eta();
     });
     this.sortBy(function(model) { return model.get('arrtime'); });
-    this.models = this.models.slice(0,num_models);
+
+    if ( num_models ) {
+      this.models = this.models.slice(0,num_models);
+    }
   }
 
 });

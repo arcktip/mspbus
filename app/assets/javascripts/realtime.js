@@ -38,8 +38,8 @@ var RealTimeView = Backbone.View.extend({
     }
   },
 
-  process_data: function() {
-    this.collection.process_models(5);
+  process_data: function(num_models) {
+    this.collection.process_models(num_models);
     this.render();
   }
 });
