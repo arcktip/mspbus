@@ -23,9 +23,9 @@
 
   <div class="btn-group btn-group-vertical" style="width:100%;">
     <% @stops.results.first(10).each do |stop| %>
-      <div style="text-align:left;" class="stopbutton btn">
+      <div class="btn stopbutton">
         <a href="stop/<%= stop.stop_id %>">
-          <div style="position:absolute;right:5px">
+          <div style="position:absolute;right:5px" class="distance-label">
             <%= 
             if (stop.sort[0].nil?)
               ""
@@ -37,8 +37,8 @@
               (stop.sort[0]*5280).round().to_s+" ft"
             end %>
           </div>
-          <b><%= stop.stop_name %></b> 
-          <div class="real-time" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>"></div>
+          <span class="stop-name"><%= stop.stop_name %></span> 
+          <div class="real-time" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
         </a>
       </div>
       <% end %>

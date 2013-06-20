@@ -59,14 +59,14 @@ var HomeView = Backbone.View.extend({
 
     this.map_view.init(center);
     this.map_view.add_markers(stops);
-    his.map_view.ran = true;
+    this.map_view.ran = true;
 
-    google.maps.event.trigger(map, "resize");
+    google.maps.event.trigger(this.map_view.map, "resize");
     $.cookie('home_current_view', 'map_list_item');
   },
 
   resize_helper: function() {
-    google.maps.event.trigger(map, "resize");
+    google.maps.event.trigger(this.map_view.map, "resize");
 
     if (this.screen_width==screen.height && this.screen_height==screen.width){
       this.update_screen_size();
@@ -90,11 +90,6 @@ var HomeView = Backbone.View.extend({
     }
   },
 
-  resize: function() {
-    clearInterval(this.debouncer);
-    this.debouncer = setInterval(this.resize, 100);
-  },
-
   update_screen_size: function() {
     this.screen_width = screen.width;
     this.screen_height = screen.height;
@@ -103,7 +98,6 @@ var HomeView = Backbone.View.extend({
 });
 
 $(document).ready(function() {
-
   var home_view = new HomeView();
-  $(window).resize(home_view.resize.bind(home_view));
+  $(window).resize( $.throttle( 100, home_view.resize_helper.bind(home_view) ) );
 });

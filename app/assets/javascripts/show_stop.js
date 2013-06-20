@@ -1,5 +1,5 @@
 // Realtime Template
-var realtime_template = _.template('<% _.each(data, function(item) { %> <tr><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time" style="color:<%= item.priority %>"><i><%= item.DepartureText %></i> </td></tr><% }); %>');
+var realtime_template = _.template('<% _.each(data, function(item) { %> <tr style="background: <%= item.priority %>"><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time"><i><%= item.DepartureText %></i> </td></tr><% }); %>');
 
 $(document).ready(function() {
   view = new StopView();

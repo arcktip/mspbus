@@ -32,7 +32,7 @@ var MapView = Backbone.View.extend({
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
 
     var polyOptions = {
-      strokeColor: '#08c',
+      strokeColor: '#5e96d9',
       strokeOpacity: 0.8,
       strokeWeight: 6
     }
@@ -159,6 +159,7 @@ var MapView = Backbone.View.extend({
 
     if (!views[new_stop.id]) {
       views[new_stop.id] = new RealTimeView({ id: new_stop.id });
+      views[new_stop.id].$el.data('name', new_stop.name);
     }
 
     google.maps.event.addListener(marker, 'click', function() {
@@ -167,7 +168,8 @@ var MapView = Backbone.View.extend({
       console.log(view);
       view.update(function() {
 
-        var data = view.$el.html();
+        var data = '<span class="marker-header">' + view.$el.data('name') + '</span><br>';
+        data += view.$el.html();
         data += '<br><a href="/stop/'  + new_stop.id + '">Full stop info</a>';
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);

@@ -3,7 +3,12 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .stopbutton {
-  padding:5px;
+  padding: 5px;
+  text-align: left;
+  text-shadow: none;
+  background: #f5f7f7;
+  border-radius: 0;
+  -webkit-border-radius: 0 !important;
 }
 
 .stopbutton a {
@@ -61,7 +66,10 @@
 }
 
 #view-map {position:relative;}
-#map-canvas {height:500px;}
+#map-canvas {
+  height:500px;
+  border: 1px solid #ccc;
+}
 
 @media (max-width: 767px) {
   #viewchanger {display:block;}
@@ -82,4 +90,37 @@
 
 .dir_label {
   background-color:#4E4E4E;
+}
+
+.distance-label {
+  border-radius: 2px;
+  font-size: 1.3em;
+  font-family: 'OpenSansLight';
+  padding: 10px;
+  color: grey;
+}
+
+.real-time {
+  width: 79%;
+}
+.stop-name {
+  font-family: 'OpenSansRegular';
+}
+.route-chip {
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 0.85em;
+  padding: 3px 5px 3px 5px;
+  font-family: 'OpenSansRegular';
+  text-shadow: none;
+}
+
+.route-chip-italic {
+  font-weight: normal;
+  font-family: 'Helvetica Neue', Arial;
+}
+
+.marker-header {
+  font-family: 'OpenSansSemibold';
+  font-size: 1.0em;
 }

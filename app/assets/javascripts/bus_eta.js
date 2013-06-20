@@ -40,13 +40,13 @@ var BusETAModel = Backbone.Model.extend({
     var eta = this.get('dtime');
 
     if(eta < 5)
-      this.set('priority', "#B94A48");
+      this.set('priority', "#ca5a41");
     else if (eta < 15)
-      this.set('priority', "#F89406");
+      this.set('priority', "#cf842e");
     else if (eta < 20)
       this.set('priority', "#468847");
     else
-      this.set('priority', "#000080");
+      this.set('priority', "#4e7fb7");
   
   },
 

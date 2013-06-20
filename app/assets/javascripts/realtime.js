@@ -1,7 +1,7 @@
 ///////////////////////
 //Generate ETA labels
 
-var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>" data-route="<%= item.Route %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
+var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label route-chip" style="background-color:<%= item.priority %>" data-route="<%= item.Route %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <span class="route-chip-italic"><%= item.dText %></span></span> <% }); %>');
 
 /*
 |----------------------------------------------------------------------------------------------------

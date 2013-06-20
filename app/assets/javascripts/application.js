@@ -17,6 +17,7 @@
 //= require backbone-min
 //= require moment.min
 //= require jquery.cookie
+//= require jquery.throttle
 //= require url-parser
 //= require matchMedia
 //= require bus_eta
