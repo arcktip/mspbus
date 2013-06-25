@@ -1,3 +1,8 @@
+require "bundler/capistrano"
+# Load Bundler's Capistrano plugin
+set :bundle_flags,    "--deployment"
+set :bundle_without,  [:development, :test, :tools]
+
 set :application, "MSP Bus"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
