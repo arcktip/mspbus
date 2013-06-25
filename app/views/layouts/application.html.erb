@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-  <meta http-equiv="Content-Language" content="en">
-  <meta name="description" content="Real-time bus arrival information for Minneapolis/St. Paul buses" />
-  <meta name="keywords" content="msp bus, mspbus, minneapolis bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times, bus times" />
+<head>
 <% if @stop.nil? %>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <meta http-equiv="Content-Language" content="en">
-<meta name="description" content="MSP Bus provides real-time arrival information for Minneapolis/St. Paul buses near you, right now" />
+<meta name="description" content="mspbus.org provides real-time bus arrival information for routes serving the Minneapolis/St. Paul area" />
 <meta name="keywords" content="msp bus, mspbus, minneapolis bus, mpls bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times" />
-<title>MSP Bus - Real-time bus arrival info</title>
-<meta property="og:title" content="MSP Bus - Real-time bus arrival info" />
+<title>mspbus.org - Real-time bus arrivals</title>
+<meta property="og:title" content="mspbus.org - Real-time bus arrivals" />
 <meta property="og:type" content="website" />
-<meta property="og:description" content="MSP Bus provides real-time arrival information for Minneapolis/St. Paul buses near you, right now" />
+<meta property="og:description" content="mspbus.org provides real-time bus arrival information for routes serving the Minneapolis/St. Paul area" />
 <meta property="og:url" content="mspbus.org/" />
 <meta property="og:image" content="mspbus.org/assets/logo-med.png" />
 <% else %>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <meta http-equiv="Content-Language" content="en">
-<meta name="description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
+<meta name="description" content="Real-time bus arrivals for <%= @stop.stop_name %> in Minneapolis/St. Paul" />
 <meta name="keywords" content="msp bus, mspbus, minneapolis bus, mpls bus, st paul bus, twin cities bus, real-time bus, real time bus, realtime bus, bus arrival times" />
-<title><%= @stop.stop_name %>: Real-time bus arrivals - mspbus.org</title>
-<meta property="og:title" content="[stop name] Real-time bus arrivals - mspbus.org" />
+<title><%= @stop.stop_name %> real-time bus arrivals - mspbus.org</title>
+<meta property="og:title" content="<%= @stop.stop_name %> Real-time bus arrivals - mspbus.org" />
 <meta property="og:type" content="website" />
-<meta property="og:description" content="Real-time bus arrivals for [stop name] in Minneapolis/St. Paul" />
-<meta property="og:url" content="mspbus.org/stop/[stop#]" />
-<meta property="og:image" c<%= @stop.stop_name %>ontent="mspbus.org/assets/logo-med.png" />
+<meta property="og:description" content="Real-time bus arrivals for <%= @stop.stop_name %> in Minneapolis/St. Paul" />
+<meta property="og:url" content="mspbus.org/stop/<%= @stop.stop_id %>" />
+<meta property="og:image" content="mspbus.org/assets/logo-med.png" />
 <% end %>
 
 
