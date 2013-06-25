@@ -40,8 +40,8 @@ var MapView = Backbone.View.extend({
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
 
-    window.setTimeout(this.update_bus_locations, 3000);
-    window.setInterval(this.update_bus_locations, 60000);
+    //window.setTimeout(this.update_bus_locations, 3000);
+    //window.setInterval(this.update_bus_locations, 60000);
     
   },
   
@@ -67,7 +67,7 @@ var MapView = Backbone.View.extend({
       zIndex: 0
     });
 
-    self.bus_markers.push(bus);
+    this.bus_markers.push(bus);
 
     google.maps.event.addListener(bus, 'mouseover', function() {
       self.mapElement.html('<span class="label">Bus #' + obj.Route + obj.Terminal + " " + obj.RouteDirection+'</span>');
@@ -179,7 +179,7 @@ var MapView = Backbone.View.extend({
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);
         })
-      }, true);
+      });
     });
 
     // google.maps.event.addListener(marker, 'mouseover', function() {

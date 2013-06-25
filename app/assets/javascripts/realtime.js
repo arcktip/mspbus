@@ -27,10 +27,10 @@ var RealTimeView = Backbone.View.extend({
     }
   },
 
-  update: function(callback, new_model) {
+  update: function(callback, skip_fetch) {
     var self = this;
     
-    if( !new_model || this.collection.length === 0 ) {
+    if( !skip_fetch && this.collection.length === 0 ) {
       this.collection.fetch({ success: function() {
         self.process_data(5);
         if(callback) { callback(); }

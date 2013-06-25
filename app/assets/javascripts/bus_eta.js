@@ -40,13 +40,13 @@ var BusETAModel = Backbone.Model.extend({
     var eta = this.get('dtime');
 
     if(eta < 5)
-      this.set('priority', "#ca5a41");
+      this.set('priority', "#b94a48");
     else if (eta < 15)
-      this.set('priority', "#cf842e");
+      this.set('priority', "#f89406");
     else if (eta < 20)
       this.set('priority', "#468847");
     else
-      this.set('priority', "#4e7fb7");
+      this.set('priority', "#3a87ad");
   
   },
 
@@ -91,10 +91,6 @@ var BusETACollection = Backbone.Collection.extend({
   
   url: function() {
     return 'http://svc.metrotransit.org/NexTrip/' + this.stop_id + '?callback=?&format=json';
-  },
-
-  initialize: function() {
-    //this.stop_id = id;
   },
 
   process_models: function(num_models) {
