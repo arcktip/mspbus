@@ -174,7 +174,7 @@ var MapView = Backbone.View.extend({
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
         self.infobox.open(self.map, marker);
-        $('.infocontents').on('click', 'span', function() {
+        $('.infocontents').on('click', '.route-chip', function() {
           // Refactor into new map.
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);

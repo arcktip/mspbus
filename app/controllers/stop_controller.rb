@@ -11,12 +11,17 @@ class StopController < ApplicationController
     end
   end
   def closest_trip
-    s = StopTime.get_closest_trip(params[:stop_id], params[:route] + '-62')
-    shape = Shape.encode_to_polylines(s.first.shape_id.to_s)
+    
     shape_array = []
-    shape_array << {
-      :encoded_shape => shape
-    }
+
+    s = StopTime.get_closest_trip(params[:stop_id], params[:route] + '-62')
+
+    unless s.blank?
+      shape = Shape.encode_to_polylines(s.first.shape_id.to_s)
+      shape_array << {
+        :encoded_shape => shape
+      }
+    end
 
     respond_to do |format|
       format.json { render :json => shape_array, :status => :ok }
