@@ -207,11 +207,6 @@ var MapView = Backbone.View.extend({
       this.setIcon("/assets/bus-stop.png");
     });
 
-    // // Hide tooltip on mouseout event.
-    // google.maps.event.addListener(marker, 'mouseout', function() {
-    //   self.mapElement.html("");
-    // });
-
     if(look_up) //Already present in stops array
       stops[look_up].marker=marker
     else {  //The stop is not in the array, so add it
