@@ -196,17 +196,18 @@ var MapView = Backbone.View.extend({
       });
     });
 
-    // google.maps.event.addListener(marker, 'mouseover', function() {
-    //   self.hover_on_marker(new_stop.id);
-    //   this.setOptions({zIndex:10});
-    //   this.setIcon("/assets/bus-stop-hover.png");
-    // });
+    google.maps.event.addListener(marker, 'mouseover', function() {
+      var view = views[new_stop.id];
+      $("#maptt").html( view.$el.html() );
+      this.setOptions({zIndex:10});
+      this.setIcon("/assets/bus-stop-hover.png");
+    });
 
-    // google.maps.event.addListener(marker, "mouseout", function() {  
-    //   this.setOptions({zIndex:this.get("myZIndex")});  
-    //   this.setOptions({zIndex:1});
-    //   this.setIcon("/assets/bus-stop.png");
-    // });
+    google.maps.event.addListener(marker, "mouseout", function() {  
+      this.setOptions({zIndex:this.get("myZIndex")});  
+      this.setOptions({zIndex:1});
+      this.setIcon("/assets/bus-stop.png");
+    });
 
     // // Hide tooltip on mouseout event.
     // google.maps.event.addListener(marker, 'mouseout', function() {
