@@ -23,8 +23,10 @@ var HomeView = Backbone.View.extend({
 
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
+      HomeView.mobile=true; //TODO: Is this the right place to attach this?
       this.determine_view();
     } else {
+      HomeView.mobile=false; //TODO: Is this the right place to attach this?
       if( $('#view-map').css('display') !== 'none' ) {
         this.map_view.init(center);
         this.map_view.add_markers(stops);

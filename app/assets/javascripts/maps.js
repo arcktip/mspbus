@@ -35,10 +35,12 @@ var MapView = Backbone.View.extend({
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
 
-    var hud_div=document.createElement('div');
-    hud_div.id='maptt';
-    this.mapElement = $(hud_div);
-    this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(hud_div);
+    if(!HomeView.mobile){  //TODO: Is this attached to the right place?
+      var hud_div=document.createElement('div');
+      hud_div.id='maptt';
+      this.mapElement = $(hud_div);
+      this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(hud_div);
+    }
 
     var polyOptions = {
       strokeColor: '#5e96d9',
@@ -194,18 +196,20 @@ var MapView = Backbone.View.extend({
       });
     });
 
-    google.maps.event.addListener(marker, 'mouseover', function() {
-      self.hover_on_marker(new_stop.id);
-      this.setOptions({zIndex:10});
-      this.setIcon("/assets/bus-stop-hover.png");
-    });
+    if(!HomeView.mobile){  //TODO: Is this attached to the right place?
+      google.maps.event.addListener(marker, 'mouseover', function() {
+        self.hover_on_marker(new_stop.id);
+        this.setOptions({zIndex:10});
+        this.setIcon("/assets/bus-stop-hover.png");
+      });
 
-    google.maps.event.addListener(marker, "mouseout", function() {
-      $("#maptt").html("");
-      this.setOptions({zIndex:this.get("myZIndex")});  
-      this.setOptions({zIndex:1});
-      this.setIcon("/assets/bus-stop.png");
-    });
+      google.maps.event.addListener(marker, "mouseout", function() {
+        $("#maptt").html("");
+        this.setOptions({zIndex:this.get("myZIndex")});  
+        this.setOptions({zIndex:1});
+        this.setIcon("/assets/bus-stop.png");
+      });
+    }
 
     if(look_up) //Already present in stops array
       stops[look_up].marker=marker
