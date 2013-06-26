@@ -94,11 +94,16 @@ var BusETACollection = Backbone.Collection.extend({
   },
 
   process_models: function(num_models) {
+
+    // Process the times for sorting purposes.
     this.map(function(model) {
       model.process_eta();
     });
-    this.sortBy(function(model) { return model.get('arrtime'); });
 
+    // Sort models by closest
+    this.models = this.sortBy(function(model) { return model.get('arrtime'); });
+    
+    // Slice only the first five for display
     if ( num_models ) {
       this.models = this.models.slice(0,num_models);
     }
