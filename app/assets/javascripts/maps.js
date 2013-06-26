@@ -35,6 +35,9 @@ var MapView = Backbone.View.extend({
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
 
+    //TODO: Strictly speaking, we should only eliminate the HUD in situations
+    //where the client is either or slow or using taps instead of clicks (i.e.
+    //cannot hover)
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       var hud_div=document.createElement('div');
       hud_div.id='maptt';
