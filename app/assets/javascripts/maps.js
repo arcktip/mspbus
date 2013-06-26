@@ -18,8 +18,6 @@ var MapView = Backbone.View.extend({
       size: new google.maps.Size(200, 50)
     });
 
-    this.mapElement = $("#maptt");
-    
     if (this.ran === true)
       return;
 
@@ -39,7 +37,7 @@ var MapView = Backbone.View.extend({
 
     var hud_div=document.createElement('div');
     hud_div.id='maptt';
-
+    this.mapElement = $(hud_div);
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(hud_div);
 
     var polyOptions = {
@@ -116,12 +114,12 @@ var MapView = Backbone.View.extend({
 
   hover_on_marker: function(stopid) {
     var view = views[stopid], self = this;
-    
+
     view.update(function() {
       if(view.collection.models.length !== 0)
-        self.mapElement.html(self.$el.html());
+        self.mapElement.html(view.$el.html());
       else
-        self.mapElement.html('<span class="label" style="background-color:black">No Data</span>');
+        self.mapElement.html('<span class="label route-chip" style="background-color:black">No Data</span>');
     });
   },
 
@@ -197,13 +195,13 @@ var MapView = Backbone.View.extend({
     });
 
     google.maps.event.addListener(marker, 'mouseover', function() {
-      var view = views[new_stop.id];
-      $("#maptt").html( view.$el.html() );
+      self.hover_on_marker(new_stop.id);
       this.setOptions({zIndex:10});
       this.setIcon("/assets/bus-stop-hover.png");
     });
 
-    google.maps.event.addListener(marker, "mouseout", function() {  
+    google.maps.event.addListener(marker, "mouseout", function() {
+      $("#maptt").html("");
       this.setOptions({zIndex:this.get("myZIndex")});  
       this.setOptions({zIndex:1});
       this.setIcon("/assets/bus-stop.png");
