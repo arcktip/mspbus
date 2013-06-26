@@ -1,3 +1,6 @@
+var map_hud_template = _.template('<div class="map-route-hud"><div class="pull-left hud-descr"><span><%= descr %></span>&nbsp;<span class="label">4 of 7</span><h4>University Av & Univ Rec Ctr</h4></div><div class="pull-right hud-stops-descr"><span class="btn"><i class="icon-chevron-left"></i></span><span class="btn"><i class="icon-chevron-right"></i></span></div></div>');
+
+
 var MapView = Backbone.View.extend({
   
   map: null,
@@ -165,11 +168,10 @@ var MapView = Backbone.View.extend({
     google.maps.event.addListener(marker, 'click', function() {
       
       var view = views[new_stop.id];
-      console.log(view);
       view.update(function() {
 
-        var data = '<span class="marker-header">' + view.$el.data('name') + '</span><br>';
-        data += view.$el.html();
+        var data = '<span class="marker-header clearfix">' + view.$el.data('name') + '</span><br>';
+        data += '<div class="clearfix">' + view.$el.html() + '</div>';
         data += '<br><a href="/stop/'  + new_stop.id + '">Full stop info</a>';
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
@@ -178,6 +180,7 @@ var MapView = Backbone.View.extend({
           // Refactor into new map.
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);
+          self.mapElement.html( map_hud_template({ descr: $('<div></div>').append($(this).clone()).html() }) );
         })
       });
     });
