@@ -25,7 +25,7 @@
     <% @stops.results.first(10).each do |stop| %>
       <div class="btn stopbutton">
         <a href="stop/<%= stop.stop_id %>">
-          <div style="position:absolute;right:5px" class="distance-label">
+          <div class="distance-label">
             <%= 
             if (stop.sort[0].nil?)
               ""
