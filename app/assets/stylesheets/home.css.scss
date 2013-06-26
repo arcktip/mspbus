@@ -58,11 +58,12 @@
 
 #maptt {
   position: absolute;
-  bottom: 10px;
+  top:0;
   width: 100%;
   height: 3em;
   text-align: center;
-  // pointer-events: none;
+  background-color:rgba(0,0,0,0.3);
+  pointer-events: none;
 }
 
 #view-map {position:relative;}

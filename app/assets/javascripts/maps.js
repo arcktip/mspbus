@@ -31,10 +31,16 @@ var MapView = Backbone.View.extend({
       zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       panControl: false,
-      mapTypeControl: false
+      mapTypeControl: false,
+      zoomControlOptions: { position: google.maps.ControlPosition.LEFT_CENTER }
     };
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
+
+    var hud_div=document.createElement('div');
+    hud_div.id='maptt';
+
+    this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(hud_div);
 
     var polyOptions = {
       strokeColor: '#5e96d9',
