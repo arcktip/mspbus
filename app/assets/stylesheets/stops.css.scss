@@ -12,6 +12,7 @@ span.desc {
 
 #thestop {
   font-family: 'OpenSansSemibold';
+  font-size: 1.5em;
 }
 
 .stop-table {
@@ -33,4 +34,10 @@ span.desc {
   img {
     vertical-align: top;
   }
+}
+
+.stop-desc {
+  margin-left: 0.5em;
+  font-size: 90%;
+  font-style: italic;
 }

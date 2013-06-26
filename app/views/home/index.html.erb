@@ -1,6 +1,8 @@
 <!--<button id="btn-current-location-small" class="btn btn-info btn-address pull-right"><i class="icon-circle-blank"></i> Update my location</button>-->
 
-
+<% if not @inbounds %>
+  <div class="alert alert-info">Your geolocation places you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
+<% end %>
 
 <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
   <li class="active" id="table-list-item">
@@ -13,10 +15,6 @@
 
 <% if @stops.results.empty? %>
   <div class="alert alert-info">No stops found.</div>
-<% end %>
-
-<% if not @inbounds %>
-  <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
 <% end %>
 
 <div class="container">     
@@ -40,7 +38,7 @@
             end %>
           </div>
           <span class="stop-name"><%= stop.stop_name %></span> 
-          <div class="real-time" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+          <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
         </a>
       </div>
       <% end %>
