@@ -29,7 +29,9 @@ var MapView = Backbone.View.extend({
     var map_options = {
       center: new google.maps.LatLng(this.lat, this.lon),
       zoom: 16,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      panControl: false,
+      mapTypeControl: false
     };
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
@@ -42,6 +44,9 @@ var MapView = Backbone.View.extend({
 
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
+
+    console.log($('div.gmnoprint').first());
+    $('div.gmnoprint').first().parent().append('<div id="maptt"></div>');
 
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
