@@ -131,7 +131,6 @@ DEPENDENCIES
   polylines
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
-  sprockets
   therubyracer
   tire
   uglifier (>= 1.0.3)
