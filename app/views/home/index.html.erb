@@ -43,12 +43,9 @@
           </div>
           <% end %>
       </div>
-      <div style="margin-top:1em;">
-        <span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
-        <b>Arriving in:</b><br>
-        <%= render 'shared/arriving' %>
+      <div style="margin-top:1em;margin-left:5px;">
+        <%= render 'shared/legend' %>
       </div>
-      <%= render 'shared/locations' %>
     </div>
 
     <div id="view-map" class="span6 views">
@@ -64,11 +61,8 @@
   </div>
   <div class="modal-body" style="text-align:center;">
     <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Use My Location</button>
-	<div style="text-align:left;">
-    	<span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
-      <b>Arriving in:</b><br>
-      <%= render 'shared/arriving' %>
-      <%= render 'shared/locations' %>
+	  <div style="text-align:left;">
+      <%= render 'shared/legend' %>      
     </div>
   </div>
  </div>
