@@ -62,6 +62,7 @@ var BusETAModel = Backbone.Model.extend({
   process_eta: function() {
     var departure_time = this.get('DepartureTime');
 
+    //TODO: Does this work over midnight?
     var seconds = departure_time.substr(6,10);
     var offset = departure_time.substr(19,3);
     var arrtime = moment(seconds, "X");
