@@ -227,8 +227,8 @@ var MapView = Backbone.View.extend({
   get_closest_trip: function(stop_id, route_id) {
     var self = this;
     $.get('/stop/closest_trip', {stop_id: stop_id, route: route_id }, function(data, textStatus, jqXHR) {
-      if(data[0]) {
-        self.add_path(data[0].encoded_shape);
+      if(data) {
+        self.add_path(data.encoded_polyline);
       }
     });
   },
