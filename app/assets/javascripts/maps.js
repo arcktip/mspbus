@@ -1,6 +1,3 @@
-var map_hud_template = _.template('<div class="map-route-hud"><div class="pull-left hud-descr"><span><%= descr %></span>&nbsp;<span class="label">4 of 7</span><h4>University Av & Univ Rec Ctr</h4></div><div class="pull-right hud-stops-descr"><span class="btn"><i class="icon-chevron-left"></i></span><span class="btn"><i class="icon-chevron-right"></i></span></div></div>');
-
-
 var MapView = Backbone.View.extend({
   
   map: null,
@@ -54,8 +51,7 @@ var MapView = Backbone.View.extend({
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
 
-    console.log($('div.gmnoprint').first());
-    $('div.gmnoprint').first().parent().append('<div id="maptt"></div>');
+    $('div.gmnoprint').first().parent().append(this.mapElement);
 
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
@@ -194,22 +190,22 @@ var MapView = Backbone.View.extend({
           // Refactor into new map.
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);
-          self.mapElement.css({ 'height': '4em', 'background': 'rgba(0,0,0,0.6)'});
-          self.mapElement.html( map_hud_template({ descr: $('<div></div>').append($(this).clone()).html() }) );
-        })
+          //self.mapElement.css({ 'height': '4em', 'background': 'rgba(0,0,0,0.6)'});
+          //self.mapElement.html( JST['templates/map_hud']({ descr: $('<div></div>').append($(this).clone()).html() }) );
+        });
       });
     });
 
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
-        self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
+        //self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon("/assets/bus-stop-hover.png");
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
-        $("#maptt").html("");
+        self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
         this.setIcon("/assets/bus-stop.png");

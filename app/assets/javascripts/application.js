@@ -22,4 +22,5 @@
 //= require matchMedia
 //= require bus_eta
 // require jquery.storage
+//= require_tree ./templates
 // require_tree .
