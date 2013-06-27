@@ -10,16 +10,24 @@ var BusETAModel = Backbone.Model.extend({
 
   set_dtext: function() {
     var dtime = this.get('dtime');
-    var dtext = this.get('DepartureText');
+    var ChipText = this.get('DepartureText');
+    var StopText = this.get('DepartureText');
 
-    if(dtime < 20 && dtext.indexOf(":") !== -1) {
-      dtext = '&ndash; ' + Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
-    } else if(dtime >= 20) {
-      dtext = '';
-    } else {
-      dtext = '&ndash; ' + this.get('DepartureText');
+    if(dtime < 20 && ChipText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
+      ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+    } else if(dtime >= 20) {                         //Ex: 4:30 (and it is now 4:00)
+      ChipText = '';
+    } else {                                         //Ex: 12 min
+      ChipText = '&ndash; ' + ChipText;
     }
-    this.set('dText', dtext);
+    this.set('ChipText', ChipText);
+
+    if(dtime < 20 && StopText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
+      StopText = Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+    } else {                         //Ex: "4:30" (and it is now 4:00) or "12 min"
+      StopText = StopText;
+    }
+    this.set('StopText', StopText);
   },
   
   set_direction_class: function() {
