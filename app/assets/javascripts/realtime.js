@@ -49,6 +49,13 @@ var RealTimeView = Backbone.View.extend({
 
 var views = {};
 
+function update_table(){
+  $(".real-time").each(function(index, item) {
+    views[item.id] = new RealTimeView({ el: item });
+    views[item.id].update();
+  });
+}
+
 $(document).ready(function() {
 
   // Loop over stops and get realtime data
@@ -56,6 +63,8 @@ $(document).ready(function() {
     views[item.id] = new RealTimeView({ el: item });
     views[item.id].update();
   });
+
+  window.setInterval(update_table, 60000);
 
   function got_coordiates(position) {
     $.cookie('lat', position.coords.latitude, { expires: 1 });
