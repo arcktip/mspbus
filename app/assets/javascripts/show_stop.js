@@ -4,6 +4,7 @@ var realtime_template = _.template('<% _.each(data, function(item) { %> <tr styl
 $(document).ready(function() {
   view = new StopView();
   view.update();
+  window.setInterval(view.update, 60000);
 });
 
 /*
