@@ -58,13 +58,15 @@
 }
 
 #maptt {
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s; /* Safari */
   position: absolute;
   top:0;
   width: 100%;
   height: 2em;
-  line-height:2em;
+  line-height: 2em;
   text-align:center;
-  background-color:rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.3);
   pointer-events: none;
 }
 
@@ -146,7 +148,7 @@
   font-weight: normal;
   text-align: left;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  // background: rgba(0, 0, 0, 0.6);
   padding: 0.3em;
   color: #fff;
 

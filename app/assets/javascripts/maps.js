@@ -194,6 +194,7 @@ var MapView = Backbone.View.extend({
           // Refactor into new map.
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);
+          self.mapElement.css({ 'height': '4em', 'background': 'rgba(0,0,0,0.6)'});
           self.mapElement.html( map_hud_template({ descr: $('<div></div>').append($(this).clone()).html() }) );
         })
       });
@@ -201,6 +202,7 @@ var MapView = Backbone.View.extend({
 
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
+        self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon("/assets/bus-stop-hover.png");
