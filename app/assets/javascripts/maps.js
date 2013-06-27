@@ -186,13 +186,13 @@ var MapView = Backbone.View.extend({
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
         self.infobox.open(self.map, marker);
-        $('.infocontents').on('click', '.route-chip', function() {
+/*        $('.infocontents').on('click', '.route-chip', function() {
           // Refactor into new map.
           var route_id = $(this).data('route');
           self.get_closest_trip(new_stop.id, route_id);
           //self.mapElement.css({ 'height': '4em', 'background': 'rgba(0,0,0,0.6)'});
           //self.mapElement.html( JST['templates/map_hud']({ descr: $('<div></div>').append($(this).clone()).html() }) );
-        });
+        });*/
       });
     });
 
