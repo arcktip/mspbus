@@ -11,10 +11,6 @@ var MapView = Backbone.View.extend({
   init: function(coords) {
     _.bindAll(this);
 
-    this.infobox = new google.maps.InfoWindow({
-      size: new google.maps.Size(200, 50)
-    });
-
     if (this.ran === true)
       return;
 
@@ -53,9 +49,12 @@ var MapView = Backbone.View.extend({
 
     $('div.gmnoprint').first().parent().append(this.mapElement);
 
+    this.infobox = new google.maps.InfoWindow({
+      size: new google.maps.Size(200, 50)
+    });
+
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
-    
   },
   
   render: function() {
