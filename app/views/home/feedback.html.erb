@@ -13,19 +13,3 @@
 </div>
 </div>
 </div>
-
-<script>
-$(window).resize(function() {
-  if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-    $('#view-table').removeClass('span6');
-    $('#view-table').addClass('span12');
-    $('#view-map').removeClass('span6');
-    $('#view-map').addClass('span12');
-  } else {
-    $('#view-table').removeClass('span12');
-    $('#view-table').addClass('span6');
-    $('#view-map').removeClass('span12');
-    $('#view-map').addClass('span6');
-  }
-});
-</script>
