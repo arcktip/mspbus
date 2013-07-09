@@ -49,7 +49,7 @@ var BusETAModel = Backbone.Model.extend({
 
     if(eta < 5)
       this.set('priority', "#b94a48");
-    else if (eta < 15)
+    else if (eta < 12)
       this.set('priority', "#f89406");
     else if (eta < 20)
       this.set('priority', "#468847");
