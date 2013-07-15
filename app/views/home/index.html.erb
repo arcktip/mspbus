@@ -1,5 +1,3 @@
-<!--<button id="btn-current-location-small" class="btn btn-info btn-address pull-right"><i class="icon-circle-blank"></i> Update my location</button>-->
-
 <% if not @inbounds %>
   <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
 <% end %>
@@ -60,7 +58,7 @@
     <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Real-time bus arrivals</h3>
   </div>
   <div class="modal-body" style="text-align:center;">
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Use My Location</button>
+    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Find Me</button>
 	  <div style="text-align:left;" class="legend">
       <%= render 'shared/legend' %>      
     </div>
