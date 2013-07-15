@@ -85,13 +85,19 @@
 }
 
 .infocontents {
-  width: 90%;
+  width: 200px;
   text-align: center;
   margin: 0 auto;
+  overflow:hide;
 }
 
 .infocontents a {
   font-weight:bold;
+}
+
+.infocontents .route-chip {
+  display:inline-block;
+  float:none;
 }
 
 .dir_label {
