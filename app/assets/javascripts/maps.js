@@ -179,9 +179,8 @@ var MapView = Backbone.View.extend({
       var view = views[new_stop.id];
       view.update(function() {
 
-        var data = '<span class="marker-header clearfix">' + view.$el.data('name') + '</span><br>';
+        var data = '<a class="marker-header clearfix" href="/stop/'  + new_stop.id + '">' + view.$el.data('name') + '</a><br>';
         data += '<div class="clearfix">' + view.$el.html() + '</div>';
-        data += '<br><a href="/stop/'  + new_stop.id + '">Full stop info</a>';
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
         self.infobox.open(self.map, marker);
