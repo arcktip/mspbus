@@ -77,19 +77,22 @@ var HomeView = Backbone.View.extend({
     this.update_screen_size();
 
     if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-      if($.cookie('home_current_view')!=='map_list_item')
+      if($.cookie('home_current_view')==='map_list_item')
+        $('#view-table').hide();
+      else if ($.cookie('home_current_view')==='table_list_item')
         $('#view-map').hide();
-      $('#view-table').removeClass('span6');
-      $('#view-table').addClass('span12');
-      $('#view-map').removeClass('span6');
-      $('#view-map').addClass('span12');
+
+      this.view_table.removeClass('span6');
+      this.view_table.addClass('span12');
+      this.view_map.removeClass('span6');
+      this.view_map.addClass('span12');
     } else {
-      $('#view-map').show();
-      $('#view-table').show();
-      $('#view-table').removeClass('span12');
-      $('#view-table').addClass('span6');
-      $('#view-map').removeClass('span12');
-      $('#view-map').addClass('span6');
+      this.view_map.show();
+      this.view_table.show();
+      this.view_table.removeClass('span12');
+      this.view_table.addClass('span6');
+      this.view_map.removeClass('span12');
+      this.view_map.addClass('span6');
     }
   },
 
