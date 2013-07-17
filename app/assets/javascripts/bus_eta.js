@@ -22,7 +22,9 @@ var BusETAModel = Backbone.Model.extend({
     }
     this.set('ChipText', ChipText);
 
-    if(dtime < 20 && StopText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
+    if(dtime < 1) {
+      StopText = "Now";
+    } else if(dtime < 20 && StopText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
       StopText = Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
     } else {                         //Ex: "4:30" (and it is now 4:00) or "12 min"
       StopText = StopText;
