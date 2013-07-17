@@ -77,7 +77,8 @@ var HomeView = Backbone.View.extend({
     this.update_screen_size();
 
     if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-      $('#view-map').hide();
+      if($.cookie('home_current_view')!=='map_list_item')
+        $('#view-map').hide();
       $('#view-table').removeClass('span6');
       $('#view-table').addClass('span12');
       $('#view-map').removeClass('span6');
