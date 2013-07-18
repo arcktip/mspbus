@@ -14,8 +14,7 @@ var MapView = Backbone.View.extend({
     if (this.ran === true)
       return;
 
-    console.log($(document).height()-200);
-    $("#map-canvas").height($(document).height()-100);
+//    $("#map-canvas").height($(document).height()-100);
 
     this.lat = coords.lat;
     this.lon = coords.lon;
