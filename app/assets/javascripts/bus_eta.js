@@ -14,7 +14,7 @@ var BusETAModel = Backbone.Model.extend({
     var StopText = this.get('DepartureText');
 
     if(dtime < 20 && ChipText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
-      ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+      ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
     } else if(dtime >= 20) {                         //Ex: 4:30 (and it is now 4:00)
       ChipText = '';
     } else {                                         //Ex: 12 min
@@ -25,9 +25,9 @@ var BusETAModel = Backbone.Model.extend({
     if(dtime < 1) {
       StopText = "Now";
       if(StopText.indexOf(":") !== -1)
-        StopText+=' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+        StopText+=' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
     } else if(dtime < 20 && StopText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
-      StopText = Math.round(dtime) + ' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+      StopText = Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
     } else {                         //Ex: "4:30" (and it is now 4:00) or "12 min"
       StopText = StopText;
     }
