@@ -98,28 +98,28 @@ Example call:
 
 Example output:
 
-  [
-      {
-          "Text": "University of Minnesota",
-          "Value": "1"
-      },
-      {
-          "Text": "Airport (MAC)",
-          "Value": "2"
-      },
-      {
-          "Text": "Other",
-          "Value": "3"
-      },
-      {
-          "Text": "Prior Lake",
-          "Value": "4"
-      },
-      {
-          "Text": "Scott County",
-          "Value": "5"
-      }
-  ]
+    [
+        {
+            "Text": "University of Minnesota",
+            "Value": "1"
+        },
+        {
+            "Text": "Airport (MAC)",
+            "Value": "2"
+        },
+        {
+            "Text": "Other",
+            "Value": "3"
+        },
+        {
+            "Text": "Prior Lake",
+            "Value": "4"
+        },
+        {
+            "Text": "Scott County",
+            "Value": "5"
+        }
+    ]
 
 List of Stops on a Route
 ------------------------
