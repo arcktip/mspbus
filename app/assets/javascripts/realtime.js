@@ -69,15 +69,9 @@ $(document).ready(function() {
   function got_coordinates(position) {
     $.cookie('lat', position.coords.latitude, { expires: 1 });
     $.cookie('lon', position.coords.longitude, { expires: 1 });
-/*
-    //Google Analytics code
-    _gaq.push(['_setCustomVar',
-      1,                           // Variable slot number.
-      'latlon',                    // Variable name.
-      position.coords.latitude.toString()+","+position.coords.longitude.toString(),
-      2                            // Variable has session-level scope.
-    ]);
-*/
+
+    ga('set', 'LatLon', position.coords.latitude.toString()+","+position.coords.longitude.toString());
+
     window.location = '/';
 
     $.removeCookie('q');
