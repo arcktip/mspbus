@@ -70,6 +70,14 @@ $(document).ready(function() {
     $.cookie('lat', position.coords.latitude, { expires: 1 });
     $.cookie('lon', position.coords.longitude, { expires: 1 });
 
+    //Google Analytics code
+    ga.push(['_setCustomVar',
+      1,                           // Variable slot number.
+      'latlon',                    // Variable name.
+      position.coords.latitude.toString()+","+position.coords.longitude.toString(),
+      3                            // Variable has page-level scope.
+    ]);
+
     window.location = '/';
 
     $.removeCookie('q');
