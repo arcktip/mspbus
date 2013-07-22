@@ -70,7 +70,8 @@ $(document).ready(function() {
     $.cookie('lat', position.coords.latitude, { expires: 1 });
     $.cookie('lon', position.coords.longitude, { expires: 1 });
 
-    ga('set', 'LatLon', position.coords.latitude.toString()+","+position.coords.longitude.toString());
+//    ga('set', 'LatLon', position.coords.latitude.toString()+","+position.coords.longitude.toString());
+//    ga('send', 'event', 'geolocation', 'LatLon', 'click', position.coords.latitude.toString()+","+position.coords.longitude.toString());
 
     window.location = '/';
 
