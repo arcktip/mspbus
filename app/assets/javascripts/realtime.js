@@ -66,7 +66,7 @@ $(document).ready(function() {
 
   window.setInterval(update_table, 60000);
 
-  function got_coordiates(position) {
+  function got_coordinates(position) {
     $.cookie('lat', position.coords.latitude, { expires: 1 });
     $.cookie('lon', position.coords.longitude, { expires: 1 });
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordiates, error_on_coordinates);
+      navigator.geolocation.getCurrentPosition(got_coordinates, error_on_coordinates);
     }else{
     	error_on_coordinates();
     }
