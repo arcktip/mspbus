@@ -75,7 +75,7 @@ $(document).ready(function() {
       1,                           // Variable slot number.
       'latlon',                    // Variable name.
       position.coords.latitude.toString()+","+position.coords.longitude.toString(),
-      3                            // Variable has page-level scope.
+      2                            // Variable has session-level scope.
     ]);
 
     window.location = '/';
