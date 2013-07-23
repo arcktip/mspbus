@@ -52,33 +52,6 @@
   </div>
 </div>
 
-<div class="modal hide fade" id="ask">
-  <div class="modal-header">
-    <button type="button" class="close" id="ask-btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Real-time bus arrivals</h3>
-  </div>
-  <div class="modal-body" style="text-align:center;">
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:top" src="<%= asset_path 'location.png' %>"> Find Me</button>
-	  <div style="text-align:left;" class="legend">
-      <%= render 'shared/legend' %>      
-    </div>
-  </div>
- </div>
-
-<div class="modal hide fade" id="error">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
-  </div>
-  <div class="modal-body" style="text-align:center;">
-    <p>Location settings are disabled, or something went wrong! Please set your location below:</p>
-      <form class="fallback-form" action="/">
-        <div class="input-append"><input type="text" name="q" placeholder="1007 W Franklin" value="<%= params[:q] %>"/><button class="btn add-on"> <i class="icon-search"></i></button>
-      </div></form>
-  </div>
-</div>
-
-
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY&sensor=true">
 </script>
 
