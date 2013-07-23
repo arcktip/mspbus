@@ -79,11 +79,6 @@ $(document).ready(function() {
     //window.location = '/?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
   }
 
-  function error_on_coordinates() {
-  	$('#ask').modal("hide");
-  	$('#error').modal();
-  }
-
   // Setup location handlers
   $('.navbar-form').on('submit', function (event) {
     event.preventDefault();
@@ -100,7 +95,7 @@ $(document).ready(function() {
         $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
         $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
       }else{
-      	error_on_coordinates();
+        //Error
       }
       event.target.submit();
     });
@@ -109,17 +104,13 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, error_on_coordinates);
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){//Error});
     }else{
-    	error_on_coordinates();
+      //Error
     }
   });
 
   if ( $.url().param('q') ){
     $.cookie('q', $.url().param('q'), { expires: 1 });
-  }
-
-  if ( !$.cookie('lat') && !$.url().param('q') ) {
-    $('#ask').modal();
   }
 });
