@@ -1,0 +1,28 @@
+<% if not @inbounds %>
+  <div class="alert alert-info">Your geolocation placed you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
+<% elsif @stops.results.empty? %>
+  <div class="alert alert-info">No stops found.</div>
+<% else %>
+  <div class="btn-group btn-group-vertical" style="width:100%;">
+    <% @stops.results.first(10).each do |stop| %>
+      <div class="btn stopbutton">
+        <a href="stop/<%= stop.stop_id %>">
+          <div style="position:absolute;right:5px" class="distance-label">
+            <%= 
+            if (stop.sort[0].nil?)
+              ""
+            elsif (stop.sort[0]>2)
+              stop.sort[0].round().to_s+" mi"      
+            elsif(stop.sort[0]>0.5) then
+              stop.sort[0].round(1).to_s+" mi"
+            else
+              (stop.sort[0]*5280).round().to_s+" ft"
+            end %>
+          </div>
+          <span class="stop-name"><%= stop.stop_name %></span> 
+          <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+        </a>
+      </div>
+      <% end %>
+  </div>
+<% end %>
