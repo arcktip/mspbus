@@ -16,6 +16,31 @@
     <div id="view-table" class="span6 views">
       <div id="table-results">
 
+        <% if params[:q].present? %>
+          <div class="btn-group btn-group-vertical" style="width:100%;">
+            <% @stops.results.first(10).each do |stop| %>
+              <div class="btn stopbutton">
+                <a href="stop/<%= stop.stop_id %>">
+                  <div style="position:absolute;right:5px" class="distance-label">
+                    <%= 
+                    if (stop.sort[0].nil?)
+                      ""
+                    elsif (stop.sort[0]>2)
+                      stop.sort[0].round().to_s+" mi"      
+                    elsif(stop.sort[0]>0.5) then
+                      stop.sort[0].round(1).to_s+" mi"
+                    else
+                      (stop.sort[0]*5280).round().to_s+" ft"
+                    end %>
+                  </div>
+                  <span class="stop-name"><%= stop.stop_name %></span> 
+                  <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+                </a>
+              </div>
+              <% end %>
+          </div>
+        <% end %>
+
       </div>
       <div style="margin-top:1em;margin-left:5px;" class="legend">
         <%= render 'shared/legend' %>

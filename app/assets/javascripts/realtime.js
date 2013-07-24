@@ -56,16 +56,6 @@ function update_table(){
   });
 }
 
-function load_realtime(data){
-  $("#table-results").html(data);
-
-  // Loop over stops and get realtime data
-  $(".real-time").each(function(index, item) {
-    views[item.id] = new RealTimeView({ el: item });
-    views[item.id].update();
-  });
-}
-
 function got_coordinates(position) {
   $.cookie('lat', position.coords.latitude, { expires: 1 });
   $.cookie('lon', position.coords.longitude, { expires: 1 });
@@ -77,15 +67,19 @@ function got_coordinates(position) {
       lat:position.coords.latitude,
       lon:position.coords.longitude
     },
-  }).done(load_realtime);
+  }).done(function(data){  $("#table-results").html(data); update_table(); });
 }
 
 $(document).ready(function() {
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+  if(!$(document).getUrlParam("q")){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+    } else {
+      //Error
+    }
   } else {
-    //Error
+    update_table();
   }
 
   window.setInterval(update_table, 60000);
