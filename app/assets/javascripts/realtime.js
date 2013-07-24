@@ -109,7 +109,7 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+      navigator.geolocation.getCurrentPosition(function(pos){got_coordinates(pos);        EventBus.trigger("center_map", pos.coords.latitude, pos.coords.longitude);}, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
     }else{
       //Error
     }

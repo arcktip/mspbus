@@ -56,6 +56,9 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY&sensor=true">
 </script>
 
+<script>
+window.EventBus = _.extend({},Backbone.Events);
+</script>
 <%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "maps" %>
 

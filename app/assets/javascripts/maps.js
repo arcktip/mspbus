@@ -11,6 +11,8 @@ var MapView = Backbone.View.extend({
   init: function(coords) {
     _.bindAll(this);
 
+    window.EventBus.on("center_map",this.center_map);
+
     if (this.ran === true)
       return;
 
@@ -61,6 +63,12 @@ var MapView = Backbone.View.extend({
   
   render: function() {
 
+  },
+
+  center_map: function(lat, lon){
+    var self=this;
+    var center = new google.maps.LatLng(lat, lon);
+    self.map.panTo(center);
   },
 
   create_bus_marker: function(stop_id, obj) {
