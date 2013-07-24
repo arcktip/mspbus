@@ -69,6 +69,7 @@ var MapView = Backbone.View.extend({
     var self=this;
     var center = new google.maps.LatLng(lat, lon);
     self.map.panTo(center);
+    self.yah_marker.setPosition(center);
   },
 
   create_bus_marker: function(stop_id, obj) {
@@ -144,7 +145,7 @@ var MapView = Backbone.View.extend({
     //idle event fires once when the user stops panning/zooming
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
 
-    var yah_marker = new google.maps.Marker({
+    this.yah_marker = new google.maps.Marker({
       position: new google.maps.LatLng(this.lat, this.lon),
       map: this.map,
       draggable: false,
