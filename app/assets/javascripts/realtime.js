@@ -56,28 +56,39 @@ function update_table(){
   });
 }
 
-$(document).ready(function() {
+function load_realtime(data){
+  $("#table-results").html(data);
 
   // Loop over stops and get realtime data
   $(".real-time").each(function(index, item) {
     views[item.id] = new RealTimeView({ el: item });
     views[item.id].update();
   });
+}
+
+function got_coordinates(position) {
+  $.cookie('lat', position.coords.latitude, { expires: 1 });
+  $.cookie('lon', position.coords.longitude, { expires: 1 });
+
+  $.ajax({
+    url: "/table",
+    method: "post",
+    data: {
+      lat:position.coords.latitude,
+      lon:position.coords.longitude
+    },
+  }).done(load_realtime);
+}
+
+$(document).ready(function() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+  } else {
+    //Error
+  }
 
   window.setInterval(update_table, 60000);
-
-  function got_coordinates(position) {
-    $.cookie('lat', position.coords.latitude, { expires: 1 });
-    $.cookie('lon', position.coords.longitude, { expires: 1 });
-
-//    ga('set', 'LatLon', position.coords.latitude.toString()+","+position.coords.longitude.toString());
-//    ga('send', 'event', 'geolocation', 'LatLon', 'click', position.coords.latitude.toString()+","+position.coords.longitude.toString());
-
-    window.location = '/';
-
-    $.removeCookie('q');
-    //window.location = '/?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
-  }
 
   // Setup location handlers
   $('.navbar-form').on('submit', function (event) {
@@ -104,7 +115,7 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){//Error});
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
     }else{
       //Error
     }
