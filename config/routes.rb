@@ -50,6 +50,7 @@ MspBus::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'home#index'
   post '/table' => 'home#table'
+  post '/sms' => 'home#sms'
   get 'stop/bounds' => 'stop#bounds'
   get 'stop/closest_trip' => 'stop#closest_trip'
   get 'stop/:id' => 'stop#show'

@@ -49,6 +49,11 @@ class HomeController < ApplicationController
     render :layout => false
   end
 
+  def sms
+
+
+  end
+
   def about
 
   end
