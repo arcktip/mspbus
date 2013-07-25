@@ -4,6 +4,8 @@
 |----------------------------------------------------------------------------------------------------
 */
 
+var center;
+
 var RealTimeView = Backbone.View.extend({
 
   template: JST['templates/eta_label'],
@@ -60,6 +62,10 @@ function got_coordinates(position) {
   $.cookie('lat', position.coords.latitude, { expires: 1 });
   $.cookie('lon', position.coords.longitude, { expires: 1 });
 
+  center={'lat':position.coords.latitude, 'lon':position.coords.longitude};
+
+  EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
+
   $.ajax({
     url: "/table",
     method: "post",
@@ -109,7 +115,7 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(pos){got_coordinates(pos);        EventBus.trigger("center_map", pos.coords.latitude, pos.coords.longitude);}, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
     }else{
       //Error
     }
