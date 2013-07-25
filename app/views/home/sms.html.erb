@@ -3,5 +3,6 @@ Couldn't find Stop #<%= @stopid %>.
 <% elsif @error %>
 Could not retrieve stop information.
 <% end %>
-
-<%= @smess %>
+<Response>
+    <Sms><%= @smess %></Sms>
+</Response>
