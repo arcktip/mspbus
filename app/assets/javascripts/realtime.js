@@ -5,6 +5,8 @@
 */
 
 var center;
+window.EventBus = _.extend({},Backbone.Events);
+var stops;
 
 var RealTimeView = Backbone.View.extend({
 
