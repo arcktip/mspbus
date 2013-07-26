@@ -8,7 +8,7 @@ var MapView = Backbone.View.extend({
   lat: 0,
   lon: 0,
 
-  init: function(coords) {
+  init: function() {
     _.bindAll(this);
 
     window.EventBus.on("center_map",this.center_map);
@@ -18,11 +18,10 @@ var MapView = Backbone.View.extend({
 
 //    $("#map-canvas").height($(document).height()-100);
 
-    this.lat = coords.lat;
-    this.lon = coords.lon;
+    var default_center={lat:44.980522382993826, lon:-93.27006340026855};
 
     var map_options = {
-      center: new google.maps.LatLng(this.lat, this.lon),
+      center: new google.maps.LatLng(default_center.lat, default_center.lon),
       zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       panControl: false,
@@ -55,6 +54,13 @@ var MapView = Backbone.View.extend({
 
     this.infobox = new google.maps.InfoWindow({
       size: new google.maps.Size(200, 50)
+    });
+
+    this.yah_marker = new google.maps.Marker({
+      position: new google.maps.LatLng(default_center.lat, default_center.lon),
+      map: this.map,
+      draggable: false,
+      icon: '/assets/you-are-here.png'
     });
 
     //window.setTimeout(this.update_bus_locations, 3000);
@@ -144,13 +150,6 @@ var MapView = Backbone.View.extend({
 
     //idle event fires once when the user stops panning/zooming
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
-
-    this.yah_marker = new google.maps.Marker({
-      position: new google.maps.LatLng(this.lat, this.lon),
-      map: this.map,
-      draggable: false,
-      icon: '/assets/you-are-here.png'
-    });
   },
 
   add_stop: function(new_stop){
