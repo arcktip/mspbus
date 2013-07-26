@@ -145,15 +145,6 @@ var MapView = Backbone.View.extend({
     });
   },
 
-  add_markers: function(stops) {
-    if (this.ran === true)
-      return;
-
-    for(var i=0, len=stops.length; i < len; i++) {
-      this.add_stop( stops[i] );
-    }
-  },
-
   add_stop: function(new_stop){
     
     //Search stops array to see if an object for this stop is already present
