@@ -91,11 +91,18 @@ function geocode(address){
   });
 }
 
+function geocode_failure(){
+  $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');
+//  got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
+}
+
 function update_coordinates(){
+  var geosucc=setTimeout(geocode_failure,5000);
+
   if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos);}, geocode_failure);
   else //TODO: Alert user that they cannot do geocoding
-    got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
+    geocode_failure();
 }
 
 $(document).ready(function() {
