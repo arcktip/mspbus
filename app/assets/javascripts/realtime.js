@@ -107,4 +107,6 @@ $(document).ready(function() {
   window.setInterval(update_table, 60000);
 
   $('.btn-current-location').on('click', update_coordinates);
+  $("#q").on("keypress", function(e) { if (e.which == 13) geocode($("#q").val()); });
+  $("#qsub").click(function() { geocode($("#q").val()); });
 });
