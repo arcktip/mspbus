@@ -1,7 +1,3 @@
-<!--<button id="btn-current-location-small" class="btn btn-info btn-address pull-right"><i class="icon-circle-blank"></i> Update my location</button>-->
-
-
-
 <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
   <li class="active" id="table-list-item">
     <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
@@ -15,91 +11,60 @@
   <div class="alert alert-info">No stops found.</div>
 <% end %>
 
-<% if not @inbounds %>
-  <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
-<% end %>
-
 <div class="container">     
-    <div class="row">
-<div id="view-table" class="span6 views">
+  <div class="row">
+    <div id="view-table" class="span6 views">
+      <div id="table-results">
 
-  <div class="btn-group btn-group-vertical" style="width:100%;">
-    <% @stops.results.first(10).each do |stop| %>
-      <div style="text-align:left;" class="stopbutton btn">
-        <a href="stop/<%= stop.stop_id %>">
-          <div style="position:absolute;right:5px">
-            <%= 
-            if (stop.sort[0].nil?)
-              ""
-            elsif (stop.sort[0]>2)
-              stop.sort[0].round().to_s+" mi"      
-            elsif(stop.sort[0]>0.5) then
-              stop.sort[0].round(1).to_s+" mi"
-            else
-              (stop.sort[0]*5280).round().to_s+" ft"
-            end %>
+        <% if params[:q].present? %>
+          <div class="btn-group btn-group-vertical" style="width:100%;">
+            <% @stops.results.first(10).each do |stop| %>
+              <div class="btn stopbutton">
+                <a href="stop/<%= stop.stop_id %>">
+                  <div style="position:absolute;right:5px" class="distance-label">
+                    <%= 
+                    if (stop.sort[0].nil?)
+                      ""
+                    elsif (stop.sort[0]>2)
+                      stop.sort[0].round().to_s+" mi"      
+                    elsif(stop.sort[0]>0.5) then
+                      stop.sort[0].round(1).to_s+" mi"
+                    else
+                      (stop.sort[0]*5280).round().to_s+" ft"
+                    end %>
+                  </div>
+                  <span class="stop-name"><%= stop.stop_name %></span> 
+                  <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+                </a>
+              </div>
+              <% end %>
           </div>
-          <b><%= stop.stop_name %></b> 
-          <div class="real-time" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>"></div>
-        </a>
+        <% end %>
+
       </div>
-      <% end %>
-  </div>
-  <div style="margin-top:1em;">
-    <span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
-    <b>Arriving in:</b><br>
-    <%= render 'shared/arriving' %>
-  </div>
-  <%= render 'shared/locations' %>
-</div>
+      <div style="margin-top:1em;margin-left:5px;" class="legend">
+        <%= render 'shared/legend' %>
+      </div>
+    </div>
 
-<div id="view-map" class="span6 views">
-  <div id="map-canvas"></div>
-  <div id="maptt"></div>
-</div>
-</div>
-</div>
-
-<div class="modal hide fade" id="ask">
-  <div class="modal-header">
-    <button type="button" class="close" id="ask-btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Real-time bus arrivals</h3>
-  </div>
-  <div class="modal-body" style="text-align:center;">
-    <button class="btn-current-location btn btn-info btn-large btn-address" style="font-weight:bold;font-size:20px"><img style="width:20px;height:20px;vertical-align:middle" src="<%= asset_path 'location.png' %>"> Use My Location</button>
-	<div style="text-align:left;">
-    	<span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
-      <b>Arriving in:</b><br>
-      <%= render 'shared/arriving' %>
-      <%= render 'shared/locations' %>
+    <div id="view-map" class="span6 views">
+      <div id="map-canvas"></div>
     </div>
   </div>
- </div>
-
-<div class="modal hide fade" id="error">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;MSP Bus</h3>
-  </div>
-  <div class="modal-body" style="text-align:center;">
-    <p>Location settings are disabled, or something went wrong! Please set your location below:</p>
-      <form class="fallback-form" action="/">
-        <div class="input-append"><input type="text" name="q" placeholder="1007 W Franklin" value="<%= params[:q] %>"/><button class="btn add-on"> <i class="icon-search"></i></button>
-      </div></form>
-  </div>
 </div>
-
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY&sensor=true">
 </script>
 
+<script>
+window.EventBus = _.extend({},Backbone.Events);
+var center = {lat:<%= @lat %>, lon:<%= @lon %>}; //{lat: XXX, lon: XXX}
+</script>
 <%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "maps" %>
 
 <script>
   var stops = <%= @stops.results.first(10).map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }.to_json.html_safe %>;
-
-  var center   = {lat:<%= @lat %>, lon:<%= @lon %>};
 </script>
 
 <%= javascript_include_tag "home" %>

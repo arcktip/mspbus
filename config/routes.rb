@@ -49,7 +49,10 @@ MspBus::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'home#index'
+  post '/table' => 'home#table'
+  post '/sms' => 'home#sms'
   get 'stop/bounds' => 'stop#bounds'
+  get 'stop/closest_trip' => 'stop#closest_trip'
   get 'stop/:id' => 'stop#show'
   get 'about' => 'home#about'
   get 'feedback' => 'home#feedback'

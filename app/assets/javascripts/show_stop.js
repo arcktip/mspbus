@@ -1,23 +1,57 @@
 // Realtime Template
-var realtime_template = _.template('<% _.each(data, function(item) { %> <tr><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time" style="color:<%= item.priority %>"><i><%= item.DepartureText %></i> </td></tr><% }); %>');
+var realtime_template = _.template('<% _.each(data, function(item) { %> <tr style="background: <%= item.priority %>"><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time"><i><%= item.StopText %></i> </td></tr><% }); %>');
 
 $(document).ready(function() {
-  var id=$("#thestop").data().attr;
-  BusETA(id, got_data );
+  view = new StopView();
+  view.update();
+  window.setInterval(view.update, 60000);
+});
+
+/*
+|----------------------------------------------------------------------------------------------------
+| StopView
+|----------------------------------------------------------------------------------------------------
+*/
+
+var StopView = Backbone.View.extend({
+
+  el: '.result',
+  template: realtime_template,
   
-  // Callback on realtime model.
-  function got_data(data) {
-    if(data.length==0){
-      $("#result").parent().html("No buses found.");   
+  initialize: function() {
+    _.bindAll(this);
+    this.collection = new BusETACollection();
+    this.collection.stop_id = this.el.id;
+  },
+
+  render: function() {
+
+    if ( view.collection.models.length === 0 ) {
+      this.$el.parent().html("No buses found.");
+      return;
     }
 
-    data=_.map(data,
+    this.$el.html( realtime_template({ data: this.format_data() }) );
+
+  },
+
+  update: function() {
+    var self = this;
+    
+    this.collection.fetch({ success: function() {
+      self.process_data();
+    } });
+
+  },
+
+  process_data: function(num_models) {
+    this.collection.process_models(num_models);
+    this.render();
+  },
+
+  format_data: function() {
+    var data = _.map(view.collection.toJSON(),
       function(obj) {
-        obj=process_eta(obj);
-
-        if(obj.DepartureText.indexOf(":")!=-1)
-          obj.DepartureText=obj.arrtime.format("h:mma");
-
         if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
           obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
 
@@ -28,10 +62,7 @@ $(document).ready(function() {
         return obj;
       }
     );
-    data=_.sortBy(data,function(obj) { return obj.arrtime; });
-    data=_.filter(data,function(obj) {
-      return obj.DepartureText=obj.DepartureText;
-    });
-    $("#result").html( realtime_template({ data: data }) );
+
+    return data;
   }
 });

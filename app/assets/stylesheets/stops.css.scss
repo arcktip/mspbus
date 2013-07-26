@@ -9,3 +9,36 @@ table {
 span.desc {
   font-size:60%;
 }
+
+#thestop {
+  font-family: 'OpenSansSemibold';
+  font-size: 1.5em;
+}
+
+.stop-table {
+  th {
+    font-family: 'OpenSansSemibold';
+    font-size: 1em;
+    background: #f5f7f7;
+  }
+  td {
+    font-family: 'OpenSansRegular';
+    color: #fff;
+  }
+}
+
+.stop-header {
+  line-height: 20px;
+  padding: 5px 10px 5px 10px;
+  margin-bottom:3px;
+
+  img {
+    vertical-align: bottom;
+  }
+}
+
+.stop-desc {
+  margin-left: 0.5em;
+  font-size: 90%;
+  font-style: italic;
+}

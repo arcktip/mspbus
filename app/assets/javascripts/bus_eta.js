@@ -1,59 +1,129 @@
-function BusETA(stopid, success) {
-  var now=new Date().getTime()/1000;
-  stopid=stopid.toString();
+/*
+|----------------------------------------------------------------------------------------------------
+| BusETAModel
+|----------------------------------------------------------------------------------------------------
+*/
 
-  //Check cache to see if we already have this
-  if(typeof(BusETA.datas[stopid])!=='undefined' && now-BusETA.datas[stopid].ts<45)
-    success(BusETA.datas[stopid].data);
+var BusETAModel = Backbone.Model.extend({
 
-  $.getJSON( 'http://svc.metrotransit.org/NexTrip/'+stopid+'?callback=?&format=json', '', 
-    function(data, textStatus, jqXHR){
-      BusETA.datas[stopid]={ts:now, data:data};
-      success(data);
+  initialize: function() {},
+
+  set_dtext: function() {
+    var dtime = this.get('dtime');
+    var ChipText = this.get('DepartureText');
+    var StopText = this.get('DepartureText');
+
+    if(dtime < 20 && ChipText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
+      ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
+    } else if(dtime >= 20) {                         //Ex: 4:30 (and it is now 4:00)
+      ChipText = '';
+    } else {                                         //Ex: 12 min
+      ChipText = '&ndash; ' + ChipText;
     }
-  );
-}
-BusETA.datas={};
+    this.set('ChipText', ChipText);
 
+    if(dtime < 1) {
+      StopText = "Now";
+      if(StopText.indexOf(":") !== -1)
+        StopText+=' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
+    } else if(dtime < 20 && StopText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
+      StopText = Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
+    } else {                         //Ex: "4:30" (and it is now 4:00) or "12 min"
+      StopText = StopText;
+    }
+    this.set('StopText', StopText);
+  },
+  
+  set_direction_class: function() {
+    var route = this.get('RouteDirection');
+    
+    if(route === 'SOUTHBOUND') {
+      this.set('direction', 'icon-arrow-down');
+    } else if(route === 'NORTHBOUND') {
+      this.set('direction', 'icon-arrow-up');
+    } else if(route === 'EASTBOUND') {
+      this.set('direction', 'icon-arrow-right');
+    } else if(route === 'WESTBOUND') {
+      this.set('direction', 'icon-arrow-left');
+    }
+  },
 
-function get_direction_class(route) {
-  if(route === 'SOUTHBOUND') {
-    return 'icon-arrow-down';
-  } else if(route === 'NORTHBOUND') {
-    return 'icon-arrow-up';
-  } else if(route === 'EASTBOUND') {
-    return 'icon-arrow-right';
-  } else if(route === 'WESTBOUND') {
-    return 'icon-arrow-left';
+  set_priority: function() {
+    var eta = this.get('dtime');
+
+    if(eta < 5)
+      this.set('priority', "#b94a48");
+    else if (eta < 12)
+      this.set('priority', "#f89406");
+    else if (eta < 20)
+      this.set('priority', "#468847");
+    else
+      this.set('priority', "#3a87ad");
+  
+  },
+
+  set_departure_text: function() {
+    var departure_text = this.get('DepartureText');
+
+    if(departure_text === 'Due') {
+      this.set('DepartureText', 'Now')
+    }
+
+  },
+
+  process_eta: function() {
+    var departure_time = this.get('DepartureTime');
+
+    //TODO: Does this work over midnight?
+    var seconds = departure_time.substr(6,10);
+    var offset = departure_time.substr(19,3);
+    var arrtime = moment(seconds, "X");
+    var ctime = moment();
+    var dtime = (arrtime - ctime ) / 1000 / 60; //Convert to minutes
+
+    this.set('arrtime', arrtime);
+    this.set('dtime', dtime);
+    this.set_priority();
+    this.set_departure_text();
+    this.set_direction_class();
+    this.set_dtext();
   }
-}
 
-function get_priority(eta) {
-  if(eta<5)
-    return "#B94A48";
-  else if (eta<15)
-    return "#F89406";
-  else if (eta<20)
-    return "#468847";
-  else
-    return "#000080";
-}
+});
 
-function process_eta(obj) {
-  var seconds=obj.DepartureTime.substr(6,10);
-  var offset=obj.DepartureTime.substr(19,3);
+/*
+|----------------------------------------------------------------------------------------------------
+| BusETACollection
+|----------------------------------------------------------------------------------------------------
+*/
 
-  obj.arrtime=moment(seconds, "X");
-  var ctime=moment();
+var BusETACollection = Backbone.Collection.extend({
 
-  obj.dtime=(obj.arrtime-ctime)/1000/60; //Convert to minutes
+  stop_id: null,
+  model: BusETAModel,
+  
+  url: function() {
+    return 'http://svc.metrotransit.org/NexTrip/' + this.stop_id + '?callback=?&format=json';
+  },
 
-  obj.priority=get_priority(obj.dtime);
+  process_models: function(num_models) {
 
-  if(obj.DepartureText=="Due")
-    obj.DepartureText="Now";
+    // Process the times for sorting purposes.
+    this.map(function(model) {
+      model.process_eta();
+    });
 
-  obj.direction = get_direction_class(obj.RouteDirection);
+    // Sort models by closest
+    this.models = this.sortBy(function(model) { return model.get('arrtime'); });
+    
+    // Slice only the first five for display
+    if ( num_models ) {
+      this.models = this.models.slice(0,num_models);
+    }
+  }
 
-  return obj;
-}
+});
+
+// BusETACollection.comparator = function(bus_eta) {
+//   return bus_eta.get('arrtime');
+// };

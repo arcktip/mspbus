@@ -5,6 +5,19 @@
 <h3>Feedback</h3>
 <p>Found a bug? Want to see a new feature? Love the site? Hate the site? Something else?</p>
 <p> -- <a href="mailto:mspbus@gmail.com">mspbus@gmail.com</a></p>
+
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+  var disqus_shortname = 'mspbus'; // required: replace example with your forum shortname
+
+  (function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
 
 <div id="fbtwitter" class="span6">
@@ -13,19 +26,3 @@
 </div>
 </div>
 </div>
-
-<script>
-$(window).resize(function() {
-  if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-    $('#view-table').removeClass('span6');
-    $('#view-table').addClass('span12');
-    $('#view-map').removeClass('span6');
-    $('#view-map').addClass('span12');
-  } else {
-    $('#view-table').removeClass('span12');
-    $('#view-table').addClass('span6');
-    $('#view-map').removeClass('span12');
-    $('#view-map').addClass('span6');
-  }
-});
-</script>

@@ -1,0 +1,8 @@
+<% if not @stopfound %>
+Couldn't find Stop #<%= @stopid %>.
+<% elsif @error %>
+Could not retrieve stop information.
+<% end %>
+<Response>
+    <Sms><%= @smess %></Sms>
+</Response>

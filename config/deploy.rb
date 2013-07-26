@@ -1,3 +1,8 @@
+require "bundler/capistrano"
+# Load Bundler's Capistrano plugin
+set :bundle_flags,    "--deployment"
+set :bundle_without,  [:development, :test, :tools]
+
 set :application, "MSP Bus"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
@@ -37,7 +42,7 @@ end
 
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
-  run "newgrp mspbus"
+  #run "newgrp mspbus"
   task :start do ; end
   task :stop do ; end
   desc "Symlinks the database.yml"

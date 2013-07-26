@@ -1,66 +1,94 @@
-///////////////////////
-//Generate ETA labels
+/*
+|----------------------------------------------------------------------------------------------------
+| RealTimeView
+|----------------------------------------------------------------------------------------------------
+*/
 
-var eta_label_template = _.template('<% _.each(data, function(item) { %> <span class="label" style="background-color:<%= item.priority %>"><i class="<%= item.direction %>"></i> <b><%= item.Route %><%= item.Terminal %></b> <i><%= item.dText %></i></span> <% }); %>');
+var center;
 
-// Callback on realtime model.
-function process_eta_data(data) {
-  if(data.length==0) {
-    data="";
-  } else {
-    data=_.map(data,
-      function(obj) {
-        obj=process_eta(obj);
+var RealTimeView = Backbone.View.extend({
 
-        if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.dText='&ndash; ' + Math.round(obj.dtime)+' Min <i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
-        else if(obj.dtime>=20)
-          obj.dText='';
-        else
-          obj.dText='&ndash; ' + obj.DepartureText;
+  template: JST['templates/eta_label'],
+  
+  initialize: function() {
+    _.bindAll(this);
+    this.collection = new BusETACollection();
+    this.collection.stop_id = this.el.id;
+  },
 
-        return obj;
-      }
-    );
+  render: function() {
+    if( this.collection.length === 0 ) {
+      this.$el.parent().parent().hide();
+    } else {
+      this.$el.html(this.template({ data: this.collection.toJSON() }));
+    }
+  },
 
-    data=_.sortBy(data,function(obj) { return obj.arrtime; });
-    data=data.slice(0,5);
-    data=eta_label_template({ data: data });
+  update: function(callback, skip_fetch) {
+    var self = this;
+    
+    if( !skip_fetch && this.collection.length === 0 ) {
+      this.collection.fetch({ success: function() {
+        self.process_data(5);
+        if(callback) { callback(); }
+      } });
+    } else {
+      if(callback) { callback(); }
+    }
+  },
+
+  process_data: function(num_models) {
+    this.collection.process_models(num_models);
+    this.render();
   }
-  return data;
+});
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Main DOM Ready
+|----------------------------------------------------------------------------------------------------
+*/
+
+var views = {};
+
+function update_table(){
+  $(".real-time").each(function(index, item) {
+    views[item.id] = new RealTimeView({ el: item });
+    views[item.id].update();
+  });
 }
 
+function got_coordinates(position) {
+  $.cookie('lat', position.coords.latitude, { expires: 1 });
+  $.cookie('lon', position.coords.longitude, { expires: 1 });
 
+  center={'lat':position.coords.latitude, 'lon':position.coords.longitude};
+
+  EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
+
+  $.ajax({
+    url: "/table",
+    method: "post",
+    data: {
+      lat:position.coords.latitude,
+      lon:position.coords.longitude
+    },
+  }).done(function(data){  $("#table-results").html(data); update_table(); });
+}
 
 $(document).ready(function() {
 
-  // Loop over stops and get realtime data
-  $(".real-time").each(function(index, item) {
-    BusETA(item.id, function(data) {
-        data=process_eta_data(data);
-        if(data.length==0)
-          $("#" + item.id).parent().parent().hide();
-        else
-          $("#" + item.id).html(data);
-      }
-    );
-  });
-  
-
-  function got_coordiates(position) {
-    $.cookie('lat', position.coords.latitude, { expires: 1 });
-    $.cookie('lon', position.coords.longitude, { expires: 1 });
-
-    window.location = '/';
-
-    $.removeCookie('q');
-    //window.location = '/?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
+  if(!$(document).getUrlParam("q")){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+    } else {
+      //Error
+    }
+  } else {
+    update_table();
   }
 
-  function error_on_coordinates() {
-  	$('#ask').modal("hide");
-  	$('#error').modal();
-  }
+  window.setInterval(update_table, 60000);
 
   // Setup location handlers
   $('.navbar-form').on('submit', function (event) {
@@ -78,7 +106,7 @@ $(document).ready(function() {
         $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
         $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
       }else{
-      	error_on_coordinates();
+        //Error
       }
       event.target.submit();
     });
@@ -87,17 +115,13 @@ $(document).ready(function() {
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordiates, error_on_coordinates);
+      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
     }else{
-    	error_on_coordinates();
+      //Error
     }
   });
 
   if ( $.url().param('q') ){
     $.cookie('q', $.url().param('q'), { expires: 1 });
-  }
-
-  if ( !$.cookie('lat') && !$.url().param('q') ) {
-    $('#ask').modal();
   }
 });

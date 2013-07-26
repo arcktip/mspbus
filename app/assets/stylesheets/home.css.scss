@@ -3,7 +3,13 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .stopbutton {
-  padding:5px;
+  padding: 5px;
+  text-align: left;
+  text-shadow: none;
+  background: #f5f7f7;
+  border-radius: 0;
+  -webkit-border-radius: 0 !important;
+  min-height: 2em;
 }
 
 .stopbutton a {
@@ -24,17 +30,13 @@
   font-weight: normal;
 }
 
-.label-info {
-  background-color:#000080;
-}
+// .label-info {
+//   background-color:#000080;
+// }
 
 .footer {
   width: 100%;
-
-  .inner-footer {
-    width: 200px;
-    margin: 0 auto;
-  }
+  text-align: center;
 }
 
 .prof {
@@ -52,16 +54,25 @@
 }
 
 #maptt {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:2em;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s; /* Safari */
+  position: absolute;
+  top:0;
+  width: 100%;
+  height: 2em;
+  line-height: 2em;
   text-align:center;
-  pointer-events:none;
+  background-color: rgba(0,0,0,0.3);
+  pointer-events: none;
 }
 
 #view-map {position:relative;}
-#map-canvas {height:500px;}
+#map-canvas {
+  height:500px;
+  border: 1px solid #ccc;
+}
+
+#viewchanger {margin-left:5px;}
 
 @media (max-width: 767px) {
   #viewchanger {display:block;}
@@ -72,14 +83,113 @@
 }
 
 .infocontents {
-  width:90%;
-  text-align:center;
+  width: 200px;
+  text-align: center;
+  margin: 0 auto;
+  overflow:hide;
 }
 
 .infocontents a {
   font-weight:bold;
 }
 
+.infocontents .route-chip {
+  display:inline-block;
+  float:none;
+}
+
 .dir_label {
   background-color:#4E4E4E;
+}
+
+.distance-label {
+  border-radius: 2px;
+  font-size: 1.3em;
+  font-family: 'OpenSansLight';
+  padding: 10px;
+  color: grey;
+  position:absolute;
+  right:5px;
+}
+
+.real-time {
+  width: 85%;
+  margin-top:2px;
+}
+.stop-name {
+  font-family: 'OpenSansRegular';
+  font-weight: bold;
+}
+.route-chip {
+  display: block;
+  height: 15px;
+  float: left;
+/*  cursor: pointer;*/
+  border-radius: 2px;
+  font-size: 0.85em;
+  padding: 3px 5px 3px 5px;
+  margin: 0 3px 3px 0;
+  font-family: 'OpenSansRegular';
+  margin-bottom:2px;
+  text-shadow: none;
+}
+
+#maptt .route-chip {
+  display:inline;
+  float:none;
+  vertical-align:middle;
+}
+
+.route-chip-italic {
+  font-weight: normal;
+  font-family: 'Helvetica Neue', Arial;
+}
+
+.marker-header {
+  font-family: 'OpenSansSemibold';
+  font-size: 1.0em;
+}
+
+.map-route-hud {
+  font-weight: normal;
+  text-align: left;
+  height: 100%;
+  // background: rgba(0, 0, 0, 0.6);
+  padding: 0.3em;
+  color: #fff;
+
+  h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.2em;
+    font-family: 'OpenSansLight';
+    font-weight: normal;
+  }
+
+  .route-chip {
+    padding: 0 5px 0 5px;
+    display: inline;
+    float: none;
+  }
+
+  .hud-descr {
+    margin-left: 10px;
+  }
+
+  .hud-stops-descr {
+    .btn {
+      margin: 5px 5px 0 7px;
+    }
+  }
+}
+
+.update-location-descr {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 8pt;
+  line-height: 10pt;
+}
+
+.legend {
+  font-family: 'OpenSansRegular';
 }

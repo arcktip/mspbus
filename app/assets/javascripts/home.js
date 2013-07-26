@@ -9,6 +9,8 @@ var HomeView = Backbone.View.extend({
 
   initialize: function() {
 
+    this.map_view = new MapView();
+    
     // Cache selectors for other actions.
     this.viewchanger = this.$el.find('#viewchanger');
     this.views = this.$el.find('.views');
@@ -21,7 +23,15 @@ var HomeView = Backbone.View.extend({
 
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
+      HomeView.mobile=true; //TODO: Is this the right place to attach this?
       this.determine_view();
+    } else {
+      HomeView.mobile=false; //TODO: Is this the right place to attach this?
+      if( $('#view-map').css('display') !== 'none' ) {
+        this.map_view.init(center);
+        this.map_view.add_markers(stops);
+        this.map_view.ran = true;
+      }
     }
   },
 
@@ -49,15 +59,16 @@ var HomeView = Backbone.View.extend({
     this.view_table.hide();
     this.view_map.show();
 
-    initialize(center.lat, center.lon);
-    add_markers(stops);
-    initialize.ran=true;
-    google.maps.event.trigger(map, "resize");
+    this.map_view.init(center);
+    this.map_view.add_markers(stops);
+    this.map_view.ran = true;
+
+    google.maps.event.trigger(this.map_view.map, "resize");
     $.cookie('home_current_view', 'map_list_item');
   },
 
   resize_helper: function() {
-    google.maps.event.trigger(map, "resize");
+    google.maps.event.trigger(this.map_view.map, "resize");
 
     if (this.screen_width==screen.height && this.screen_height==screen.width){
       this.update_screen_size();
@@ -66,42 +77,33 @@ var HomeView = Backbone.View.extend({
     this.update_screen_size();
 
     if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-      $('#view-map').hide();
-      $('#view-table').removeClass('span6');
-      $('#view-table').addClass('span12');
-      $('#view-map').removeClass('span6');
-      $('#view-map').addClass('span12');
+      if($.cookie('home_current_view')==='map_list_item')
+        $('#view-table').hide();
+      else if ($.cookie('home_current_view')==='table_list_item')
+        $('#view-map').hide();
+
+      this.view_table.removeClass('span6');
+      this.view_table.addClass('span12');
+      this.view_map.removeClass('span6');
+      this.view_map.addClass('span12');
     } else {
-      $('#view-map').show();
-      $('#view-table').show();
-      $('#view-table').removeClass('span12');
-      $('#view-table').addClass('span6');
-      $('#view-map').removeClass('span12');
-      $('#view-map').addClass('span6');
+      this.view_map.show();
+      this.view_table.show();
+      this.view_table.removeClass('span12');
+      this.view_table.addClass('span6');
+      this.view_map.removeClass('span12');
+      this.view_map.addClass('span6');
     }
   },
 
-  resize: function() {
-    clearInterval(this.debouncer);
-    this.debouncer = setInterval(this.resize, 100);
-  },
-
   update_screen_size: function() {
-    this.screen_width =screen.width;
-    this.screen_height=screen.height;
+    this.screen_width = screen.width;
+    this.screen_height = screen.height;
   }
 
 });
 
 $(document).ready(function() {
-
   var home_view = new HomeView();
-
-  $(window).resize(home_view.resize.bind(home_view));
-
-  if( $('#view-map').css('display') !== 'none' ) {
-    initialize(center.lat, center.lon);
-    add_markers(stops);
-    initialize.ran=true;
-  }
+  $(window).resize( $.throttle( 100, home_view.resize_helper.bind(home_view) ) );
 });
