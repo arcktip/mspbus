@@ -79,18 +79,18 @@ function got_coordinates(position) {
 function geocode(address){
   var geocoder = new google.maps.Geocoder();
   // from http://www.mngeo.state.mn.us/chouse/coordinates.html
+  //These bounds are definitely large enough for the whole Twin Cities area
   var bounds = new google.maps.LatLngBounds(
-    //These bounds are definitely large enough for the whole Twin Cities area
     new google.maps.LatLng(44.47,-94.01),
     new google.maps.LatLng(45.42,-92.73)
   );
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK && results[0]) {
-      $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
-      $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
-    }else{
+      got_coordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+    } else {
       //Error
     }
+  });
 }
 
 $(document).ready(function() {
