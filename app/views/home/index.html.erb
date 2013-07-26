@@ -30,7 +30,7 @@
 <script>
 window.EventBus = _.extend({},Backbone.Events);
 var center; //{lat: XXX, lon: XXX}
-//var stops = <%= @stops.results.first(10).map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['stop_id'].to_i} }.to_json.html_safe %>;
+var stops;
 </script>
 <%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "maps" %>
