@@ -59,9 +59,6 @@ function update_table(){
 }
 
 function got_coordinates(position) {
-  $.cookie('lat', position.coords.latitude, { expires: 1 });
-  $.cookie('lon', position.coords.longitude, { expires: 1 });
-
   center={'lat':position.coords.latitude, 'lon':position.coords.longitude};
 
   EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
@@ -86,7 +83,7 @@ function geocode(address){
   );
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK && results[0])
-      got_coordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+      got_coordinates({coords:{latitude:results[0].geometry.location.lat(), longitude:results[0].geometry.location.lng()}});
     else
       $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
   });
@@ -103,6 +100,7 @@ $(document).ready(function() {
   if(!$(document).getUrlParam("q")){
     update_coordinates();
   } else {
+    $("#q").val($(document).getUrlParam("q"));
     geocode($(document).getUrlParam("q"));
   }
 
