@@ -76,6 +76,23 @@ function got_coordinates(position) {
   }).done(function(data){  $("#table-results").html(data); update_table(); });
 }
 
+function geocode(address){
+  var geocoder = new google.maps.Geocoder();
+  // from http://www.mngeo.state.mn.us/chouse/coordinates.html
+  var bounds = new google.maps.LatLngBounds(
+    //These bounds are definitely large enough for the whole Twin Cities area
+    new google.maps.LatLng(44.47,-94.01),
+    new google.maps.LatLng(45.42,-92.73)
+  );
+  geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
+    if (status == google.maps.GeocoderStatus.OK && results[0]) {
+      $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
+      $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
+    }else{
+      //Error
+    }
+}
+
 $(document).ready(function() {
 
   if(!$(document).getUrlParam("q")){
@@ -85,33 +102,10 @@ $(document).ready(function() {
       got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
     }
   } else {
-    update_table();
+    //Perform geocoding and query server
   }
 
   window.setInterval(update_table, 60000);
-
-  // Setup location handlers
-  $('.navbar-form').on('submit', function (event) {
-    event.preventDefault();
-    var form = $(this)
-    var geocoder = new google.maps.Geocoder();
-    // from http://www.mngeo.state.mn.us/chouse/coordinates.html
-    var bounds = new google.maps.LatLngBounds(
-      //These bounds are definitely large enough for the whole Twin Cities area
-      new google.maps.LatLng(44.47,-94.01),
-      new google.maps.LatLng(45.42,-92.73)
-    );
-    geocoder.geocode({'address': form.find('#q').val(), 'bounds': bounds}, function (results, status) {
-      if (status == google.maps.GeocoderStatus.OK && results[0]) {
-        $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
-        $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
-      }else{
-        //Error
-      }
-      event.target.submit();
-    });
-    return false;
-  });
 
   $('.btn-current-location').on('click', function() {
     if (navigator.geolocation) {
