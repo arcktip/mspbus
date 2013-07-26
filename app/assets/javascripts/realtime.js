@@ -5,6 +5,8 @@
 */
 
 var center;
+window.EventBus = _.extend({},Backbone.Events);
+var stops;
 
 var RealTimeView = Backbone.View.extend({
 
@@ -59,9 +61,6 @@ function update_table(){
 }
 
 function got_coordinates(position) {
-  $.cookie('lat', position.coords.latitude, { expires: 1 });
-  $.cookie('lon', position.coords.longitude, { expires: 1 });
-
   center={'lat':position.coords.latitude, 'lon':position.coords.longitude};
 
   EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
@@ -76,52 +75,47 @@ function got_coordinates(position) {
   }).done(function(data){  $("#table-results").html(data); update_table(); });
 }
 
-$(document).ready(function() {
+function geocode(address){
+  var geocoder = new google.maps.Geocoder();
+  // from http://www.mngeo.state.mn.us/chouse/coordinates.html
+  //These bounds are definitely large enough for the whole Twin Cities area
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(44.47,-94.01),
+    new google.maps.LatLng(45.42,-92.73)
+  );
+  geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
+    if (status == google.maps.GeocoderStatus.OK && results[0])
+      got_coordinates({coords:{latitude:results[0].geometry.location.lat(), longitude:results[0].geometry.location.lng()}});
+    else
+      $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
+  });
+}
 
+function geocode_failure(){
+  $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');
+//  got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
+}
+
+function update_coordinates(){
+  var geosucc=setTimeout(geocode_failure,5000);
+
+  if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos);}, geocode_failure);
+  else //TODO: Alert user that they cannot do geocoding
+    geocode_failure();
+}
+
+$(document).ready(function() {
   if(!$(document).getUrlParam("q")){
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
-    } else {
-      //Error
-    }
+    update_coordinates();
   } else {
-    update_table();
+    $("#q").val($(document).getUrlParam("q").replace(/\+/g," "));
+    geocode($(document).getUrlParam("q"));
   }
 
   window.setInterval(update_table, 60000);
 
-  // Setup location handlers
-  $('.navbar-form').on('submit', function (event) {
-    event.preventDefault();
-    var form = $(this)
-    var geocoder = new google.maps.Geocoder();
-    // from http://www.mngeo.state.mn.us/chouse/coordinates.html
-    var bounds = new google.maps.LatLngBounds(
-      //These bounds are definitely large enough for the whole Twin Cities area
-      new google.maps.LatLng(44.47,-94.01),
-      new google.maps.LatLng(45.42,-92.73)
-    );
-    geocoder.geocode({'address': form.find('#q').val(), 'bounds': bounds}, function (results, status) {
-      if (status == google.maps.GeocoderStatus.OK && results[0]) {
-        $.cookie('lat', results[0].geometry.location.lat(), { expires: 1 });
-        $.cookie('lon', results[0].geometry.location.lng(), { expires: 1 });
-      }else{
-        //Error
-      }
-      event.target.submit();
-    });
-    return false;
-  });
-
-  $('.btn-current-location').on('click', function() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
-    }else{
-      //Error
-    }
-  });
-
-  if ( $.url().param('q') ){
-    $.cookie('q', $.url().param('q'), { expires: 1 });
-  }
+  $('.btn-current-location').on('click', update_coordinates);
+  $("#q").on("keypress", function(e) { if (e.which == 13) geocode($("#q").val()); });
+  $("#qsub").click(function() { geocode($("#q").val()); });
 });

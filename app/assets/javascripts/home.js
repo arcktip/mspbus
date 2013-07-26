@@ -28,8 +28,7 @@ var HomeView = Backbone.View.extend({
     } else {
       HomeView.mobile=false; //TODO: Is this the right place to attach this?
       if( $('#view-map').css('display') !== 'none' ) {
-        this.map_view.init(center);
-        this.map_view.add_markers(stops);
+        this.map_view.init();
         this.map_view.ran = true;
       }
     }
@@ -59,8 +58,7 @@ var HomeView = Backbone.View.extend({
     this.view_table.hide();
     this.view_map.show();
 
-    this.map_view.init(center);
-    this.map_view.add_markers(stops);
+    this.map_view.init();
     this.map_view.ran = true;
 
     google.maps.event.trigger(this.map_view.map, "resize");
