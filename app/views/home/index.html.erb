@@ -58,7 +58,7 @@
 
 <script>
 window.EventBus = _.extend({},Backbone.Events);
-var center; //{lat: XXX, lon: XXX}
+var center = {lat:<%= @lat %>, lon:<%= @lon %>}; //{lat: XXX, lon: XXX}
 </script>
 <%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "maps" %>
