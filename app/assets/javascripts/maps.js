@@ -65,6 +65,9 @@ var MapView = Backbone.View.extend({
       icon: '/assets/you-are-here.png'
     });
 
+    //idle event fires once when the user stops panning/zooming
+    google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
+
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
   },
@@ -149,9 +152,6 @@ var MapView = Backbone.View.extend({
     for(var i=0, len=stops.length; i < len; i++) {
       this.add_stop( stops[i] );
     }
-
-    //idle event fires once when the user stops panning/zooming
-    google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
   },
 
   add_stop: function(new_stop){
