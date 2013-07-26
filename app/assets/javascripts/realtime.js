@@ -82,7 +82,7 @@ $(document).ready(function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
     } else {
-      //Error
+      got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
     }
   } else {
     update_table();
