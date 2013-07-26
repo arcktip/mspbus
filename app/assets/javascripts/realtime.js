@@ -76,11 +76,6 @@ function got_coordinates(position) {
 }
 
 function geocode(address){
-  if(window.location.href.indexOf("/stop/")!=-1){
-    window.location.href="/?q="+address.replace(/ /g,"+");
-    return;
-  }
-
   var geocoder = new google.maps.Geocoder();
   // from http://www.mngeo.state.mn.us/chouse/coordinates.html
   //These bounds are definitely large enough for the whole Twin Cities area
