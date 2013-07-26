@@ -4,13 +4,6 @@ class HomeController < ApplicationController
   end
 
   def table
-    unless cookies[:lat] && cookies[:lon]
-      params[:lat] = 44.979971
-      params[:lon] = -93.269797
-    else 
-      params[:lat] = cookies[:lat]
-      params[:lon] = cookies[:lon]
-    end
     params[:radius] = 1
 
     @inbounds=true
