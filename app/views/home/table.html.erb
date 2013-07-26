@@ -9,7 +9,7 @@
 
 <div class="btn-group btn-group-vertical" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
-    <div class="btn stopbutton">
+    <div class="btn stopbutton" data-stopid="<%= stop.stop_id %>">
       <a href="stop/<%= stop.stop_id %>">
         <div style="position:absolute;right:5px" class="distance-label">
           <%= 

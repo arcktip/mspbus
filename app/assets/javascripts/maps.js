@@ -12,6 +12,8 @@ var MapView = Backbone.View.extend({
     _.bindAll(this);
 
     window.EventBus.on("center_map",this.center_map);
+    window.EventBus.on("mouseover_stopbutton",this.mouseover_stopbutton);
+    window.EventBus.on("mouseleave_stopbutton",this.mouseleave_stopbutton);
 
     if (this.ran === true)
       return;
@@ -74,6 +76,36 @@ var MapView = Backbone.View.extend({
   
   render: function() {
 
+  },
+
+  mouseover_stopbutton: function(id) {
+    var look_up=false; //TODO: Fix stops array to eliminate these kinds of searches
+    for(i in stops){
+      if( stops[i].id == id ){
+        look_up=i;
+        break;
+      }
+    }
+    if(look_up===false) return;
+
+    marker=stops[look_up].marker;
+    marker.setOptions({zIndex:10});
+    marker.setIcon("/assets/bus-stop-hover.png");
+  },
+
+  mouseleave_stopbutton: function(id) {
+    var look_up=false;
+    for(i in stops){
+      if( stops[i].id == id ){
+        look_up=i;
+        break;
+      }
+    }
+    if(look_up===false) return;
+
+    marker=stops[look_up].marker;
+    marker.setOptions({zIndex:1});
+    marker.setIcon("/assets/bus-stop.png");
   },
 
   center_map: function(lat, lon){

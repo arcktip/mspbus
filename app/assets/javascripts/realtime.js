@@ -72,7 +72,13 @@ function got_coordinates(position) {
       lat:position.coords.latitude,
       lon:position.coords.longitude
     },
-  }).done(function(data){  $("#table-results").html(data); update_table(); });
+  }).done(function(data){
+    $("#table-results").html(data);
+    if(!HomeView.mobile){
+      $(".stopbutton").mouseover(function(){EventBus.trigger("mouseover_stopbutton", $(this).data('stopid'));}).mouseleave(function(){EventBus.trigger("mouseleave_stopbutton", $(this).data('stopid'));});
+    }
+    update_table();
+  });
 }
 
 function geocode(address){
