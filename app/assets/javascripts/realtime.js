@@ -85,37 +85,28 @@ function geocode(address){
     new google.maps.LatLng(45.42,-92.73)
   );
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
-    if (status == google.maps.GeocoderStatus.OK && results[0]) {
+    if (status == google.maps.GeocoderStatus.OK && results[0])
       got_coordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-    } else {
-      //Error
-    }
+    else
+      $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
   });
 }
 
-$(document).ready(function() {
+function update_coordinates(){
+  if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
+  else //TODO: Alert user that they cannot do geocoding
+    got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
+}
 
+$(document).ready(function() {
   if(!$(document).getUrlParam("q")){
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
-    } else {
-      got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
-    }
+    update_coordinates();
   } else {
-    //Perform geocoding and query server
+    geocode($(document).getUrlParam("q"));
   }
 
   window.setInterval(update_table, 60000);
 
-  $('.btn-current-location').on('click', function() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(got_coordinates, function(){$("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');});
-    }else{
-      //Error
-    }
-  });
-
-  if ( $.url().param('q') ){
-    $.cookie('q', $.url().param('q'), { expires: 1 });
-  }
+  $('.btn-current-location').on('click', update_coordinates);
 });
