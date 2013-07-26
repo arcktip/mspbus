@@ -19,6 +19,8 @@ var MapView = Backbone.View.extend({
 //    $("#map-canvas").height($(document).height()-100);
 
     var default_center={lat:44.980522382993826, lon:-93.27006340026855};
+    if(center)
+      default_center=center;
 
     var map_options = {
       center: new google.maps.LatLng(default_center.lat, default_center.lon),
