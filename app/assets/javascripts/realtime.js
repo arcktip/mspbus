@@ -65,6 +65,8 @@ function got_coordinates(position) {
 
   EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
 
+  ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', center.lat.toString() + "," + center.lon.toString() );
+
   $("#outside").hide();
   if(!(44.47<=center.lat && center.lat<=45.42 && -94.01<=center.lon && center.lon<=-92.73)){
     $("#outside").show();
