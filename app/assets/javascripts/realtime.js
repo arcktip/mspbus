@@ -68,10 +68,9 @@ function got_coordinates(position) {
   ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', center.lat.toString() + "," + center.lon.toString() );
 
   $("#outside").hide();
-  if(!(44.47<=center.lat && center.lat<=45.42 && -94.01<=center.lon && center.lon<=-92.73)){
+  if(!(config.bounds.south<=center.lat && center.lat<=config.bounds.north && config.bounds.west<=center.lon && center.lon<=config.bounds.east)){
     $("#outside").show();
-    center.lat = 44.979971;
-    center.lon = -93.269797;
+    center = config.default_center;
   }
 
   $.ajax({
@@ -92,11 +91,9 @@ function got_coordinates(position) {
 
 function geocode(address){
   var geocoder = new google.maps.Geocoder();
-  // from http://www.mngeo.state.mn.us/chouse/coordinates.html
-  //These bounds are definitely large enough for the whole Twin Cities area
   var bounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(44.47,-94.01),
-    new google.maps.LatLng(45.42,-92.73)
+    new google.maps.LatLng(config.bounds.south,config.bounds.west),
+    new google.maps.LatLng(config.bounds.north,config.bounds.east)
   );
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK && results[0])
@@ -108,7 +105,6 @@ function geocode(address){
 
 function geocode_failure(){
   $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');
-//  got_coordinates({coords:{latitude:44.980522382993826, longitude:-93.27006340026855}});
 }
 
 function update_coordinates(){

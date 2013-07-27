@@ -20,12 +20,12 @@ var MapView = Backbone.View.extend({
 
 //    $("#map-canvas").height($(document).height()-100);
 
-    var default_center={lat:44.980522382993826, lon:-93.27006340026855};
-    if(center)
-      default_center=center;
+    var mapcenter=center;
+    if(!mapcenter)
+      mapcenter=config.default_center;
 
     var map_options = {
-      center: new google.maps.LatLng(default_center.lat, default_center.lon),
+      center: new google.maps.LatLng(mapcenter.lat, mapcenter.lon),
       zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       panControl: false,
@@ -61,7 +61,7 @@ var MapView = Backbone.View.extend({
     });
 
     this.yah_marker = new google.maps.Marker({
-      position: new google.maps.LatLng(default_center.lat, default_center.lon),
+      position: new google.maps.LatLng(mapcenter.lat, mapcenter.lon),
       map: this.map,
       draggable: false,
       icon: '/assets/you-are-here.png'
