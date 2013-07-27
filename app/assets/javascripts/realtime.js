@@ -65,12 +65,19 @@ function got_coordinates(position) {
 
   EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
 
+  $("#outside").hide();
+  if(!(44.47<=center.lat && center.lat<=45.42 && -94.01<=center.lon && center.lon<=-92.73)){
+    $("#outside").show();
+    center.lat = 44.979971;
+    center.lon = -93.269797;
+  }
+
   $.ajax({
     url: "/table",
     method: "post",
     data: {
-      lat:position.coords.latitude,
-      lon:position.coords.longitude
+      lat:center.lat,
+      lon:center.lon
     },
   }).done(function(data){
     $("#table-results").html(data);
