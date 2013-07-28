@@ -1,6 +1,7 @@
 <% if @stop.nil? %>
   <div class="alert alert-info">Stop does not exist.</div>
 <% else %>
+<img src="http://maps.googleapis.com/maps/api/staticmap?center=<%= @stop.location[1] %>,<%= @stop.location[0] %>&zoom=15&size=110x110&markers=color:red%7Ccolor:red%7Clabel:C%7C<%= @stop.location[1] %>,<%= @stop.location[0] %>&sensor=false" style="border:5px solid #fff;box-shadow:-1px -1px 3px rgba(0,0,0,0.4);position:fixed;bottom:0;right:0;">
 
 <div class="stop-header">
   <img src="/assets/bus-stop.png">

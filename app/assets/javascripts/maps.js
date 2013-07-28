@@ -8,6 +8,8 @@ var MapView = Backbone.View.extend({
   lat: 0,
   lon: 0,
 
+  direction_template: JST['templates/directions'],
+
   init: function(coords) {
     _.bindAll(this);
 
@@ -44,12 +46,16 @@ var MapView = Backbone.View.extend({
 
     var polyOptions = {
       strokeColor: '#5e96d9',
-      strokeOpacity: 0.8,
+      strokeOpacity: 0.9,
       strokeWeight: 6
     }
 
+    // Set polyline options for map
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
+
+    // Set directions display for map
+    this.directions_service = new google.maps.DirectionsService();
 
     $('div.gmnoprint').first().parent().append(this.mapElement);
 
@@ -59,6 +65,13 @@ var MapView = Backbone.View.extend({
 
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
+    $('#btn-route').on('click', this.process_route_parameters);
+    $(".route-box").on('click', '.btn-route-back', this.show_route_input);
+
+    this.directions_box = $('.directions-box');
+    this.route_input = $('.route-input');
+    this.directions_box.on('click','.directions-step', this.center_map_on_step);
+
   },
   
   render: function() {
@@ -70,6 +83,11 @@ var MapView = Backbone.View.extend({
     var center = new google.maps.LatLng(lat, lon);
     self.map.panTo(center);
     self.yah_marker.setPosition(center);
+  },
+
+  center_map_on_step: function(e) {
+    var index = $(e.currentTarget).data('index');
+    this.map.panTo(this.steps[index].start_point);
   },
 
   create_bus_marker: function(stop_id, obj) {
@@ -233,14 +251,20 @@ var MapView = Backbone.View.extend({
     var self = this;
     $.get('/stop/closest_trip', {stop_id: stop_id, route: route_id }, function(data, textStatus, jqXHR) {
       if(data) {
-        self.add_path(data.encoded_polyline);
+        self.set_path(data.encoded_polyline);
       }
     });
   },
 
-  add_path: function(path) {
+  set_path: function(path) {
     var decodedSets = google.maps.geometry.encoding.decodePath(path); 
     this.poly.setPath(decodedSets);
+  },
+
+  add_path: function(path) {
+    var decodedSets = google.maps.geometry.encoding.decodePath(path);
+    var path = this.poly.getPath();
+    path.push(decodedSets);
   },
 
   clear_bus_markers: function() {
@@ -273,6 +297,119 @@ var MapView = Backbone.View.extend({
     $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
       _.each(data, function(obj) { self.add_stop(obj); });
     });
+  },
+
+  geocode_with_promise: function(address, bounds) {
+    
+    var dfd = $.Deferred();
+    var geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK && results[0]) {
+        // origin = results;
+        dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
+      }else{
+        dfd.reject();
+        error_on_coordinates();
+      }
+    });
+
+    return dfd;
+  },
+
+  process_route_parameters: function() {
+
+    var self = this;
+    var origin, destination;
+    var dfd = $.Deferred();
+
+    var bounds = new google.maps.LatLngBounds(
+      //These bounds are definitely large enough for the whole Twin Cities area
+      new google.maps.LatLng(44.47,-94.01),
+      new google.maps.LatLng(45.42,-92.73)
+    );
+
+    $.when(
+      // Origin geocode
+      this.geocode_with_promise($('#origin').val(), bounds),
+      
+      // Destination geocode
+      this.geocode_with_promise($('#destination').val(), bounds)
+      
+    ).done(function(origin, destination) {
+      self.calculate_route(origin, destination, self.display_route);
+    });
+
+  },
+
+  calculate_route: function(origin, destination, callback) {
+    var self = this;
+    var request = {
+      origin: origin,
+      destination: destination,
+      travelMode: google.maps.TravelMode.TRANSIT
+    }
+
+    this.directions_service.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        callback(response);
+      } else {
+        self.display_route_error(status);
+      }
+    });
+
+  },
+
+  determine_travel_mode: function(mode) {
+    if ( mode === "WALKING" ) {
+      return 'directions-walk-icon';
+    } else if ( mode === "TRANSIT" ) {
+      return 'directions-transit-icon';
+    }
+  },
+
+  display_route: function(route) {
+    console.log(route);
+    if ( route.routes ) {
+
+      var legs = route.routes[0].legs[0];
+      var steps = legs.steps;
+
+      this.route_input.hide();
+      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode}) );
+      this.directions_box.show();
+
+      this.set_path(route.routes[0].overview_polyline.points);
+      this.steps = steps;
+
+      for ( var i=0, len=steps.length; i < len; i++ ) {
+        var marker = new google.maps.Marker({
+          position: steps[i].start_point,
+          map: this.map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'blue',
+            fillOpacity: 0.6,
+            scale: 6,
+            strokeColor: 'white',
+            strokeWeight: 4
+          },
+        });
+        //this.add_path(steps[i].polyline.points )
+      }
+
+    } else {
+      // Error with routes.
+    }
+  },
+
+  show_route_input: function () {
+    this.route_input.show();
+    this.directions_box.hide();
+  },
+
+  display_route_error: function(status) {
+    // Todo: Implement alert for routing error.
   }
 
 });

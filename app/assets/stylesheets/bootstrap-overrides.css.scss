@@ -58,6 +58,14 @@
     display: block;
   }
 
+  .route-box {
+    top: 38px !important;
+
+    input {
+      width: 126px;
+    }
+  }
+
 }
 
 @media (max-width: 979px) and (min-width: 768px) {

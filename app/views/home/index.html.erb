@@ -1,54 +1,71 @@
-<ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
-  <li class="active" id="table-list-item">
-    <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
-  </li>
-  <li id="map-list-item">
-    <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
-  </li>
-</ul>
-
-<% if @stops.results.empty? %>
-  <div class="alert alert-info">No stops found.</div>
+<% if not @inbounds %>
+  <div class="alert alert-info">Your geolocation place you outside of the Twin Cities. Please use the search bar to locate yourself.</div>
 <% end %>
 
-<div class="container">     
-  <div class="row">
-    <div id="view-table" class="span6 views">
-      <div id="table-results">
-
-        <% if params[:q].present? %>
-          <div class="btn-group btn-group-vertical" style="width:100%;">
-            <% @stops.results.first(10).each do |stop| %>
-              <div class="btn stopbutton">
-                <a href="stop/<%= stop.stop_id %>">
-                  <div style="position:absolute;right:5px" class="distance-label">
-                    <%= 
-                    if (stop.sort[0].nil?)
-                      ""
-                    elsif (stop.sort[0]>2)
-                      stop.sort[0].round().to_s+" mi"      
-                    elsif(stop.sort[0]>0.5) then
-                      stop.sort[0].round(1).to_s+" mi"
-                    else
-                      (stop.sort[0]*5280).round().to_s+" ft"
-                    end %>
-                  </div>
-                  <span class="stop-name"><%= stop.stop_name %></span> 
-                  <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
-                </a>
-              </div>
-              <% end %>
-          </div>
-        <% end %>
-
-      </div>
-      <div style="margin-top:1em;margin-left:5px;" class="legend">
-        <%= render 'shared/legend' %>
-      </div>
+<div class="home-container">
+  <div class="well route-box">
+    <div class="route-input">
+      <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
+      <input type="text" name="origin" id="origin" placeholder="Start" value="1892 Carl Street" class="span2">
+      <input type="text" name="destination" id="destination" placeholder="Destination" value="420 Church Street" class="span2"><br>
+      <button id="btn-route" class="btn btn-primary">Route</button>
     </div>
+    <div class="directions-box"></div>
+  </div>
 
-    <div id="view-map" class="span6 views">
-      <div id="map-canvas"></div>
+
+  <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
+    <li class="active" id="table-list-item">
+      <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
+    </li>
+    <li id="map-list-item">
+      <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
+    </li>
+  </ul>
+
+  <% if @stops.results.empty? %>
+    <div class="alert alert-info">No stops found.</div>
+  <% end %>
+
+  <div class="container">     
+    <div class="row">
+      <div id="view-table" class="span6 views">
+        <div id="table-results">
+
+          <% if params[:q].present? %>
+            <div class="btn-group btn-group-vertical" style="width:100%;">
+              <% @stops.results.first(10).each do |stop| %>
+                <div class="btn stopbutton">
+                  <a href="stop/<%= stop.stop_id %>">
+                    <div style="position:absolute;right:5px" class="distance-label">
+                      <%= 
+                      if (stop.sort[0].nil?)
+                        ""
+                      elsif (stop.sort[0]>2)
+                        stop.sort[0].round().to_s+" mi"      
+                      elsif(stop.sort[0]>0.5) then
+                        stop.sort[0].round(1).to_s+" mi"
+                      else
+                        (stop.sort[0]*5280).round().to_s+" ft"
+                      end %>
+                    </div>
+                    <span class="stop-name"><%= stop.stop_name %></span> 
+                    <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+                  </a>
+                </div>
+                <% end %>
+            </div>
+          <% end %>
+
+        </div>
+        <div style="margin-top:1em;margin-left:5px;" class="legend">
+          <%= render 'shared/legend' %>
+        </div>
+      </div>
+
+      <div id="view-map" class="span6 views">
+        <div id="map-canvas"></div>
+      </div>
     </div>
   </div>
 </div>
