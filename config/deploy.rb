@@ -10,6 +10,9 @@ set :scm, :git
 set :use_sudo, false
 set :group_writable, true
 
+default_run_options[:pty] = true
+set :ssh_options, { :forward_agent => true }
+
 desc "Run on development server" 
 task :development do
   # set :branch, "map-refactor"
