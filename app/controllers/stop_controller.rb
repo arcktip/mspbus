@@ -15,7 +15,7 @@ class StopController < ApplicationController
   def get_stop_neighbours
     @neighbours=StopTime.get_stop_neighbours(params[:stop_id], params[:route_id])
 
-    stop_index = @neighbours.index {|a| a.stop_id=params[:stop_id]}
+    stop_index = @neighbours.index {|a| a.stop_id==params[:stop_id]}
 
     #Get the 4 stops before and the 4 stops after this one
     @neighbours=@neighbours[ [stop_index-4,0].max .. [stop_index+4,@neighbours.length].min ]
