@@ -1,0 +1,10 @@
+<table class="table">
+  <thead>
+    <tr style="font-weight:bold"><th>Stop Name</th></tr>
+  </thead>
+  <tbody>
+<% @route.each do |stop| %>
+    <tr data-stopid="<%= stop.stop_id %>"><td><%= stop.stop_name %></td></tr>
+<% end %>
+  </tbody>
+</table>

@@ -12,18 +12,20 @@ var MapView = Backbone.View.extend({
     _.bindAll(this);
 
     window.EventBus.on("center_map",this.center_map);
+    window.EventBus.on("mouseover_stopbutton",this.mouseover_stopbutton);
+    window.EventBus.on("mouseleave_stopbutton",this.mouseleave_stopbutton);
 
     if (this.ran === true)
       return;
 
 //    $("#map-canvas").height($(document).height()-100);
 
-    var default_center={lat:44.980522382993826, lon:-93.27006340026855};
-    if(center)
-      default_center=center;
+    var mapcenter=center;
+    if(!mapcenter)
+      mapcenter=config.default_center;
 
     var map_options = {
-      center: new google.maps.LatLng(default_center.lat, default_center.lon),
+      center: new google.maps.LatLng(mapcenter.lat, mapcenter.lon),
       zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       panControl: false,
@@ -59,7 +61,7 @@ var MapView = Backbone.View.extend({
     });
 
     this.yah_marker = new google.maps.Marker({
-      position: new google.maps.LatLng(default_center.lat, default_center.lon),
+      position: new google.maps.LatLng(mapcenter.lat, mapcenter.lon),
       map: this.map,
       draggable: false,
       icon: '/assets/you-are-here.png'
@@ -74,6 +76,36 @@ var MapView = Backbone.View.extend({
   
   render: function() {
 
+  },
+
+  mouseover_stopbutton: function(id) {
+    var look_up=false; //TODO: Fix stops array to eliminate these kinds of searches
+    for(i in stops){
+      if( stops[i].id == id ){
+        look_up=i;
+        break;
+      }
+    }
+    if(look_up===false) return;
+
+    marker=stops[look_up].marker;
+    marker.setOptions({zIndex:10});
+    marker.setIcon("/assets/bus-stop-hover.png");
+  },
+
+  mouseleave_stopbutton: function(id) {
+    var look_up=false;
+    for(i in stops){
+      if( stops[i].id == id ){
+        look_up=i;
+        break;
+      }
+    }
+    if(look_up===false) return;
+
+    marker=stops[look_up].marker;
+    marker.setOptions({zIndex:1});
+    marker.setIcon("/assets/bus-stop.png");
   },
 
   center_map: function(lat, lon){

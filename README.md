@@ -18,7 +18,8 @@ Setup
  8. rake db:migrate
  9. Load stop data into postgres `rake mspbus:load_stops`
  10. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
- 11. Run `rails s` in the project's base directory to start the server
+ 11. Set up the configuration variables in `app/assets/javascripts/config.js`
+ 12. Run `rails s` in the project's base directory to start the server
 
 
 Database Stops Table

@@ -10,11 +10,12 @@ set :scm, :git
 set :use_sudo, false
 set :group_writable, true
 
-set :group_writable, true
+default_run_options[:pty] = true
+set :ssh_options, { :forward_agent => true }
 
 desc "Run on development server" 
 task :development do
-  set :branch, "map-refactor"
+  # set :branch, "map-refactor"
   set :rails_env,   "development"
   set :deploy_to, "/var/www/mspbus-dev"
 end

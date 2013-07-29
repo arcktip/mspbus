@@ -11,7 +11,8 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 // require jquery
-//= require jquery_ujs
+//= require config
+// require jquery_ujs
 //= require bootstrap.min
 //= require underscore-min
 //= require backbone-min
