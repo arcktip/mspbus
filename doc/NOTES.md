@@ -15,3 +15,15 @@ Code to set up the flat_routes table:
     CREATE INDEX date_range ON flat_routes (start_date, end_date);
     CREATE INDEX route_id ON flat_routes (route_id);
     CREATE INDEX stop_id ON flat_routes (stop_id);
+
+
+Text Queries
+============
+
+Get closest trip id for a stop.
+
+    SELECT trip_id FROM flat_routes WHERE '20130729' BETWEEN start_date AND end_date AND monday='1' AND route_id='16-62' AND stop_id='16154' AND arrival_time>='10:40:00' ORDER BY arrival_time LIMIT 1;
+
+Return stops on a trip.
+
+    SELECT * FROM flat_routes WHERE trip_id='6533466-MAY13-MVS-BUS-Weekday-01' ORDER BY stop_sequence;
