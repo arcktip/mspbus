@@ -7,10 +7,10 @@ Code to set up the flat_routes table:
                       c.monday, c.tuesday, c.wednesday, c.thursday, c.friday,
                       c.saturday, c.sunday, c.start_date, c.end_date, t.trip_id
                       FROM stops s
-                      JOIN stop_times st ON s.stop_id = st.stop_id
-                      JOIN trips t ON st.trip_id = t.trip_id
-                      JOIN routes r ON r.route_id = t.route_id
-                      JOIN calendar c ON t.service_id = c.service_id
+                      INNER JOIN stop_times st ON st.stop_id   = s.stop_id
+                      INNER JOIN trips t       ON t.trip_id    = st.trip_id
+                      INNER JOIN routes r      ON r.route_id   = t.route_id
+                      INNER JOIN calendar c    ON c.service_id = t.service_id
                       ORDER BY t.direction_id, t.trip_id, t.route_id, st.stop_sequence;
     CREATE INDEX date_range ON flat_routes (start_date, end_date);
     CREATE INDEX route_id ON flat_routes (route_id);
