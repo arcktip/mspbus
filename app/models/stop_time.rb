@@ -14,9 +14,9 @@ class StopTime < ActiveRecord::Base
   end
 
   #TODO: Need to account for the direction
-  def self.get_stop_list(route_id)
+  def self.get_stop_neighbours(stop_id, route_id)
     today = Date.today.strftime("%Y%m%d")
-    trip_id=get_trip_beginning_now(route_id).first().trip_id
+    trip_id=get_closest_trip(stop_id, route_id).first().trip_id
 
     select('stop_id, stop_name, stop_sequence, stop_lat, stop_lon')
     .where("trip_id='#{trip_id}'")

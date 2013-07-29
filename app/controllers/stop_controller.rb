@@ -12,15 +12,29 @@ class StopController < ApplicationController
     end
   end
 
+  def get_stop_neighbours
+    @neighbours=StopTime.get_stop_neighbours(params[:stop_id], params[:route_id])
+
+    stop_index = @neighbours.index {|a| a.stop_id=params[:stop_id]}
+
+    #Get the 4 stops before and the 4 stops after this one
+    @neighbours=@neighbours[ [stop_index-4,0].max .. [stop_index+4,@neighbours.length].min ]
+
+    respond_to do |format|
+      format.json { render :json=> @neighbours }
+    end
+  end
+
   def closest_trip
     
     # shape_array = []
 
-    s = StopTime.get_closest_trip(params[:stop_id], params[:route] + '-62')
+    s = StopTime.get_closest_trip(params[:stop_id], params[:route])
 
     unless s.blank?
       #shape = Shape.encode_to_polylines(s.first.shape_id.to_s)
       shape = ShapesGoogleEncoded.select('shape_id, encoded_polyline').find_by_shape_id(s.first.shape_id.to_s)
+      puts shape
       # shape_array << {
       #   :encoded_shape => shape
       # }
