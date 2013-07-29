@@ -1,17 +1,26 @@
 class StopTime < ActiveRecord::Base
 
-  def self.get_closest_trip(stop_id, route_id)
+  self.table_name = 'flat_routes'
 
-    service_ids = Calendar.get_service_ids
-    
-    #sql = "trips.service_id in (?) and stop_times.stop_id = ? and trips.route_id = ? and arrival_time::time >= CURRENT_TIME"
-    sql = "trips.service_id in (#{service_ids.collect{ |c| "?" }.join(',') }) and stop_times.stop_id = ? and trips.route_id = ? and arrival_time >= CURRENT_TIME::varchar"
-  
-    select('trips.shape_id as shape_id, stop_times.trip_id')
-    .joins('inner join trips on trips.trip_id = stop_times.trip_id')
-    .where([sql, *service_ids.collect{ |c| "#{c.service_id}" }, stop_id, route_id])
-    .order('stop_times.arrival_time, trips.service_id')
+  def self.get_closest_trip(stop_id, route_id)
+    today = Date.today.strftime("%Y%m%d")
+    timenow = Date.today.strftime("%H:%M:00")
+
+    #TODO: Need to account for the direction
+    select('trip_id')
+    .where("start_date<='#{today}' AND '#{today}'<=end_date AND #{Date.today.strftime("%A").downcase} = '1' AND route_id='#{route_id}-62' AND stop_id='#{stop_id}' AND arrival_time>='#{timenow}'")
+    .order('arrival_time')
     .limit(1)
+  end
+
+  #TODO: Need to account for the direction
+  def self.get_stop_list(route_id)
+    today = Date.today.strftime("%Y%m%d")
+    trip_id=get_trip_beginning_now(route_id).first().trip_id
+
+    select('stop_id, stop_name, stop_sequence, stop_lat, stop_lon')
+    .where("trip_id='#{trip_id}'")
+    .order('stop_sequence')
   end
 
   def shape_id
