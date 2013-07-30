@@ -527,7 +527,7 @@ var RouteInputView = Backbone.View.extend({
 
     // Current location
     if ( address.toLowerCase() === 'current location' ) {
-      dfd.resolve( new google.maps.LatLng(center.lat, center.lon) );
+      dfd.resolve( new google.maps.LatLng(geocenter.lat, geocenter.lon) );
     } else {
       // Otherwise geocode the address.
       geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {

@@ -5,6 +5,7 @@
 */
 
 var center;
+var geocenter;
 window.EventBus = _.extend({},Backbone.Events);
 var stops;
 
@@ -126,7 +127,11 @@ function update_coordinates(){
   var geosucc=setTimeout(geocode_failure,5000);
 
   if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos.coords.latitude, pos.coords.longitude);}, geocode_failure);
+    navigator.geolocation.getCurrentPosition(function(pos){
+      clearTimeout(geosucc);
+      geocenter={lat:pos.coords.latitude, lon:pos.coords.longitude};
+      got_coordinates(pos.coords.latitude, pos.coords.longitude);
+    }, geocode_failure);
   else //TODO: Alert user that they cannot do geocoding
     geocode_failure();
 }
