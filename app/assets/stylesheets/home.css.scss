@@ -225,7 +225,7 @@
 
   .route-input {
     input {
-      width: 140px;
+      width: 120px;
     }
   }
 
@@ -282,6 +282,10 @@
 
   .directions-transit-icon {
     background-position: -96px 0;
+  }
+
+  .directions-driving-icon {
+    background-position: -48px 0;
   }
 }
 

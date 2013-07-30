@@ -65,9 +65,17 @@
         <div class="route-input">
           <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
           <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
-          <input type="text" name="origin" id="origin" placeholder="Start" value="1892 Carl Street" class="span2">
-          <input type="text" name="destination" id="destination" placeholder="Destination" value="420 Church Street" class="span2">
-          <button id="btn-route" class="btn btn-primary"><i class="icon-compass"></i> Route</button>
+          <div class="input-prepend">
+            <span class="add-on loc-arrow" data-input="origin"><i class="icon-location-arrow"></i></span>
+            <input type="text" name="origin" id="origin" placeholder="Start" value="" class="span2">
+          </div>
+          <div class="input-prepend">
+            <span class="add-on loc-arrow" data-input="destination"><i class="icon-location-arrow"></i></span>
+            <input type="text" name="destination" id="destination" placeholder="Destination" value="" class="span2">
+          </div>
+          <div>
+            <button id="btn-route" class="btn btn-primary"><i class="icon-compass"></i> Route</button>
+          </div>
         </div>
         <div class="directions-box"></div>
       </div>

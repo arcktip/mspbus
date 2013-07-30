@@ -259,6 +259,11 @@ var MapView = Backbone.View.extend({
   set_path: function(path) {
     var decodedSets = google.maps.geometry.encoding.decodePath(path); 
     this.poly.setPath(decodedSets);
+    this.poly.setMap(this.map);
+  },
+
+  clear_path: function() {
+    this.poly.setMap(null);
   },
 
   add_path: function(path) {
@@ -305,6 +310,7 @@ var RouteInputView = Backbone.View.extend({
 
   el: '#view-route',
   direction_template: JST['templates/directions'],
+  direction_markers: [],
 
   initialize: function() {
     _.bindAll(this);
@@ -317,13 +323,14 @@ var RouteInputView = Backbone.View.extend({
     this.$el.on('click', '.btn-route-back', this.show_route_input);
     this.$el.on('click', '.btn-hide-route', this.hide);
     this.$el.on('click', '.btn-exchange', this.exchange);
+    this.$el.on('click', '.loc-arrow', this.set_current_location);
 
     this.directions_box = this.$el.find('.directions-box');
     this.route_input = this.$el.find('.route-input');
     this.directions_box.on('click', '.directions-step', this.center_map_on_step);
 
     this.origin = this.$el.find('#origin');
-    this.destination = this.$el.find('#destination'); 
+    this.destination = this.$el.find('#destination');
   },
 
   hide: function() {
@@ -331,12 +338,28 @@ var RouteInputView = Backbone.View.extend({
   },
 
   exchange: function() {
-    console.log('ex');
+    
     var origin = this.origin.val();
     var destination = this.destination.val();
 
     this.origin.val(destination);
     this.destination.val(origin);
+  },
+
+  set_current_location: function(e) {
+    var input = $(e.currentTarget).data('input');
+    if ( input === 'origin' ) {
+      this.origin.val('Current Location');
+    } else {
+      this.destination.val('Current Location');
+    }
+  },
+  
+  clear_direction_markers: function() {
+    _.each(this.direction_markers, function(marker) {
+      marker.setMap(null);
+    });
+    this.direction_markers = [];
   },
 
   center_map_on_step: function(e) {
@@ -406,11 +429,13 @@ var RouteInputView = Backbone.View.extend({
       return 'directions-walk-icon';
     } else if ( mode === "TRANSIT" ) {
       return 'directions-transit-icon';
+    } else if ( mode === "DRIVING" ) {
+      return 'directions-driving-icon';
     }
   },
 
   display_route: function(route) {
-    console.log(route);
+    
     if ( route.routes ) {
 
       var legs = route.routes[0].legs[0];
@@ -438,6 +463,7 @@ var RouteInputView = Backbone.View.extend({
             strokeWeight: 4
           }
         });
+        this.direction_markers.push(marker);
         //this.add_path(steps[i].polyline.points )
       }
 
@@ -449,6 +475,9 @@ var RouteInputView = Backbone.View.extend({
   show_route_input: function () {
     this.route_input.show();
     this.directions_box.hide();
+
+    this.clear_direction_markers();
+    this.map_parent.clear_path();
   },
 
   display_route_error: function(status) {
@@ -460,15 +489,21 @@ var RouteInputView = Backbone.View.extend({
     var dfd = $.Deferred();
     var geocoder = new google.maps.Geocoder();
 
-    geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK && results[0]) {
-        // origin = results;
-        dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
-      }else{
-        dfd.reject();
-        error_on_coordinates();
-      }
-    });
+    // Current location
+    if ( address.toLowerCase() === 'current location' ) {
+      dfd.resolve( new google.maps.LatLng(center.lat, center.lon) );
+    } else {
+      // Otherwise geocode the address.
+      geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK && results[0]) {
+          // origin = results;
+          dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
+        }else{
+          dfd.reject();
+          error_on_coordinates();
+        }
+      });
+    }
 
     return dfd;
   },
