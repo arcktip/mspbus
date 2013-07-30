@@ -3,23 +3,16 @@
 <% end %>
 
 <div class="home-container">
-  <div class="well route-box">
-    <div class="route-input">
-      <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
-      <input type="text" name="origin" id="origin" placeholder="Start" value="1892 Carl Street" class="span2">
-      <input type="text" name="destination" id="destination" placeholder="Destination" value="420 Church Street" class="span2"><br>
-      <button id="btn-route" class="btn btn-primary">Route</button>
-    </div>
-    <div class="directions-box"></div>
-  </div>
-
 
   <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
     <li class="active" id="table-list-item">
-      <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
+      <a id="view-table-btn" href="#view-table-btn"><i class="icon-list-ul"></i> List</a>
     </li>
     <li id="map-list-item">
-      <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
+      <a id="view-map-btn" href="#map-list-item"><i class="icon-map-marker"></i> Map</a>
+    </li>
+    <li id="route-list-item">
+      <a id="view-route-btn" href="#route-list-item"><i class="icon-compass"></i> Route</a>
     </li>
   </ul>
 
@@ -65,6 +58,19 @@
 
       <div id="view-map" class="span6 views">
         <div id="map-canvas"></div>
+      </div>
+
+      <div id="view-route" class="span6 views">
+        <div class="well route-box">
+        <div class="route-input">
+          <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
+          <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
+          <input type="text" name="origin" id="origin" placeholder="Start" value="1892 Carl Street" class="span2">
+          <input type="text" name="destination" id="destination" placeholder="Destination" value="420 Church Street" class="span2">
+          <button id="btn-route" class="btn btn-primary"><i class="icon-compass"></i> Route</button>
+        </div>
+        <div class="directions-box"></div>
+      </div>
       </div>
     </div>
   </div>

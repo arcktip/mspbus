@@ -198,20 +198,51 @@
   position: relative;
 }
 
+.directions-header {
+  color: #666;
+  margin-top: 5px;
+}
+
+.directions-header-container {
+  margin-right: 10px;
+}
+
+#route-list-item {
+  float: right;
+}
+
 .route-box {
-  padding: 10px;
+  padding: 10px 0px 10px 10px;
   width: 200px;
   font-family: 'OpenSansLight';
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 0px;
   position: absolute;
   top: 32px;
   right: 3px;
   z-index: 9999;
-  box-shadow: 2px 2px 1px rgba(0,0,0,0.2);
 
-  // .directions-leg {
-  //   border-top: 1px solid #ccc;
-  // }
+  .route-input {
+    input {
+      width: 140px;
+    }
+  }
+
+  .btn-hide-route {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    border-radius: 5px;
+    height: 30px;
+  }
+
+  .directions-leg {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 300px;
+  }
 
   .btn-exchange {
     position: absolute;
@@ -223,9 +254,17 @@
   .directions-step {
     cursor: pointer;
     margin-top: 5px;
+    margin-right: 5px;
     padding: 5px;
     background: #fff;
     border-bottom: 1px solid #ccc;
+  }
+
+  .directions-end {
+    display: inline-block;
+    white-space: normal;
+    text-overflow: ellipsis;
+    background: #3a87ad;
   }
 
   .directions-travel-mode-icon {

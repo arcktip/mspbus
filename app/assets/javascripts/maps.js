@@ -8,8 +8,6 @@ var MapView = Backbone.View.extend({
   lat: 0,
   lon: 0,
 
-  direction_template: JST['templates/directions'],
-
   init: function(coords) {
     _.bindAll(this);
 
@@ -45,14 +43,27 @@ var MapView = Backbone.View.extend({
     }
 
     var polyOptions = {
-      strokeColor: '#5e96d9',
-      strokeOpacity: 0.9,
-      strokeWeight: 6
-    }
+      strokeColor: '#2ea1e2',
+      strokeOpacity: 0.7,
+      strokeWeight: 4.5
+      // icons: [{
+      //   icon: {
+      //     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+      //     fillOpacity: 1,
+      //     scale: 3
+      //   },
+      //   offset: '50px',
+      //   repeat: '100px'
+      // }]
+    };
 
     // Set polyline options for map
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
+
+    // Setup directions renderer
+    this.directions_display = new google.maps.DirectionsRenderer({ draggable: false });
+    this.directions_display.setMap(this.map);
 
     // Set directions display for map
     this.directions_service = new google.maps.DirectionsService();
@@ -65,13 +76,7 @@ var MapView = Backbone.View.extend({
 
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
-    $('#btn-route').on('click', this.process_route_parameters);
-    $(".route-box").on('click', '.btn-route-back', this.show_route_input);
-
-    this.directions_box = $('.directions-box');
-    this.route_input = $('.route-input');
-    this.directions_box.on('click','.directions-step', this.center_map_on_step);
-
+    this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
   },
   
   render: function() {
@@ -83,11 +88,6 @@ var MapView = Backbone.View.extend({
     var center = new google.maps.LatLng(lat, lon);
     self.map.panTo(center);
     self.yah_marker.setPosition(center);
-  },
-
-  center_map_on_step: function(e) {
-    var index = $(e.currentTarget).data('index');
-    this.map.panTo(this.steps[index].start_point);
   },
 
   create_bus_marker: function(stop_id, obj) {
@@ -297,24 +297,63 @@ var MapView = Backbone.View.extend({
     $.get('/stop/bounds', boundsobj, function(data, textStatus, jqXHR) {
       _.each(data, function(obj) { self.add_stop(obj); });
     });
+  }
+
+});
+
+var RouteInputView = Backbone.View.extend({
+
+  el: '#view-route',
+  direction_template: JST['templates/directions'],
+
+  initialize: function() {
+    _.bindAll(this);
+
+    // Set the map parent view.
+    this.map_parent = arguments[0].map_parent;
+    
+    // Setup Route inpute events.
+    this.$el.on('click', '#btn-route', this.process_route_parameters);
+    this.$el.on('click', '.btn-route-back', this.show_route_input);
+    this.$el.on('click', '.btn-hide-route', this.hide);
+    this.$el.on('click', '.btn-exchange', this.exchange);
+
+    this.directions_box = this.$el.find('.directions-box');
+    this.route_input = this.$el.find('.route-input');
+    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
+
+    this.origin = this.$el.find('#origin');
+    this.destination = this.$el.find('#destination'); 
   },
 
-  geocode_with_promise: function(address, bounds) {
-    
-    var dfd = $.Deferred();
-    var geocoder = new google.maps.Geocoder();
+  hide: function() {
+    this.$el.hide();
+  },
 
-    geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK && results[0]) {
-        // origin = results;
-        dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
-      }else{
-        dfd.reject();
-        error_on_coordinates();
-      }
-    });
+  exchange: function() {
+    console.log('ex');
+    var origin = this.origin.val();
+    var destination = this.destination.val();
 
-    return dfd;
+    this.origin.val(destination);
+    this.destination.val(origin);
+  },
+
+  center_map_on_step: function(e) {
+    var index = $(e.currentTarget).data('index');
+    var location;
+
+    if ( index < this.steps.length ) {
+      location = this.steps[index].start_point;
+    } else {
+      location = this.end_location;    
+    }
+
+    this.map_parent.map.panTo(location);
+
+    if ( matchMedia('only screen and (max-width: 767px)').matches ) {
+      this.$el.hide();
+    }
   },
 
   process_route_parameters: function() {
@@ -331,10 +370,10 @@ var MapView = Backbone.View.extend({
 
     $.when(
       // Origin geocode
-      this.geocode_with_promise($('#origin').val(), bounds),
+      this.geocode_with_promise(this.origin.val(), bounds),
       
       // Destination geocode
-      this.geocode_with_promise($('#destination').val(), bounds)
+      this.geocode_with_promise(this.destination.val(), bounds)
       
     ).done(function(origin, destination) {
       self.calculate_route(origin, destination, self.display_route);
@@ -348,9 +387,11 @@ var MapView = Backbone.View.extend({
       origin: origin,
       destination: destination,
       travelMode: google.maps.TravelMode.TRANSIT
-    }
+    };
 
-    this.directions_service.route(request, function(response, status) {
+    window.location.hash = '#map-list-item';
+
+    this.map_parent.directions_service.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         callback(response);
       } else {
@@ -376,24 +417,26 @@ var MapView = Backbone.View.extend({
       var steps = legs.steps;
 
       this.route_input.hide();
-      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode}) );
+      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode, end_address: legs.end_address}) );
       this.directions_box.show();
 
-      this.set_path(route.routes[0].overview_polyline.points);
+      this.map_parent.set_path(route.routes[0].overview_polyline.points);
+      //this.map_parent.directions_display.setDirections(route);
       this.steps = steps;
+      this.end_location = legs.end_location;
 
       for ( var i=0, len=steps.length; i < len; i++ ) {
         var marker = new google.maps.Marker({
           position: steps[i].start_point,
-          map: this.map,
+          map: this.map_parent.map,
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillColor: 'blue',
-            fillOpacity: 0.6,
+            fillOpacity: 1.0,
             scale: 6,
             strokeColor: 'white',
             strokeWeight: 4
-          },
+          }
         });
         //this.add_path(steps[i].polyline.points )
       }
@@ -410,6 +453,23 @@ var MapView = Backbone.View.extend({
 
   display_route_error: function(status) {
     // Todo: Implement alert for routing error.
-  }
+  },
 
+  geocode_with_promise: function(address, bounds) {
+    
+    var dfd = $.Deferred();
+    var geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK && results[0]) {
+        // origin = results;
+        dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
+      }else{
+        dfd.reject();
+        error_on_coordinates();
+      }
+    });
+
+    return dfd;
+  },
 });
