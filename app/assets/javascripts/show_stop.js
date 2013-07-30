@@ -7,6 +7,7 @@ $(document).ready(function() {
   window.setInterval(view.update, 60000);
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
+  $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
 });
 
 /*
