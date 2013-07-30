@@ -244,7 +244,7 @@ var MapView = Backbone.View.extend({
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
         this.setIcon("/assets/bus-stop.png");
-        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#F5F7F7");
+        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","");
       });
     }
 
