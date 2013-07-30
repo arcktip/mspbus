@@ -1,6 +1,9 @@
 class StopController < ApplicationController
   def show
     @stop = Stop.get_stop_by_id({:id => params[:id] }).results.first
+    @lat = @stop.location[1]
+    @lon = @stop.location[0]
+    puts @lat
   end
 
   def bounds

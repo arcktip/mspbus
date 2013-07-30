@@ -5,6 +5,8 @@ $(document).ready(function() {
   view = new StopView();
   view.update();
   window.setInterval(view.update, 60000);
+
+  $("#mapshow").click(function(){$("#mapmodal").modal('show');});
 });
 
 /*
