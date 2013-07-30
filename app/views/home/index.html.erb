@@ -1,27 +1,54 @@
 <div id="outside" style="display:none;" class="alert alert-info">Your geolocation is outside of the Twin Cities, so I'll use a default location instead. Use the search bar to locate yourself.</div>
 
-<ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
-  <li class="active" id="table-list-item">
-    <a id="view-table-btn" href="#"><i class="icon-list-ul"></i> List</a>
-  </li>
-  <li id="map-list-item">
-    <a id="view-map-btn" href="#"><i class="icon-map-marker"></i> Map</a>
-  </li>
-</ul>
+<div class="home-container">
 
-<div class="container">     
-  <div class="row">
-    <div id="view-table" class="span6 views">
-      <div id="table-results">
+  <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
+    <li class="active" id="table-list-item">
+      <a id="view-table-btn" href="#view-table-btn"><i class="icon-list-ul"></i> List</a>
+    </li>
+    <li id="map-list-item">
+      <a id="view-map-btn" href="#map-list-item"><i class="icon-map-marker"></i> Map</a>
+    </li>
+    <li id="route-list-item">
+      <a id="view-route-btn" href="#route-list-item"><i class="icon-compass"></i> Route</a>
+    </li>
+  </ul>
 
+  <div class="container">     
+    <div class="row">
+      <div id="view-table" class="span6 views">
+        <div id="table-results">
+
+        </div>
+        <div style="margin-top:1em;margin-left:5px;" class="legend">
+          <%= render 'shared/legend' %>
+        </div>
       </div>
-      <div style="margin-top:1em;margin-left:5px;" class="legend">
-        <%= render 'shared/legend' %>
-      </div>
-    </div>
 
-    <div id="view-map" class="span6 views">
-      <div id="map-canvas"></div>
+      <div id="view-map" class="span6 views">
+        <div id="map-canvas"></div>
+      </div>
+
+      <div id="view-route" class="span6 views">
+        <div class="well route-box">
+        <div class="route-input">
+          <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
+          <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
+          <div class="input-prepend">
+            <span class="add-on loc-arrow" data-input="origin"><i class="icon-location-arrow"></i></span>
+            <input type="text" name="origin" id="origin" placeholder="Start" value="" class="span2">
+          </div>
+          <div class="input-prepend">
+            <span class="add-on loc-arrow" data-input="destination"><i class="icon-location-arrow"></i></span>
+            <input type="text" name="destination" id="destination" placeholder="Destination" value="" class="span2">
+          </div>
+          <div>
+            <button id="btn-route" class="btn btn-primary"><i class="icon-compass"></i> Route</button>
+          </div>
+        </div>
+        <div class="directions-box"></div>
+      </div>
+      </div>
     </div>
   </div>
 </div>

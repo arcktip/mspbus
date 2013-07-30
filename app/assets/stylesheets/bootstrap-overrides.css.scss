@@ -58,6 +58,28 @@
     display: block;
   }
 
+  .route-box {
+    top: 38px !important;
+    width: 94% !important;
+    padding: 5px;
+
+    input {
+      width: 180px !important;
+    }
+
+    .btn-hide-route {
+      display: block !important;
+    }
+
+    .btn-exchange {
+      right: 60px !important;
+    }
+
+    .btn-route-back {
+      margin-right: 40px;
+    }
+  }
+
 }
 
 @media (max-width: 979px) and (min-width: 768px) {

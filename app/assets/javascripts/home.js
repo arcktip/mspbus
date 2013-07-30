@@ -4,7 +4,8 @@ var HomeView = Backbone.View.extend({
 
   events: {
     "click #view-table-btn": "show_table",
-    "click #view-map-btn": "show_map"
+    "click #view-map-btn": "show_map",
+    "click #view-route-btn": "show_route"
   },
 
   initialize: function() {
@@ -14,8 +15,11 @@ var HomeView = Backbone.View.extend({
     // Cache selectors for other actions.
     this.viewchanger = this.$el.find('#viewchanger');
     this.views = this.$el.find('.views');
+    
     this.view_table = this.$el.find('#view-table');
     this.view_map = this.$el.find('#view-map');
+    this.view_route = this.$el.find('#view-route');
+
     this.table_list_item = this.$el.find('#table-list-item');
     this.map_list_item = this.$el.find('#map-list-item');
 
@@ -47,6 +51,7 @@ var HomeView = Backbone.View.extend({
     this.table_list_item.addClass("active");
 
     this.view_map.hide();
+    this.view_route.hide();
     this.view_table.show();
     $.cookie('home_current_view', 'table_list_item');
   },
@@ -63,6 +68,14 @@ var HomeView = Backbone.View.extend({
 
     google.maps.event.trigger(this.map_view.map, "resize");
     $.cookie('home_current_view', 'map_list_item');
+  },
+
+  show_route: function() {
+    if($.cookie('home_current_view') !== 'map_list_item') {
+      this.show_map();
+    }
+
+    this.view_route.show();
   },
 
   resize_helper: function() {

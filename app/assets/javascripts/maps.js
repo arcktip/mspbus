@@ -46,13 +46,30 @@ var MapView = Backbone.View.extend({
     }
 
     var polyOptions = {
-      strokeColor: '#5e96d9',
-      strokeOpacity: 0.8,
-      strokeWeight: 6
-    }
+      strokeColor: '#2ea1e2',
+      strokeOpacity: 0.7,
+      strokeWeight: 4.5
+      // icons: [{
+      //   icon: {
+      //     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+      //     fillOpacity: 1,
+      //     scale: 3
+      //   },
+      //   offset: '50px',
+      //   repeat: '100px'
+      // }]
+    };
 
+    // Set polyline options for map
     this.poly = new google.maps.Polyline(polyOptions);
     this.poly.setMap(this.map);
+
+    // Setup directions renderer
+    this.directions_display = new google.maps.DirectionsRenderer({ draggable: false });
+    this.directions_display.setMap(this.map);
+
+    // Set directions display for map
+    this.directions_service = new google.maps.DirectionsService();
 
     $('div.gmnoprint').first().parent().append(this.mapElement);
 
@@ -72,6 +89,7 @@ var MapView = Backbone.View.extend({
 
     //window.setTimeout(this.update_bus_locations, 3000);
     //window.setInterval(this.update_bus_locations, 60000);
+    this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
   },
   
   render: function() {
@@ -260,14 +278,25 @@ var MapView = Backbone.View.extend({
     var self = this;
     $.get('/stop/closest_trip', {stop_id: stop_id, route: route_id }, function(data, textStatus, jqXHR) {
       if(data) {
-        self.add_path(data.encoded_polyline);
+        self.set_path(data.encoded_polyline);
       }
     });
   },
 
-  add_path: function(path) {
+  set_path: function(path) {
     var decodedSets = google.maps.geometry.encoding.decodePath(path); 
     this.poly.setPath(decodedSets);
+    this.poly.setMap(this.map);
+  },
+
+  clear_path: function() {
+    this.poly.setMap(null);
+  },
+
+  add_path: function(path) {
+    var decodedSets = google.maps.geometry.encoding.decodePath(path);
+    var path = this.poly.getPath();
+    path.push(decodedSets);
   },
 
   clear_bus_markers: function() {
@@ -302,4 +331,207 @@ var MapView = Backbone.View.extend({
     });
   }
 
+});
+
+var RouteInputView = Backbone.View.extend({
+
+  el: '#view-route',
+  direction_template: JST['templates/directions'],
+  direction_markers: [],
+
+  initialize: function() {
+    _.bindAll(this);
+
+    // Set the map parent view.
+    this.map_parent = arguments[0].map_parent;
+    
+    // Setup Route inpute events.
+    this.$el.on('click', '#btn-route', this.process_route_parameters);
+    this.$el.on('click', '.btn-route-back', this.show_route_input);
+    this.$el.on('click', '.btn-hide-route', this.hide);
+    this.$el.on('click', '.btn-exchange', this.exchange);
+    this.$el.on('click', '.loc-arrow', this.set_current_location);
+
+    this.directions_box = this.$el.find('.directions-box');
+    this.route_input = this.$el.find('.route-input');
+    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
+
+    this.origin = this.$el.find('#origin');
+    this.destination = this.$el.find('#destination');
+  },
+
+  hide: function() {
+    this.$el.hide();
+  },
+
+  exchange: function() {
+    
+    var origin = this.origin.val();
+    var destination = this.destination.val();
+
+    this.origin.val(destination);
+    this.destination.val(origin);
+  },
+
+  set_current_location: function(e) {
+    var input = $(e.currentTarget).data('input');
+    if ( input === 'origin' ) {
+      this.origin.val('Current Location');
+    } else {
+      this.destination.val('Current Location');
+    }
+  },
+  
+  clear_direction_markers: function() {
+    _.each(this.direction_markers, function(marker) {
+      marker.setMap(null);
+    });
+    this.direction_markers = [];
+  },
+
+  center_map_on_step: function(e) {
+    var index = $(e.currentTarget).data('index');
+    var location;
+
+    if ( index < this.steps.length ) {
+      location = this.steps[index].start_point;
+    } else {
+      location = this.end_location;    
+    }
+
+    this.map_parent.map.panTo(location);
+
+    if ( matchMedia('only screen and (max-width: 767px)').matches ) {
+      this.$el.hide();
+    }
+  },
+
+  process_route_parameters: function() {
+
+    var self = this;
+    var origin, destination;
+    var dfd = $.Deferred();
+
+    var bounds = new google.maps.LatLngBounds(
+      //These bounds are definitely large enough for the whole Twin Cities area
+      new google.maps.LatLng(44.47,-94.01),
+      new google.maps.LatLng(45.42,-92.73)
+    );
+
+    $.when(
+      // Origin geocode
+      this.geocode_with_promise(this.origin.val(), bounds),
+      
+      // Destination geocode
+      this.geocode_with_promise(this.destination.val(), bounds)
+      
+    ).done(function(origin, destination) {
+      self.calculate_route(origin, destination, self.display_route);
+    });
+
+  },
+
+  calculate_route: function(origin, destination, callback) {
+    var self = this;
+    var request = {
+      origin: origin,
+      destination: destination,
+      travelMode: google.maps.TravelMode.TRANSIT
+    };
+
+    window.location.hash = '#map-list-item';
+
+    this.map_parent.directions_service.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        callback(response);
+      } else {
+        self.display_route_error(status);
+      }
+    });
+
+  },
+
+  determine_travel_mode: function(mode) {
+    if ( mode === "WALKING" ) {
+      return 'directions-walk-icon';
+    } else if ( mode === "TRANSIT" ) {
+      return 'directions-transit-icon';
+    } else if ( mode === "DRIVING" ) {
+      return 'directions-driving-icon';
+    }
+  },
+
+  display_route: function(route) {
+    
+    if ( route.routes ) {
+
+      var legs = route.routes[0].legs[0];
+      var steps = legs.steps;
+
+      this.route_input.hide();
+      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode, end_address: legs.end_address}) );
+      this.directions_box.show();
+
+      this.map_parent.set_path(route.routes[0].overview_polyline.points);
+      //this.map_parent.directions_display.setDirections(route);
+      this.steps = steps;
+      this.end_location = legs.end_location;
+
+      for ( var i=0, len=steps.length; i < len; i++ ) {
+        var marker = new google.maps.Marker({
+          position: steps[i].start_point,
+          map: this.map_parent.map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'blue',
+            fillOpacity: 1.0,
+            scale: 6,
+            strokeColor: 'white',
+            strokeWeight: 4
+          }
+        });
+        this.direction_markers.push(marker);
+        //this.add_path(steps[i].polyline.points )
+      }
+
+    } else {
+      // Error with routes.
+    }
+  },
+
+  show_route_input: function () {
+    this.route_input.show();
+    this.directions_box.hide();
+
+    this.clear_direction_markers();
+    this.map_parent.clear_path();
+  },
+
+  display_route_error: function(status) {
+    // Todo: Implement alert for routing error.
+  },
+
+  geocode_with_promise: function(address, bounds) {
+    
+    var dfd = $.Deferred();
+    var geocoder = new google.maps.Geocoder();
+
+    // Current location
+    if ( address.toLowerCase() === 'current location' ) {
+      dfd.resolve( new google.maps.LatLng(center.lat, center.lon) );
+    } else {
+      // Otherwise geocode the address.
+      geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK && results[0]) {
+          // origin = results;
+          dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
+        }else{
+          dfd.reject();
+          error_on_coordinates();
+        }
+      });
+    }
+
+    return dfd;
+  },
 });

@@ -1,0 +1,31 @@
+<div class="directions-box">
+  <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
+  <div class="clearfix directions-header-container">
+    <h4 class="directions-header pull-left">Route</h4>
+    <button class="btn btn-primary pull-right btn-route-back"><i class="icon-reply"></i></button>
+  </div>
+  
+  <div class="directions-leg">
+    <% _.each(steps, function(step, index) { %>
+      <div class="directions-step" data-index="<%= index %>">
+        <div class="clearfix">
+          <span class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>"></span>
+          <% if ( step.transit ) { %>
+            <span class="pull-left label"><%= step.transit.line.short_name %></span>
+          <% } %>
+          <span class="pull-right"><%= step.distance.text %></span>
+        </div>
+        <div>
+          <%= step.instructions %>
+        </div>
+        <% if ( step.transit ) { %>
+          <span><a href="#"><%= step.transit.num_stops %> Stops</a></span>
+        <% } %>
+      </div>
+    <% }); %>
+    <div class="directions-step label directions-end" data-index="<%= steps.length + 1 %>">
+      End - <%= end_address %>
+    </div>
+  </div>
+  
+</div>
