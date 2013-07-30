@@ -92,6 +92,11 @@ function got_coordinates(lat, lon) {
 
 
 function geocode(address){
+  if(address.replace(/\s/g,'').length==0){
+    update_coordinates();
+    return;
+  }
+
   var geocoder = new google.maps.Geocoder();
   var bounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(config.bounds.south,config.bounds.west),
