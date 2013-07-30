@@ -235,6 +235,8 @@ var MapView = Backbone.View.extend({
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon("/assets/bus-stop-hover.png");
+        console.log('[data-stopid="' + new_stop.id + '"]');
+        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#E6E6E6");
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
@@ -242,6 +244,7 @@ var MapView = Backbone.View.extend({
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
         this.setIcon("/assets/bus-stop.png");
+        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#F5F7F7");
       });
     }
 
