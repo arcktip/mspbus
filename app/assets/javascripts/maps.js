@@ -501,7 +501,7 @@ var RouteInputView = Backbone.View.extend({
         //this.add_path(steps[i].polyline.points )
       }
 
-      EventBus.trigger("pan_map", steps[0].start_point.jb, steps[0].start_point.kb);
+      got_coordinates(steps[0].start_point.jb, steps[0].start_point.kb);
 
     } else {
       // Error with routes.
