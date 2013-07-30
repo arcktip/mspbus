@@ -5,7 +5,8 @@ Code to set up the flat_routes table:
     SELECT DISTINCT   s.stop_id, s.stop_name, st.stop_sequence, st.arrival_time,
                       s.stop_lat, s.stop_lon, t.route_id, t.direction_id, 
                       c.monday, c.tuesday, c.wednesday, c.thursday, c.friday,
-                      c.saturday, c.sunday, c.start_date, c.end_date, t.trip_id
+                      c.saturday, c.sunday, c.start_date, c.end_date, t.trip_id,
+                      r.agency_id
                       FROM stops s
                       INNER JOIN stop_times st ON st.stop_id   = s.stop_id
                       INNER JOIN trips t       ON t.trip_id    = st.trip_id
