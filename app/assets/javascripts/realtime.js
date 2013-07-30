@@ -120,7 +120,7 @@ $(document).ready(function() {
   if(!$(document).getUrlParam("q")){
     update_coordinates();
   } else {
-    $("#q").val($(document).getUrlParam("q").replace(/\+/g," "));
+    $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
     geocode($(document).getUrlParam("q"));
   }
 

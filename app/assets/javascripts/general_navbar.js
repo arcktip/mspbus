@@ -3,7 +3,7 @@ function update_coordinates(){
 }
 
 function geocode(address){
-  window.location.href="/?q="+address.replace(/ /g,"+");
+  window.location.href="/?q="+encodeURIComponent(address);
   return;
 }
 
