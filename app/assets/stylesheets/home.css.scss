@@ -197,3 +197,98 @@
 #searchbox {
   margin-top:8px;
 }
+
+.home-container {
+  position: relative;
+}
+
+.directions-header {
+  color: #666;
+  margin-top: 5px;
+}
+
+.directions-header-container {
+  margin-right: 10px;
+}
+
+#route-list-item {
+  float: right;
+}
+
+.route-box {
+  padding: 10px 0px 10px 10px;
+  width: 200px;
+  font-family: 'OpenSansLight';
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  position: absolute;
+  top: 32px;
+  right: 3px;
+  z-index: 9999;
+
+  .route-input {
+    input {
+      width: 120px;
+    }
+  }
+
+  .btn-hide-route {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    border-radius: 5px;
+    height: 30px;
+  }
+
+  .directions-leg {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 300px;
+  }
+
+  .btn-exchange {
+    position: absolute;
+    top: 30px;
+    right: 5px;
+    padding: 3px 7px 3px 7px;
+  }
+
+  .directions-step {
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 5px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .directions-end {
+    display: inline-block;
+    white-space: normal;
+    text-overflow: ellipsis;
+    background: #3a87ad;
+  }
+
+  .directions-travel-mode-icon {
+    background: transparent url('/assets/sprite-1x.png') no-repeat 0 0;
+    background-size: 120px 15px;
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    margin: 4px 0 4px 0;
+  }
+
+  .directions-walk-icon {
+    background-position: -24px 0;
+  }
+
+  .directions-transit-icon {
+    background-position: -96px 0;
+  }
+
+  .directions-driving-icon {
+    background-position: -48px 0;
+  }
+}
