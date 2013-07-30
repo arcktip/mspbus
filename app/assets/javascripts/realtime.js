@@ -141,7 +141,7 @@ $(document).ready(function() {
     update_coordinates();
   } else {
     $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
-    geocode($(document).getUrlParam("q"));
+    geocode(decodeURIComponent($(document).getUrlParam("q")));
   }
 
   window.setInterval(update_table, 60000);
