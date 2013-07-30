@@ -25,6 +25,16 @@ class StopController < ApplicationController
     end
   end
 
+  def arrivals
+    @arrivals=StopTime.arrivals(params[:stopid])
+
+    puts :stopid
+
+    respond_to do |format|
+      format.json { render :json=>@arrivals}
+    end
+  end
+
   def closest_trip
     
     # shape_array = []

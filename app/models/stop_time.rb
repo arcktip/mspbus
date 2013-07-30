@@ -13,6 +13,17 @@ class StopTime < ActiveRecord::Base
     .limit(1)
   end
 
+  def self.arrivals(stop_id)
+    today = Date.today.strftime("%Y%m%d")
+    timenow = Time.new.strftime("%H:%M:00")
+
+    #TODO: Need to account for the direction
+    select('arrival_time, route_id, trip_headsign')
+    .where("('#{today}' BETWEEN start_date AND end_date) AND #{Date.today.strftime("%A").downcase} = '1' AND stop_id='#{stop_id}' AND arrival_time>='#{timenow}'")
+    .order('arrival_time')
+    .limit(20)
+  end
+
   #TODO: Need to account for the direction
   def self.get_stop_neighbours(stop_id, route_id)
     trip_id=get_closest_trip(stop_id, route_id).first().trip_id
