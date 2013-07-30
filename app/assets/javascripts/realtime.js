@@ -60,15 +60,15 @@ function update_table(){
   });
 }
 
-function got_coordinates(position) {
-  center={'lat':position.coords.latitude, 'lon':position.coords.longitude};
+function got_coordinates(lat, lon) {
+  center={'lat':lat, 'lon':lon};
 
-  EventBus.trigger("center_map", position.coords.latitude, position.coords.longitude);
+  EventBus.trigger("center_map", lat, lon);
 
-  ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', center.lat.toString() + "," + center.lon.toString() );
+  ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', lat.toString() + "," + lon.toString() );
 
   $("#outside").hide();
-  if(!(config.bounds.south<=center.lat && center.lat<=config.bounds.north && config.bounds.west<=center.lon && center.lon<=config.bounds.east)){
+  if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
     $("#outside").show();
     center = config.default_center;
   }
@@ -77,8 +77,8 @@ function got_coordinates(position) {
     url: "/table",
     method: "post",
     data: {
-      lat:center.lat,
-      lon:center.lon
+      lat:lat,
+      lon:lon
     },
   }).done(function(data){
     $("#table-results").html(data);
@@ -89,6 +89,7 @@ function got_coordinates(position) {
   });
 }
 
+
 function geocode(address){
   var geocoder = new google.maps.Geocoder();
   var bounds = new google.maps.LatLngBounds(
@@ -96,10 +97,24 @@ function geocode(address){
     new google.maps.LatLng(config.bounds.north,config.bounds.east)
   );
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
-    if (status == google.maps.GeocoderStatus.OK && results[0])
-      got_coordinates({coords:{latitude:results[0].geometry.location.lat(), longitude:results[0].geometry.location.lng()}});
-    else
+    if (status == google.maps.GeocoderStatus.OK){
+      if(results.length==1){ //One result, display it
+        got_coordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+      } else {               //Multiple results, prompt user to choose
+        var ab=$("#ambiguitybuttons");
+        for(var i=0;i<results.length;i++){
+          ab.append('<div class="btn ambiguitybutton" data-lat="' + results[i].geometry.location.jb + '" data-lon="' + results[i].geometry.location.kb + '">' + results[i].formatted_address + '</div>');
+        }
+        $(".ambiguitybutton").click(function(){
+          got_coordinates($(this).data("lat"), $(this).data("lon"));
+          $("#ambiguity").modal('hide');
+          ab.html("");
+        });
+        $("#ambiguity").modal("show");
+      }
+    } else {                 //No results, indicate failure
       $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
+    }
   });
 }
 
@@ -111,7 +126,7 @@ function update_coordinates(){
   var geosucc=setTimeout(geocode_failure,5000);
 
   if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos);}, geocode_failure);
+    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos.coords.latitude, pos.coords.longitude);}, geocode_failure);
   else //TODO: Alert user that they cannot do geocoding
     geocode_failure();
 }
