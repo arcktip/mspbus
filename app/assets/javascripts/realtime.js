@@ -5,6 +5,7 @@
 */
 
 var center;
+var geocenter;
 window.EventBus = _.extend({},Backbone.Events);
 var stops;
 
@@ -91,6 +92,11 @@ function got_coordinates(lat, lon) {
 
 
 function geocode(address){
+  if(address.replace(/\s/g,'').length==0){
+    update_coordinates();
+    return;
+  }
+
   var geocoder = new google.maps.Geocoder();
   var bounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(config.bounds.south,config.bounds.west),
@@ -126,7 +132,11 @@ function update_coordinates(){
   var geosucc=setTimeout(geocode_failure,5000);
 
   if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(function(pos){clearTimeout(geosucc);got_coordinates(pos.coords.latitude, pos.coords.longitude);}, geocode_failure);
+    navigator.geolocation.getCurrentPosition(function(pos){
+      clearTimeout(geosucc);
+      geocenter={lat:pos.coords.latitude, lon:pos.coords.longitude};
+      got_coordinates(pos.coords.latitude, pos.coords.longitude);
+    }, geocode_failure);
   else //TODO: Alert user that they cannot do geocoding
     geocode_failure();
 }
@@ -136,7 +146,7 @@ $(document).ready(function() {
     update_coordinates();
   } else {
     $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
-    geocode($(document).getUrlParam("q"));
+    geocode(decodeURIComponent($(document).getUrlParam("q")));
   }
 
   window.setInterval(update_table, 60000);

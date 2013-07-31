@@ -71,11 +71,14 @@ var HomeView = Backbone.View.extend({
   },
 
   show_route: function() {
-    if($.cookie('home_current_view') !== 'map_list_item') {
-      this.show_map();
-    }
+    if(!this.view_route.is(":visible")){
+      if($.cookie('home_current_view') !== 'map_list_item') {
+        this.show_map();
+      }
 
-    this.view_route.show();
+      this.view_route.show();
+    } else
+      this.view_route.hide();
   },
 
   resize_helper: function() {

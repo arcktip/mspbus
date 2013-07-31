@@ -55,6 +55,7 @@ MspBus::Application.routes.draw do
   get 'stop/bounds' => 'stop#bounds'
   get 'stop/closest_trip' => 'stop#closest_trip'
   get 'stop/get_stop_neighbours' => 'stop#get_stop_neighbours'
+  get 'stop/:stopid/arrivals' => 'stop#arrivals'
   get 'stop/:id' => 'stop#show'
   get 'about' => 'home#about'
   get 'feedback' => 'home#feedback'

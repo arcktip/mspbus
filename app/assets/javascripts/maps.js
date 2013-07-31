@@ -12,6 +12,7 @@ var MapView = Backbone.View.extend({
     _.bindAll(this);
 
     window.EventBus.on("center_map",this.center_map);
+    window.EventBus.on("pan_map",this.center_map);
     window.EventBus.on("mouseover_stopbutton",this.mouseover_stopbutton);
     window.EventBus.on("mouseleave_stopbutton",this.mouseleave_stopbutton);
 
@@ -131,6 +132,12 @@ var MapView = Backbone.View.extend({
     var center = new google.maps.LatLng(lat, lon);
     self.map.panTo(center);
     self.yah_marker.setPosition(center);
+  },
+
+  pan_map: function(lat, lon){
+    var self=this;
+    var center = new google.maps.LatLng(lat, lon);
+    self.map.panTo(center);
   },
 
   create_bus_marker: function(stop_id, obj) {
@@ -399,7 +406,7 @@ var RouteInputView = Backbone.View.extend({
       location = this.end_location;    
     }
 
-    this.map_parent.map.panTo(location);
+    EventBus.trigger("pan_map", location.jb, location.kb);
 
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       this.$el.hide();
@@ -414,8 +421,8 @@ var RouteInputView = Backbone.View.extend({
 
     var bounds = new google.maps.LatLngBounds(
       //These bounds are definitely large enough for the whole Twin Cities area
-      new google.maps.LatLng(44.47,-94.01),
-      new google.maps.LatLng(45.42,-92.73)
+      new google.maps.LatLng(config.bounds.south,config.bounds.west),
+      new google.maps.LatLng(config.bounds.north,config.bounds.east)
     );
 
     $.when(
@@ -494,6 +501,8 @@ var RouteInputView = Backbone.View.extend({
         //this.add_path(steps[i].polyline.points )
       }
 
+      got_coordinates(steps[0].start_point.jb, steps[0].start_point.kb);
+
     } else {
       // Error with routes.
     }
@@ -518,11 +527,11 @@ var RouteInputView = Backbone.View.extend({
 
     // Current location
     if ( address.toLowerCase() === 'current location' ) {
-      dfd.resolve( new google.maps.LatLng(center.lat, center.lon) );
+      dfd.resolve( new google.maps.LatLng(geocenter.lat, geocenter.lon) );
     } else {
       // Otherwise geocode the address.
       geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK && results[0]) {
+        if (status == google.maps.GeocoderStatus.OK && results[0]) { //TODO: Handle ambiguity
           // origin = results;
           dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
         }else{

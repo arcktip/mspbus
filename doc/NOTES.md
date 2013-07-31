@@ -1,3 +1,6 @@
+Flat Routes Table
+=================
+
 Code to set up the flat_routes table:
 
     DROP TABLE flat_routes;
@@ -5,7 +8,8 @@ Code to set up the flat_routes table:
     SELECT DISTINCT   s.stop_id, s.stop_name, st.stop_sequence, st.arrival_time,
                       s.stop_lat, s.stop_lon, t.route_id, t.direction_id, 
                       c.monday, c.tuesday, c.wednesday, c.thursday, c.friday,
-                      c.saturday, c.sunday, c.start_date, c.end_date, t.trip_id
+                      c.saturday, c.sunday, c.start_date, c.end_date, t.trip_id,
+                      r.agency_id, t.trip_headsign
                       FROM stops s
                       INNER JOIN stop_times st ON st.stop_id   = s.stop_id
                       INNER JOIN trips t       ON t.trip_id    = st.trip_id
@@ -16,6 +20,20 @@ Code to set up the flat_routes table:
     CREATE INDEX route_id ON flat_routes (route_id);
     CREATE INDEX stop_id ON flat_routes (stop_id);
 
+Master Stops Table
+==================
+
+    DROP TABLE master_stops;
+    CREATE TABLE master_stops (
+      id   VARCHAR(20) PRIMARY KEY,
+      name VARCHAR(500),
+      lat  FLOAT,
+      lon  FLOAT,
+      street VARCHAR(500),
+      city   VARCHAR(500)
+    );
+
+    INSERT INTO master_stops (id, name, lat, lon, street, city) SELECT 'msta' || stop_id, stop_name, stop_lat, stop_lon, stop_street, stop_city FROM stops;
 
 Text Queries
 ============
