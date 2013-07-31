@@ -1,3 +1,6 @@
+Flat Routes Table
+=================
+
 Code to set up the flat_routes table:
 
     DROP TABLE flat_routes;
@@ -17,6 +20,20 @@ Code to set up the flat_routes table:
     CREATE INDEX route_id ON flat_routes (route_id);
     CREATE INDEX stop_id ON flat_routes (stop_id);
 
+Master Stops Table
+==================
+
+    DROP TABLE master_stops;
+    CREATE TABLE master_stops (
+      id   VARCHAR(20) PRIMARY KEY,
+      name VARCHAR(500),
+      lat  FLOAT,
+      lon  FLOAT,
+      street VARCHAR(500),
+      city   VARCHAR(500)
+    );
+
+    INSERT INTO master_stops (id, name, lat, lon, street, city) SELECT 'msta' || stop_id, stop_name, stop_lat, stop_lon, stop_street, stop_city FROM stops;
 
 Text Queries
 ============
