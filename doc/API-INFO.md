@@ -409,3 +409,39 @@ If **isDeparture** is true, then this is the estimated time at which the bus wil
 If **isScheduleBased** is set, then the prediction is not based on real-time data.
 
 If **delayed** is set, the vehicle is traveling slower than was expected over the past few minutes.
+
+NiceRide API
+=================================
+
+The [NiceRide](https://secure.niceridemn.org) system rents bicycles on an
+hourly basis through Minneapolis and St. Paul. Bikes may be rented or returned
+from automated stations.
+
+The NiceRide API can be used to get the location of these stations, as well as
+the number of bikes available.
+
+The API takes the form a single XML file available at
+https://secure.niceridemn.org/data2/bikeStations.xml
+
+The following is the start of this file:
+
+    <stations lastUpdate="1375231472074" version="2.0">
+      <station>
+      <id>2</id>
+      <name>100 Main Street SE</name>
+      <terminalName>30000</terminalName>
+      <lastCommWithServer>1375231456412</lastCommWithServer>
+      <lat>44.984892</lat>
+      <long>-93.256551</long>
+      <installed>true</installed>
+      <locked>false</locked>
+      <installDate/>
+      <removalDate/>
+      <temporary>false</temporary>
+      <public>true</public>
+      <nbBikes>17</nbBikes>
+      <nbEmptyDocks>10</nbEmptyDocks>
+      <latestUpdateTime>1375230969269</latestUpdateTime>
+      </station>
+
+
