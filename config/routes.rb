@@ -48,17 +48,18 @@ MspBus::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
-  post '/table' => 'home#table'
-  post '/sms' => 'home#sms'
-  get 'route/:id' => 'route#show'
-  get 'stop/bounds' => 'stop#bounds'
-  get 'stop/closest_trip' => 'stop#closest_trip'
+  root :to           => 'home#index'
+  post '/table'      => 'home#table'
+  post '/sms'        => 'home#sms'
+  get '/fav'         => 'home#fav'
+  get 'route/:id'    => 'route#show'
+  get 'stop/bounds'  => 'stop#bounds'
+  get 'stop/closest_trip'        => 'stop#closest_trip'
   get 'stop/get_stop_neighbours' => 'stop#get_stop_neighbours'
-  get 'stop/:stopid/arrivals' => 'stop#arrivals'
-  get 'stop/:id' => 'stop#show'
-  get 'about' => 'home#about'
-  get 'feedback' => 'home#feedback'
+  get 'stop/:stopid/arrivals'    => 'stop#arrivals'
+  get 'stop/:id'     => 'stop#show'
+  get 'about'        => 'home#about'
+  get 'feedback'     => 'home#feedback'
 
   # See how all your routes lay out with "rake routes"
 
