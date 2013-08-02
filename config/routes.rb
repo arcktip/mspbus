@@ -52,6 +52,7 @@ MspBus::Application.routes.draw do
   post '/table'      => 'home#table'
   post '/sms'        => 'home#sms'
   get '/fav'         => 'home#fav'
+  post '/favlist'    => 'home#favlist'
   get 'route/:id'    => 'route#show'
   get 'stop/bounds'  => 'stop#bounds'
   get 'stop/closest_trip'        => 'stop#closest_trip'

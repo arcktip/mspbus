@@ -20,6 +20,21 @@ class HomeController < ApplicationController
     render :layout => false
   end
 
+  def favlist
+    @stops=Array.new
+    if params[:favs].empty?
+      return
+    end
+
+    params[:favs][1..-1].split(',').each do |stop|
+      @stops.push(Stop.get_stop_by_id({:id=>stop}).results.first())
+    end
+
+    puts @stops
+
+    render :layout => false
+  end
+
   def sms
     #  Twilio POST request parameters
     #  Parameter	Description

@@ -13,7 +13,7 @@ function togglefav(){
     favs+=stopid+",";
     $("#makefav img").attr("src","/assets/star_filled.png");
   }
-  $.cookie("favs",favs);
+  $.cookie("favs",favs,{path:'/'});
 }
 
 $(document).ready(function() {
