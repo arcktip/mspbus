@@ -1,6 +1,21 @@
 // Realtime Template
 var realtime_template = _.template('<% _.each(data, function(item) { %> <tr style="background: <%= item.priority %>"><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time"><i><%= item.StopText %></i> </td></tr><% }); %>');
 
+function togglefav(){
+  var favs=$.cookie("favs");
+  if(typeof(favs)==='undefined')
+    favs=",";
+
+  if(favs.indexOf(","+stopid+",")!=-1){
+    favs=favs.replace(","+stopid+",",",");
+    $("#makefav img").attr("src","/assets/star_empty.png");
+  } else {
+    favs+=stopid+",";
+    $("#makefav img").attr("src","/assets/star_filled.png");
+  }
+  $.cookie("favs",favs);
+}
+
 $(document).ready(function() {
   view = new StopView();
   view.update();
@@ -8,6 +23,12 @@ $(document).ready(function() {
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
   $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
+
+  var favs=$.cookie("favs");
+  if(typeof(favs)!=='undefined' && favs.indexOf(","+stopid+",")!=-1)
+    $("#makefav img").attr("src","/assets/star_filled.png");
+
+  $("#makefav").click(togglefav);
 });
 
 /*

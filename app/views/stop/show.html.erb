@@ -5,7 +5,8 @@
 <div class="stop-header">
   <img src="/assets/bus-stop.png">
   <span id="thestop" data-attr="<%= @stop.stop_id %>" style="font-weight:bold;margin:0"><%= @stop.stop_name %></span>
-  <div class="btn" id="mapshow" style="float:right;margin-top:0"><img src="/assets/map24.png"></div>
+  <div class="btn pull-right" id="mapshow" style="margin-top:0"><img src="/assets/map24.png"></div>
+  <div class="btn pull-right" id="makefav" style="margin-top:0;margin-right:5px;" title="Make this stop a favorite"><img src="/assets/star_empty.png" style="height:24px"></div>
 </div>
 
 <table class="table stop-table">
@@ -31,6 +32,10 @@
     <img src="http://maps.googleapis.com/maps/api/staticmap?center=<%= @lat %>,<%= @lon %>&zoom=15&size=500x300&maptype=roadmap&sensor=false&markers=color:blue%7C<%= @lat %>,<%= @lon %>">
   </div>
 </div>
+
+<script>
+  var stopid=<%= params[:id] %>;
+</script>
 
 <%= javascript_include_tag "show_stop" %>
 <%= javascript_include_tag "general_navbar" %>
