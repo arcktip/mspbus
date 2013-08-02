@@ -120,4 +120,6 @@ var HomeView = Backbone.View.extend({
 $(document).ready(function() {
   var home_view = new HomeView();
   $(window).resize( $.throttle( 100, home_view.resize_helper.bind(home_view) ) );
+
+  $("#btn-fav").click(function(){window.location.href="/fav";});
 });

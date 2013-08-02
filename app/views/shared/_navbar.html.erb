@@ -3,10 +3,14 @@
     <div class="container">
       <a class="brand" href="/"><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %></a>
         <button class="btn-current-location btn btn-info btn-address pull-right"><img height=25 width=25 src="<%= asset_path 'location.png' %>" alt="Find Me (Update Location)" style="vertical-align:middle"/>&nbsp;&nbsp;<div style="display:inline-block;vertical-align:middle;font-size:8pt;line-height:10pt">Find<br>Me</div></button>
+        <button class="btn-current-location btn btn-info btn-address pull-right" style="margin-right:5px" id="btn-fav"><img src="/assets/star_filled.png" style="height:26px"></button>
       <div id="searchbox" class="input-append">
         <input type="text" id="q" placeholder="Find stops near&hellip;"/>
         <button class="btn add-on" id="qsub"> <i class="icon-search"></i></button>
       </div>
+
+      
+      
       
     </div>
   </div>
