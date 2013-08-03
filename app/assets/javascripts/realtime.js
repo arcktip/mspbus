@@ -91,36 +91,50 @@ function got_coordinates(lat, lon) {
 }
 
 
-function geocode(address){
-  if(address.replace(/\s/g,'').length==0){
-    update_coordinates();
-    return;
-  }
-
+function geocode(address, bounds){
+  var dfd = $.Deferred();
   var geocoder = new google.maps.Geocoder();
-  var bounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(config.bounds.south,config.bounds.west),
-    new google.maps.LatLng(config.bounds.north,config.bounds.east)
-  );
+
   geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK){
       if(results.length==1){ //One result, display it
-        got_coordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+        dfd.resolve({lat:results[0].geometry.location.lat(), lon:results[0].geometry.location.lng()});
       } else {               //Multiple results, prompt user to choose
         var ab=$("#ambiguitybuttons");
         for(var i=0;i<results.length;i++){
           ab.append('<div class="btn ambiguitybutton" data-lat="' + results[i].geometry.location.jb + '" data-lon="' + results[i].geometry.location.kb + '">' + results[i].formatted_address + '</div>');
         }
         $(".ambiguitybutton").click(function(){
-          got_coordinates($(this).data("lat"), $(this).data("lon"));
           $("#ambiguity").modal('hide');
           ab.html("");
+          dfd.resolve({lat:$(this).data("lat"), lon:$(this).data("lon")});
         });
         $("#ambiguity").modal("show");
       }
     } else {                 //No results, indicate failure
       $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
+      dfd.reject();
     }
+  });
+
+  return dfd;
+}
+
+function address_search(address){
+  if(address.replace(/\s/g,'').length==0){
+    update_coordinates();
+    return;
+  }
+
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(config.bounds.south,config.bounds.west),
+    new google.maps.LatLng(config.bounds.north,config.bounds.east)
+  );
+
+  $.when(
+    geocode(address, bounds)
+  ).done(function(gloc) {
+    got_coordinates(gloc.lat, gloc.lon);
   });
 }
 
@@ -146,12 +160,12 @@ $(document).ready(function() {
     update_coordinates();
   } else {
     $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
-    geocode(decodeURIComponent($(document).getUrlParam("q")));
+    address_search(decodeURIComponent($(document).getUrlParam("q")));
   }
 
   window.setInterval(update_table, 60000);
 
   $('.btn-current-location').on('click', update_coordinates);
-  $("#q").on("keypress", function(e) { if (e.which == 13) geocode($("#q").val()); });
-  $("#qsub").click(function() { geocode($("#q").val()); });
+  $("#q").on("keypress", function(e) { if (e.which == 13) address_search($("#q").val()); });
+  $("#qsub").click(function() { address_search($("#q").val()); });
 });

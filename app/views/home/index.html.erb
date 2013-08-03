@@ -53,7 +53,8 @@
   </div>
 </div>
 
-<div class="modal hide fade" id="ambiguity">
+<% #If fade is added to the modal dialog below, the UI can become unusable if ambiguity is triggered too close to another modal, such as occurs when disambiguitating two addresses in the routing function %>
+<div class="modal hide" id="ambiguity">
   <div class="modal-header">
     <button type="button" class="close" id="close-ambiguity" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Which location?</h3>

@@ -260,7 +260,6 @@ var MapView = Backbone.View.extend({
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon("/assets/bus-stop-hover.png");
-        console.log('[data-stopid="' + new_stop.id + '"]');
         $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#E6E6E6");
       });
 
@@ -425,16 +424,17 @@ var RouteInputView = Backbone.View.extend({
       new google.maps.LatLng(config.bounds.north,config.bounds.east)
     );
 
-    $.when(
-      // Origin geocode
-      this.geocode_with_promise(this.origin.val(), bounds),
-      
-      // Destination geocode
-      this.geocode_with_promise(this.destination.val(), bounds)
-      
-    ).done(function(origin, destination) {
-      self.calculate_route(origin, destination, self.display_route);
-    });
+    geocode(self.origin.val(), bounds).then(
+      function(origin){
+        geocode(self.destination.val(), bounds).done(
+          function(destination) {
+            origin=new google.maps.LatLng(origin.lat, origin.lon);
+            destination=new google.maps.LatLng(destination.lat, destination.lon);
+            self.calculate_route(origin, destination, self.display_route);
+          }
+        )
+      }
+    );
 
   },
 
@@ -518,29 +518,5 @@ var RouteInputView = Backbone.View.extend({
 
   display_route_error: function(status) {
     // Todo: Implement alert for routing error.
-  },
-
-  geocode_with_promise: function(address, bounds) {
-    
-    var dfd = $.Deferred();
-    var geocoder = new google.maps.Geocoder();
-
-    // Current location
-    if ( address.toLowerCase() === 'current location' ) {
-      dfd.resolve( new google.maps.LatLng(geocenter.lat, geocenter.lon) );
-    } else {
-      // Otherwise geocode the address.
-      geocoder.geocode({'address': address, 'bounds': bounds}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK && results[0]) { //TODO: Handle ambiguity
-          // origin = results;
-          dfd.resolve( new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()) );
-        }else{
-          dfd.reject();
-          error_on_coordinates();
-        }
-      });
-    }
-
-    return dfd;
   },
 });
