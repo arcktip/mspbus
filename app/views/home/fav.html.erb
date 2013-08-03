@@ -65,6 +65,17 @@
     }).done(function(data){
       $("#table-results").html(data);
       update_table();
+
+      $(".trashstop").click(function(){
+        var par=$(this).parent();
+        var stopid=par.data("stopid");
+        par.hide();
+
+        var favs=$.cookie("favs");
+        favs=favs.replace(","+stopid+",",",");
+        $.cookie("favs",favs,{path:'/'});
+      });
+
     });
 
     window.setInterval(update_table, 60000);
