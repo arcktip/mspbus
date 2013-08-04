@@ -14,13 +14,47 @@ Setup
    * May need `sudo apt-get install libpq-dev`
    * May need `sudo apt-get install libsqlite3-dev`
  6. Start Elastic Search with `sudo service elasticsearch start`
- 7. Configure **config/database.yml**
+ 7. Set up the database credentials (see below)
  8. rake db:migrate
  9. Load stop data into postgres `rake mspbus:load_stops`
  10. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
  11. Set up the configuration variables in `app/assets/javascripts/config.js`
  12. Run `rails s` in the project's base directory to start the server
 
+Setting Up Database Credentials
+===============================
+Database credentials are not part of the distribution for obvious
+reasons.  The included `config/database.yml` uses the `bcdatabase`
+package to retrieve the credentials from elsewhere on your Rails
+server.  To set up these credentials:
+
+ 1. `sudo mkdir -p /etc/nubic/db`
+ 2. Create the file `/etc/nubic/db/mspbus.yml`
+
+The file `mspbus.yml` may look something like the following.
+
+<pre>
+defaults:
+  adapter: postgresql
+  encoding: utf8
+  host: localhost
+dev:
+  database: mspbus-dev
+  username: yourdevusername
+  password: yourdevpassword
+test:
+  database: mspbus-test
+  username: yourtestusername
+  password: yourtestpassword
+prod:
+  database: mspbus
+  username: yourprodusername
+  password: yourprodpassword
+</pre>
+
+You should secure `mspbus.yml` so that it can only be read by the server.
+You can optionally encrypt the file as well.  For more information, see
+the [bcdatabase project](https://github.com/NUBIC/bcdatabase).
 
 Database Stops Table
 ==============================

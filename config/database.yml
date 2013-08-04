@@ -1,0 +1,8 @@
+<%
+  require 'bcdatabase'
+  bcdb = Bcdatabase.load
+%>
+
+<%= bcdb.development :mspbus, :dev %>
+<%= bcdb.test :mspbus, :test %>
+<%= bcdb.production :mspbus, :prod %>
