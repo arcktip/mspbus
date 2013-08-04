@@ -1,34 +1,69 @@
 // Realtime Template
 var realtime_template = _.template('<% _.each(data, function(item) { %> <tr style="background: <%= item.priority %>"><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time"><i><%= item.StopText %></i> </td></tr><% }); %>');
 
-function togglefav(){
-  var favs=$.cookie("favs");
-  if(typeof(favs)==='undefined')
-    favs=",";
-
-  if(favs.indexOf(","+stopid+",")!=-1){
-    favs=favs.replace(","+stopid+",",",");
-    $("#makefav img").attr("src","/assets/star_empty.png");
-  } else {
-    favs+=stopid+",";
-    $("#makefav img").attr("src","/assets/star_filled.png");
-  }
-  $.cookie("favs",favs,{path:'/'});
-}
-
 $(document).ready(function() {
-  view = new StopView();
+  
+  // Stop View
+  var view = new StopView();
   view.update();
+  
+  // Favorites View
+  var favoritesView = new FavortiesView();
+
   window.setInterval(view.update, 60000);
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
   $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
+});
 
-  var favs=$.cookie("favs");
-  if(typeof(favs)!=='undefined' && favs.indexOf(","+stopid+",")!=-1)
-    $("#makefav img").attr("src","/assets/star_filled.png");
+/*
+|----------------------------------------------------------------------------------------------------
+| FavoritesView
+|----------------------------------------------------------------------------------------------------
+*/
 
-  $("#makefav").click(togglefav);
+var FavortiesView = Backbone.View.extend({
+  
+  el: '#makefav',
+  favs: null,
+
+  initialize: function() {
+    _.bindAll(this);
+    this.favs = $.cookie("favs");
+    
+    if(typeof(this.favs) !== 'undefined' && this.favs.indexOf("," + stopid + "," )!=-1) {
+      this.activate();
+    }
+
+    this.$el.on('click', this.togglefav);
+  },
+
+  activate: function() {
+    this.$el.find('i').addClass('star-yellow');
+  },
+
+  deactivate: function() {
+    this.$el.find('i').removeClass('star-yellow');
+  },
+
+  togglefav: function () {
+    var favs = $.cookie("favs");
+    
+    if(typeof(this.favs) === 'undefined') {
+      this.favs = ",";
+    }
+
+    if(favs.indexOf(","+stopid+",") !== -1 ) {
+      this.favs = this.favs.replace(","+stopid+",",",");
+      this.deactivate();
+    } else {
+      this.favs += stopid + ",";
+      this.activate();
+    }
+
+    $.cookie("favs", this.favs, {path:'/'});
+  }
+
 });
 
 /*
@@ -50,7 +85,7 @@ var StopView = Backbone.View.extend({
 
   render: function() {
 
-    if ( view.collection.models.length === 0 ) {
+    if ( this.collection.models.length === 0 ) {
       this.$el.parent().html("No buses found.");
       return;
     }
@@ -74,7 +109,7 @@ var StopView = Backbone.View.extend({
   },
 
   format_data: function() {
-    var data = _.map(view.collection.toJSON(),
+    var data = _.map(this.collection.toJSON(),
       function(obj) {
         if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
           obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
