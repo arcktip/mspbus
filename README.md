@@ -1,4 +1,4 @@
-MSPBUS.ORG
+mspbus.org
 ==============================
 ![Screenshot](doc/screenshot.jpg)
 
