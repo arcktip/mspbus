@@ -363,7 +363,10 @@ var RouteInputView = Backbone.View.extend({
     this.directions_box.on('click', '.directions-step', this.center_map_on_step);
 
     this.origin = this.$el.find('#origin');
+    this.origin_container = this.$el.find('.origin-container');
+    
     this.destination = this.$el.find('#destination');
+    this.destination_container = this.$el.find('.destination-container');
   },
 
   hide: function() {
@@ -405,7 +408,7 @@ var RouteInputView = Backbone.View.extend({
       location = this.end_location;    
     }
 
-    EventBus.trigger("pan_map", location.jb, location.kb);
+    EventBus.trigger("pan_map", location.lat(), location.lng());
 
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       this.$el.hide();
@@ -424,18 +427,41 @@ var RouteInputView = Backbone.View.extend({
       new google.maps.LatLng(config.bounds.north,config.bounds.east)
     );
 
-    geocode(self.origin.val(), bounds).then(
-      function(origin){
-        geocode(self.destination.val(), bounds).done(
-          function(destination) {
-            origin=new google.maps.LatLng(origin.lat, origin.lon);
-            destination=new google.maps.LatLng(destination.lat, destination.lon);
-            self.calculate_route(origin, destination, self.display_route);
-          }
-        )
-      }
-    );
+    if ( this.validate_inputs() ) {
+      geocode(self.origin.val(), bounds).then(
+        function(origin){
+          geocode(self.destination.val(), bounds).done(
+            function(destination) {
+              origin=new google.maps.LatLng(origin.lat, origin.lon);
+              destination=new google.maps.LatLng(destination.lat, destination.lon);
+              self.calculate_route(origin, destination, self.display_route);
+            }
+          )
+        }
+      );
+    }
 
+  },
+
+  validate_inputs: function() {
+
+    var ok = true;
+    
+    if ( this.origin.val() === "" ) {
+      this.origin_container.addClass("error");
+      ok = false;
+    } else {
+      this.origin_container.removeClass("error");
+    }
+
+    if ( this.destination.val() === "" ) {
+      this.destination_container.addClass("error");
+      ok = false;
+    } else {
+      this.destination_container.removeClass("error");
+    }
+
+    return ok;
   },
 
   calculate_route: function(origin, destination, callback) {
@@ -452,7 +478,8 @@ var RouteInputView = Backbone.View.extend({
       if (status == google.maps.DirectionsStatus.OK) {
         callback(response);
       } else {
-        self.display_route_error(status);
+        //console.log('Route Error: ');
+        //self.display_route_error(status);
       }
     });
 
@@ -501,7 +528,7 @@ var RouteInputView = Backbone.View.extend({
         //this.add_path(steps[i].polyline.points )
       }
 
-      got_coordinates(steps[0].start_point.jb, steps[0].start_point.kb);
+      got_coordinates(steps[0].start_point.lat(), steps[0].start_point.lng());
 
     } else {
       // Error with routes.
