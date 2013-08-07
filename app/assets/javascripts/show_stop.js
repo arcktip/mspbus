@@ -53,7 +53,7 @@ var FavortiesView = Backbone.View.extend({
       this.favs = ",";
     }
 
-    if(favs.indexOf(","+stopid+",") !== -1 ) {
+    if(this.favs.indexOf(","+stopid+",") !== -1 ) {
       this.favs = this.favs.replace(","+stopid+",",",");
       this.deactivate();
     } else {
