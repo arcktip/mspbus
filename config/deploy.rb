@@ -46,10 +46,10 @@ namespace :deploy do
   #run "newgrp mspbus"
   task :start do ; end
   task :stop do ; end
-  desc "Symlinks the database.yml"
-  task :symlink_db, :roles => :web do
-    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
-  end
+#  desc "Symlinks the database.yml"
+#  task :symlink_db, :roles => :web do
+#    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+#  end
   task :restart, :roles => :web, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
