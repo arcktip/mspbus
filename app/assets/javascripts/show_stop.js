@@ -61,7 +61,7 @@ var FavortiesView = Backbone.View.extend({
       this.activate();
     }
 
-    $.cookie("favs", this.favs, {path:'/'});
+    $.cookie("favs", this.favs, {expires: 20*365, path:'/'});
   }
 
 });
