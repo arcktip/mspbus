@@ -503,7 +503,12 @@ var RouteInputView = Backbone.View.extend({
       var steps = legs.steps;
 
       this.route_input.hide();
-      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode, end_address: legs.end_address}) );
+      this.directions_box.html( this.direction_template({
+        steps: steps,
+        determine_travel_mode: this.determine_travel_mode,
+        end_address: this.destination.val()
+      }) );
+      
       this.directions_box.show();
 
       this.map_parent.set_path(route.routes[0].overview_polyline.points);

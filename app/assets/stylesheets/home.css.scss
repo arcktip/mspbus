@@ -266,9 +266,11 @@
   }
 
   .directions-end {
-    display: inline-block;
-    white-space: normal;
-    text-overflow: ellipsis;
+    margin-right: 5px;
+    padding: 5px;
+    display: block;
+    // white-space: normal;
+    // text-overflow: ellipsis;
     background: #3a87ad;
   }
 
