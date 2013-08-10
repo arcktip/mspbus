@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.navbar-fixed-top, .navbar-fixed-bottom {
+  position: relative;
+}
+
 .stopbutton {
   padding: 5px;
   text-align: left;
@@ -75,11 +79,15 @@
 #viewchanger {margin-left:5px;}
 
 @media (max-width: 767px) {
-  #viewchanger {display:block;}
+  //#viewchanger {display:block;}
+  #view-table-btn { display: block; }
+  #view-map-btn { display: block; }
 }
 
 @media (min-width: 768px) {
-  #viewchanger {display:none;}
+  //#viewchanger {display:none;}
+  #view-table-btn { display: none; }
+  #view-map-btn { display: none; }
 }
 
 .infocontents {
@@ -223,7 +231,7 @@
   border: 1px solid #ccc;
   border-radius: 0px;
   position: absolute;
-  top: 32px;
+  top: 67px;
   right: 3px;
   z-index: 100;
 
@@ -233,8 +241,12 @@
     }
   }
 
+  .btn-route-back {
+    margin-right: 27px;
+  }
+
   .btn-hide-route {
-    display: none;
+    //display: none;
     position: absolute;
     top: 10px;
     right: 5px;
@@ -251,7 +263,7 @@
 
   .btn-exchange {
     position: absolute;
-    top: 30px;
+    top: 50px;
     right: 5px;
     padding: 3px 7px 3px 7px;
   }

@@ -70,7 +70,13 @@ var HomeView = Backbone.View.extend({
     $.cookie('home_current_view', 'map_list_item');
   },
 
-  show_route: function() {
+  show_route: function(e) {
+    
+    // Only goto anchor link if on mobile screens
+    if ( matchMedia('only screen and (min-width: 767px)').matches ) {
+      e.preventDefault();
+    }
+
     if(!this.view_route.is(":visible")){
       if($.cookie('home_current_view') !== 'map_list_item') {
         this.show_map();
