@@ -61,6 +61,7 @@ MspBus::Application.routes.draw do
   get 'stop/:id'     => 'stop#show'
   get 'about'        => 'home#about'
   get 'feedback'     => 'home#feedback'
+  get 'legal'        => 'home#legal'
 
   # See how all your routes lay out with "rake routes"
 
