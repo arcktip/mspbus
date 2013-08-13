@@ -17,12 +17,14 @@
 //= require underscore-min
 //= require backbone-min
 //= require moment.min
+//= require jquery.relevant-dropdown
 //= require jquery.cookie
 //= require jquery.throttle
 //= require jquery.getUrlParam
 //= require url-parser
 //= require matchMedia
 //= require bus_eta
+//= require views/navbar
 // require jquery.storage
 //= require_tree ./templates
 // require_tree .
