@@ -29,27 +29,28 @@
             
             </span><% } %>
           
-          <span class="pull-right"><b>&nbsp;&nbsp;
-          <% if (!(step.transit)){ %>
-          
-          <%= step.duration.text.replace('s','') %> (<%= step.distance.text %>)
-          	
+          <span class="pull-right" style="font-family:OpenSansSemibold;">&nbsp;&nbsp;
+          <% if (!step.transit){ %>
+            <%= step.duration.text.replace('s','') %> (<%= step.distance.text %>)        	
           <% }else{ %>
-          	
-          	
           	<%= step.duration.text.replace('s','') %> (<%= step.transit.num_stops %> Stops)
-          	<% } %></b>
+          <% } %>
           </span>
           <% if (step.transit){ %>
-          	<% console.log(step) %>
-          	<br>Get off at <%= step.transit.departure_stop.name %>
-          <% }else{ %>
-          <% if (index==steps.length-1){ %>
-          <%= step.instructions.replace('to','to:<br>',1).replace("/Taxi",'',1).replace(":<br>",":<span class='directions-end' style='color:white;'>",1) %>
+          	<br>Get off at <%= step.transit.arrival_stop.name %>
+          <% } else if (index==steps.length-1){ %>
+            <%= step.instructions
+                    .replace('to','to:<br>',1)
+                    .replace("/Taxi",'',1)
+                    .replace(":<br>",":<span class='directions-end' style='color:white;font-family:OpenSansSemibold;'>",1)
+                    .replace(/([^,]*,[^,]*).*/,"$1")
+            %>
           </span>
-          <% }else{ %>
-          <%= step.instructions.replace('to','to:<br>',1).replace("/Taxi",'',1) %>
-          <% } %>
+          <% } else { %>
+            <%= step.instructions
+                    .replace('to','to:<br>',1)
+                    .replace("/Taxi",'',1)
+            %>
           <% } %>
         </div>
           
