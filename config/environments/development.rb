@@ -34,4 +34,6 @@ MspBus::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
 end

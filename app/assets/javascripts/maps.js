@@ -514,12 +514,24 @@ var RouteInputView = Backbone.View.extend({
       
       this.directions_box.show();
 
-      this.map_parent.set_path(route.routes[0].overview_polyline.points);
       //this.map_parent.directions_display.setDirections(route);
       this.steps = steps;
       this.end_location = legs.end_location;
 
       for ( var i=0, len=steps.length; i < len; i++ ) {
+        var pathcolour;
+        if ( steps[i].travel_mode=="WALKING" )
+          pathcolour="black";
+        else
+          pathcolour='#2ea1e2';
+
+        var pathseg = new google.maps.Polyline(
+          {strokeColor: pathcolour, strokeOpacity: 0.7, strokeWeight: 4.5}
+        );
+        pathseg.setPath(google.maps.geometry.encoding.decodePath(steps[i].polyline.points));
+        pathseg.setMap(this.map_parent.map);
+        this.direction_markers.push(pathseg);
+
         var marker = new google.maps.Marker({
           position: steps[i].start_point,
           map: this.map_parent.map,
@@ -533,7 +545,6 @@ var RouteInputView = Backbone.View.extend({
           }
         });
         this.direction_markers.push(marker);
-        //this.add_path(steps[i].polyline.points )
       }
 
       got_coordinates(steps[0].start_point.lat(), steps[0].start_point.lng());

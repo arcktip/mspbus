@@ -64,11 +64,12 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY&sensor=true">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.config.google_maps_api_key %>&sensor=true">
 </script>
 
 <%= javascript_include_tag "realtime" %>
 <%= javascript_include_tag "maps" %>
 
 <%= javascript_include_tag "home" %>
+
+
