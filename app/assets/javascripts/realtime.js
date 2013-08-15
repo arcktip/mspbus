@@ -175,10 +175,8 @@ $(document).ready(function() {
     $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
     address_search(decodeURIComponent($(document).getUrlParam("q")));
   }
+  
+  var navbar_view = new NavbarView({ page: 'realtime' });
 
   window.setInterval(update_table, 60000);
-
-  $('.btn-current-location').on('click', update_coordinates);
-  $("#q").on("keypress", function(e) { if (e.which == 13) address_search($("#q").val()); });
-  $("#qsub").click(function() { address_search($("#q").val()); });
 });

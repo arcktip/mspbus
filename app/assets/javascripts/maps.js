@@ -223,7 +223,8 @@ var MapView = Backbone.View.extend({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
       draggable: false,
-      icon: '/assets/bus-stop.png',
+      icon: new google.maps.MarkerImage('/assets/bus-icon.svg',
+    null, null, null, new google.maps.Size(22,22)),
       //animation: google.maps.Animation.DROP,
       stopid: new_stop.id,
       zIndex: 1
@@ -259,7 +260,8 @@ var MapView = Backbone.View.extend({
         //self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
-        this.setIcon("/assets/bus-stop-hover.png");
+        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
+    null, null, null, new google.maps.Size(22,22)));
         $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#E6E6E6");
       });
 
@@ -267,7 +269,8 @@ var MapView = Backbone.View.extend({
         self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
-        this.setIcon("/assets/bus-stop.png");
+        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
+    null, null, null, new google.maps.Size(22,22)));
         $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","");
       });
     }
@@ -503,7 +506,12 @@ var RouteInputView = Backbone.View.extend({
       var steps = legs.steps;
 
       this.route_input.hide();
-      this.directions_box.html( this.direction_template({ steps: steps, determine_travel_mode: this.determine_travel_mode, end_address: legs.end_address}) );
+      this.directions_box.html( this.direction_template({
+        steps: steps,
+        determine_travel_mode: this.determine_travel_mode,
+        end_address: this.destination.val()
+      }) );
+      
       this.directions_box.show();
 
       this.map_parent.set_path(route.routes[0].overview_polyline.points);
