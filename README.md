@@ -19,7 +19,7 @@ Setup
  9. Load stop data into postgres `rake mspbus:load_stops`
  10. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
  11. Set up the configuration variables in `app/assets/javascripts/config.js`
- 12. Set your own `config.google_maps_api_key` in **development.rb**, **production.rb** and **test.rb** in `config/environments`
+ 12. Set your own `config.google_maps_api_key` inside **development.rb**, **production.rb** and **test.rb** located in `config/environments`
  13. Run `rails s` in the project's base directory to start the server
 
 Setting Up Database Credentials
