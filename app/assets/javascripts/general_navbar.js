@@ -8,8 +8,5 @@ function geocode(address){
 }
 
 $(document).ready(function() {
-  $('.btn-current-location').on('click', update_coordinates);
-  $("#q").on("keypress", function(e) { if (e.which == 13) geocode($("#q").val()); });
-  $("#qsub").click(function() { geocode($("#q").val()); });
-  $("#btn-fav").click(function() { window.location.href="/fav"; });
+  var navbar_view = new NavbarView({ page: 'general_navbar' });
 });

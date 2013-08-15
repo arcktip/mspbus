@@ -95,27 +95,33 @@ function geocode(address, bounds){
   var dfd = $.Deferred();
   var geocoder = new google.maps.Geocoder();
 
-  geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
-    if (status == google.maps.GeocoderStatus.OK){
-      if(results.length==1){ //One result, display it
-        dfd.resolve({lat:results[0].geometry.location.lat(), lon:results[0].geometry.location.lng()});
-      } else {               //Multiple results, prompt user to choose
-        var ab=$("#ambiguitybuttons");
-        for(var i=0;i<results.length;i++){
-          ab.append('<div class="btn ambiguitybutton" data-lat="' + results[i].geometry.location.jb + '" data-lon="' + results[i].geometry.location.kb + '">' + results[i].formatted_address + '</div>');
+  // If the user entered current location, let's use the current geocenter
+  if ( address.toLowerCase() === 'current location' ) {
+    dfd.resolve(geocenter);
+  } else {
+    // Else, actually do a geocode.
+    geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK){
+        if(results.length==1){ //One result, display it
+          dfd.resolve({lat:results[0].geometry.location.lat(), lon:results[0].geometry.location.lng()});
+        } else {               //Multiple results, prompt user to choose
+          var ab=$("#ambiguitybuttons");
+          for(var i=0;i<results.length;i++){
+            ab.append('<div class="btn ambiguitybutton" data-lat="' + results[i].geometry.location.lat() + '" data-lon="' + results[i].geometry.location.lng() + '">' + results[i].formatted_address + '</div>');
+          }
+          $(".ambiguitybutton").click(function(){
+            $("#ambiguity").modal('hide');
+            ab.html("");
+            dfd.resolve({lat:$(this).data("lat"), lon:$(this).data("lon")});
+          });
+          $("#ambiguity").modal("show");
         }
-        $(".ambiguitybutton").click(function(){
-          $("#ambiguity").modal('hide');
-          ab.html("");
-          dfd.resolve({lat:$(this).data("lat"), lon:$(this).data("lon")});
-        });
-        $("#ambiguity").modal("show");
+      } else {                 //No results, indicate failure
+        $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
+        dfd.reject();
       }
-    } else {                 //No results, indicate failure
-      $("#table-results").html('<div class="alert alert-info">Failed to geocode address.</div>');
-      dfd.reject();
-    }
-  });
+    });
+  }
 
   return dfd;
 }
@@ -162,10 +168,8 @@ $(document).ready(function() {
     $("#q").val(decodeURIComponent($(document).getUrlParam("q")));
     address_search(decodeURIComponent($(document).getUrlParam("q")));
   }
+  
+  var navbar_view = new NavbarView({ page: 'realtime' });
 
   window.setInterval(update_table, 60000);
-
-  $('.btn-current-location').on('click', update_coordinates);
-  $("#q").on("keypress", function(e) { if (e.which == 13) address_search($("#q").val()); });
-  $("#qsub").click(function() { address_search($("#q").val()); });
 });

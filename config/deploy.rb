@@ -29,7 +29,7 @@ role :app, "debian2.brobston.com"
 role :db,  "debian2.brobston.com", :primary => true
 
 # if you want to clean up old releases on each deploy uncomment this:
-after 'deploy:update_code', 'deploy:symlink_db', :setup_group
+after 'deploy:update_code', :setup_group
 after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
@@ -46,10 +46,10 @@ namespace :deploy do
   #run "newgrp mspbus"
   task :start do ; end
   task :stop do ; end
-  desc "Symlinks the database.yml"
-  task :symlink_db, :roles => :web do
-    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
-  end
+#  desc "Symlinks the database.yml"
+#  task :symlink_db, :roles => :web do
+#    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+#  end
   task :restart, :roles => :web, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end

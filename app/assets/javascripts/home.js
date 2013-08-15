@@ -70,7 +70,13 @@ var HomeView = Backbone.View.extend({
     $.cookie('home_current_view', 'map_list_item');
   },
 
-  show_route: function() {
+  show_route: function(e) {
+    
+    // Only goto anchor link if on mobile screens
+    if ( matchMedia('only screen and (min-width: 767px)').matches ) {
+      e.preventDefault();
+    }
+
     if(!this.view_route.is(":visible")){
       if($.cookie('home_current_view') !== 'map_list_item') {
         this.show_map();
@@ -120,6 +126,4 @@ var HomeView = Backbone.View.extend({
 $(document).ready(function() {
   var home_view = new HomeView();
   $(window).resize( $.throttle( 100, home_view.resize_helper.bind(home_view) ) );
-
-  $("#btn-fav").click(function(){window.location.href="/fav";});
 });

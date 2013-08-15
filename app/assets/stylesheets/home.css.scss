@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.navbar-fixed-top, .navbar-fixed-bottom {
+  position: relative;
+}
+
 .stopbutton {
   padding: 5px;
   text-align: left;
@@ -75,11 +79,15 @@
 #viewchanger {margin-left:5px;}
 
 @media (max-width: 767px) {
-  #viewchanger {display:block;}
+  //#viewchanger {display:block;}
+  #view-table-btn { display: block; }
+  #view-map-btn { display: block; }
 }
 
 @media (min-width: 768px) {
-  #viewchanger {display:none;}
+  //#viewchanger {display:none;}
+  #view-table-btn { display: none; }
+  #view-map-btn { display: none; }
 }
 
 .infocontents {
@@ -223,7 +231,7 @@
   border: 1px solid #ccc;
   border-radius: 0px;
   position: absolute;
-  top: 32px;
+  top: 67px;
   right: 3px;
   z-index: 100;
 
@@ -233,8 +241,12 @@
     }
   }
 
+  .btn-route-back {
+    margin-right: 27px;
+  }
+
   .btn-hide-route {
-    display: none;
+    //display: none;
     position: absolute;
     top: 10px;
     right: 5px;
@@ -245,12 +257,13 @@
   .directions-leg {
     overflow-y: scroll;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     height: 300px;
   }
 
   .btn-exchange {
     position: absolute;
-    top: 30px;
+    top: 50px;
     right: 5px;
     padding: 3px 7px 3px 7px;
   }
@@ -265,9 +278,11 @@
   }
 
   .directions-end {
-    display: inline-block;
-    white-space: normal;
-    text-overflow: ellipsis;
+    margin-right: 5px;
+    padding: 5px;
+    display: block;
+    // white-space: normal;
+    // text-overflow: ellipsis;
     background: #3a87ad;
   }
 
@@ -301,4 +316,28 @@
 .star-yellow {
   color: #fbe045;
   text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
+}
+
+.datalist {
+  list-style: none;
+  display: none;
+  background: white;
+  box-shadow: 0 2px 2px #999;
+  position: absolute;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.datalist:empty {
+  display: none !important;
+}
+.datalist li {
+  padding: 3px;
+  font: 13px "Lucida Grande", Sans-Serif;
+}
+.datalist li.active {
+  background: #3875d7;
+  color: white;
 }
