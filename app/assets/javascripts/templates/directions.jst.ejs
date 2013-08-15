@@ -5,27 +5,59 @@
     <button class="btn btn-primary pull-right btn-route-back"><i class="icon-reply"></i></button>
   </div>
   
-  <div class="directions-leg">
+  <div class="directions-leg" style="font-size:11px;" >
     <% _.each(steps, function(step, index) { %>
       <div class="directions-step" data-index="<%= index %>">
         <div class="clearfix">
-          <span class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>"></span>
+          <i class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>" style="margin:0px 0 4px 0;"></i>&nbsp;
           <% if ( step.transit ) { %>
-            <span class="pull-left label"><%= step.transit.line.short_name %></span>
+            <span class="pull-left label">
+            
+            	<%= step.transit.line.short_name %>
+            	<% if (step.instructions.indexOf("North") != -1){%>
+            		<i class="icon-arrow-up"></i>
+            	<% } %>
+            	<% if (step.instructions.indexOf("South") != -1){%>
+            		<i class="icon-arrow-down"></i>
+            	<% } %>
+            	<% if (step.instructions.indexOf("East") != -1){%>
+            		<i class="icon-arrow-right"></i>
+            	<% } %>
+            	<% if (step.instructions.indexOf("West") != -1){%>
+            		<i class="icon-arrow-left"></i>
+            	<% } %>
+            
+            </span><% } %>
+          
+          <span class="pull-right"><b>&nbsp;&nbsp;
+          <% if (!(step.transit)){ %>
+          
+          <%= step.duration.text.replace('s','') %> (<%= step.distance.text %>)
+          	
+          <% }else{ %>
+          	
+          	
+          	<%= step.duration.text.replace('s','') %> (<%= step.transit.num_stops %> Stops)
+          	<% } %></b>
+          </span>
+          <% if (step.transit){ %>
+          	<% console.log(step) %>
+          	<br>Get off at <%= step.transit.departure_stop.name %>
+          <% }else{ %>
+          <% if (index==steps.length-1){ %>
+          <%= step.instructions.replace('to','to:<br>',1).replace("/Taxi",'',1).replace(":<br>",":<span class='directions-end' style='color:white;'>",1) %>
+          </span>
+          <% }else{ %>
+          <%= step.instructions.replace('to','to:<br>',1).replace("/Taxi",'',1) %>
           <% } %>
-          <span class="pull-right"><%= step.distance.text %></span>
+          <% } %>
         </div>
-        <div>
-          <%= step.instructions %>
-        </div>
-        <% if ( step.transit ) { %>
-          <span><a href="#"><%= step.transit.num_stops %> Stops</a></span>
-        <% } %>
+          
       </div>
     <% }); %>
-    <div class="directions-step label directions-end" data-index="<%= steps.length + 1 %>">
+    <!--<div class="directions-step label directions-end" data-index="<%= steps.length + 1 %>">
       End - <%= end_address %>
-    </div>
+    </div>-->
   </div>
   
 </div>
