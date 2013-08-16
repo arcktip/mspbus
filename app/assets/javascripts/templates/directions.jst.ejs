@@ -7,7 +7,7 @@
   
   <div class="directions-leg" style="font-size:11px;" >
   	<% var total_time=0 %>
-  	<% var total_distance=0 %>
+  	<% var total_distance=0.0 %>
     <% _.each(steps, function(step, index) { %>
     <% console.log(step) %>
     <% total_time=total_time+parseInt(step.duration.text.replace(" min",''),10) %>
@@ -15,6 +15,11 @@
     	.replace(" mi",'')
     	.replace(/\d* ft/,'0')
     	,10) %>
+   	<% console.log(parseFloat(step.distance.text
+    	.replace(" mi",'')
+    	.replace(/\d* ft/,'0')
+    	,10)) %>
+   	<% console.log(total_distance) %>
       <div class="directions-step" data-index="<%= index %>">
         <div class="clearfix">
           <i class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>" style="margin:0px 0 4px 0;"></i>&nbsp;
@@ -65,7 +70,7 @@
       </div>
     <% }); %>
     <div class="directions-step" data-index="<%= steps.length + 1 %>">
-      <b style="font-size:12px">About <%= total_time %> min (<%= String(total_distance).replace(/0+\d?/,'') %> mi) Total</b>
+      <b style="font-size:12px">About <%= total_time %> min (<%= String(total_distance).replace(/0+(?!\.)\d?/,'',1) %> mi) Total</b>
     </div>
   </div>
 </div>
