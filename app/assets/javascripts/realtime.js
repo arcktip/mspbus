@@ -152,6 +152,11 @@ function address_search(address){
 
 function geocode_failure(){
   $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation, using cached position.</div>');
+  geocenter=$.cookie("geocenter");
+  if(typeof(geocenter)!=="undefined"){
+    geocenter=JSON.parse(geocenter);
+    got_coordinates(geocenter.lat, geocenter.lon);
+  }
 }
 
 function update_coordinates(){
@@ -164,14 +169,8 @@ function update_coordinates(){
       $.cookie("geocenter", JSON.stringify(geocenter));
       got_coordinates(pos.coords.latitude, pos.coords.longitude);
     }, geocode_failure);
-  else { //TODO: Alert user that they cannot do geocoding
-    geocenter=$.cookie("geocenter");
-    if(typeof(geocenter)!=="undefined"){
-      geocenter=JSON.parse(geocenter);
-      got_coordinates(geocenter.lat, geocenter.lon);
-    }
+  else //TODO: Alert user that they cannot do geocoding
     geocode_failure();
-  }
 }
 
 $(document).ready(function() {
