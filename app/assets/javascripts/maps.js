@@ -120,7 +120,9 @@ var MapView = Backbone.View.extend({
 
     marker=stops[look_up].marker;
     marker.setOptions({zIndex:10});
-    marker.setIcon("/assets/bus-stop-hover.png");
+    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg', null, null, null, new google.maps.Size(22,22)));
+    marker.Icon.size(new google.maps.Size(22,22));
+    console.log(marker);
   },
 
   mouseleave_stopbutton: function(id) {
@@ -135,7 +137,7 @@ var MapView = Backbone.View.extend({
 
     marker=stops[look_up].marker;
     marker.setOptions({zIndex:1});
-    marker.setIcon("/assets/bus-stop.png");
+    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg', null, null, null, new google.maps.Size(22,22)));
   },
 
   center_map: function(lat, lon){
