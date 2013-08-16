@@ -39,10 +39,21 @@
 </head>
 <body>
   <%= render('shared/navbar') %>
+
+  <div class="modal hide fade" id="confused_modal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Confused?</h3>
+    </div>
+    <div class="modal-body">
+      <%= render 'shared/legend' %>
+    </div>
+  </div>
+
   <div class="app-container container">
     <%= yield %>
     <div class="footer">
-      <a href="/about">About</a> &bull; <a href="/feedback">Feedback</a> &bull; <a href="/legal">Legal</a>
+      <a href="/about">About</a> &bull; <a href="/feedback">Feedback</a> &bull; <a href="/legal">Legal</a> &bull; <a href="#" onClick="show_confused()">Help</a>
     </div>
   </div>
   <%= yield :javascript %>
@@ -56,6 +67,9 @@
     ga('create', 'UA-41367617-1', 'mspbus.org');
     ga('send', 'pageview');
 
+    function show_confused() { $("#confused_modal").modal('show'); }
+    $("#btn-help").click(show_confused);
+    $("#confused_modal").click(function(){$("#confused_modal").modal('hide');});
   </script>
 </body>
 </html>
