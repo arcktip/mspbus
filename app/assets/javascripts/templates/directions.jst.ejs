@@ -11,7 +11,6 @@
   	<% var total_distance_walk=0.0 %>
   	<% var total_distance_bus=0.0 %>
     <% _.each(steps, function(step, index) { %>
-    <% console.log(step) %>
     <% if (step.transit){
     		total_time_bus=total_time_bus+parseInt(step.duration.text.replace(" min",''),10);
     		total_distance_bus=total_distance_bus+parseFloat(step.distance.text.replace(" mi",'').replace(/\d* ft/,'0'),10);
