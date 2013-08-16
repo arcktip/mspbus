@@ -1,4 +1,6 @@
 def gen_twillio_data(stopid)
+  puts '===='
+  puts stopid
   stops=Stop.get_stop_by_id({:id=>stopid})
   if stops.results.empty?
     return "Couldn't find stop."
@@ -69,8 +71,6 @@ class HomeController < ApplicationController
     if not params[:Body].index(' ')
       @stopid=params[:Body]
       @smess=gen_twillio_data(@stopid)
-      puts '===='
-      puts @smess
       respond_to do |format|
       	format.all { render :text => "<Response><Sms>#{@smess}</Sms></Response>" }
       end
