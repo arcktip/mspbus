@@ -80,8 +80,9 @@ class HomeController < ApplicationController
   end
   
   def voice
+    @smess=gen_twillio_data(49881)
     respond_to do |format|
-      format.all { render :text => "<Response><Say>Testing 1 2 3</Say></Response>" }
+      format.all { render :text => "<Response><Say language='en-gb'>#{@smess}</Say></Response>" }
     end
   end
 
