@@ -92,9 +92,9 @@ class HomeController < ApplicationController
     smess=""
     response.each do |item|
       if not item['DepartureText'].include? ":"
-        smess+=item['Route']+" "+item['Terminal']+" "+item['RouteDirection']+" departing in "+item['DepartureText'].sub("Min","Minutes")+", "
+        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
       else
-        smess+=item['Route']+" "+item['Terminal']+" "+item['RouteDirection']+" departing at "+item['DepartureText']+", "
+        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
       end
     end
     if smess[-2]==','
