@@ -52,8 +52,14 @@ namespace :mspbus do
   end
 
   task :load_umn_stops => :environment do
-    routes = UMN_Connector::Route.get_routes
-    puts routes
+    SourceStop.where(source_id: 2).each{ |stop| stop.destroy }
+    UMN_Connector::Route.get_routes.each do |route|
+      route.stops.each do |stop|
+        SourceStop.create(source_id: 2, external_stop_id: stop.stop_id, 
+          external_lat: stop.latittude, external_lon: stop.longitude,
+          external_stop_name: stop.title)
+      end
+    end
   end
 
 end
