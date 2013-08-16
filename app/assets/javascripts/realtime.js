@@ -71,6 +71,7 @@ function got_coordinates(lat, lon) {
   $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
     $("#outside").show();
+    setTimeout(function(){$("#outside").fadeOut();},5000);
     center = config.default_center;
   }
 
@@ -127,6 +128,11 @@ function geocode(address, bounds){
 }
 
 function address_search(address){
+  if(address.replace(/^\s*\d{1,3}\s*\w?\s*$/,'yep',1)=='yep'){
+  	$("#noroute").show();
+  	setTimeout(function(){$("#noroute").fadeOut();},3000);
+  	return;
+  }
   if(address.replace(/\s/g,'').length==0){
     update_coordinates();
     return;
