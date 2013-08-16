@@ -1,27 +1,4 @@
-def gen_twillio_data(stopid)
-  puts '===='
-  puts stopid
-  stops=Stop.get_stop_by_id({:id=>stopid})
-  if stops.results.empty?
-    return "Couldn't find stop."
-  end
 
-  response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
-  if not response.code==200
-    return "An error occoured! Sorry."
-  end
-  stopfound=true
-
-  smess=""
-  response.each do |item|
-    smess+=item['RouteDirection'][0]+item['Route']+item['Terminal']+" "+item['DepartureText']+", "
-  end
-  smess=smess[0..159]
-  if smess[-2]==','
-    smess=smess[0..-3]
-  end
-  return smess
-end
 
 class HomeController < ApplicationController
   def index
@@ -69,8 +46,28 @@ class HomeController < ApplicationController
     #  To	The phone number of the recipient.
     #  Body	The text body of the SMS message. Up to 160 characters long.
     if not params[:Body].index(' ')
-      @stopid=params[:Body]
-      @smess=gen_twillio_data(@stopid)
+      stopid=params[:Body]
+      puts '===='
+      puts stopid
+      stops=Stop.get_stop_by_id({:id=>stopid})
+      if stops.results.empty?
+        @smess = "Couldn't find stop."
+      end
+
+      response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
+      if not response.code==200
+        @smess = "An error occoured! Sorry."
+      end
+      stopfound=true
+
+      @smess=""
+      response.each do |item|
+        @smess+=item['RouteDirection'][0]+item['Route']+item['Terminal']+" "+item['DepartureText']+", "
+      end
+      @smess=@smess[0..159]
+      if smess[-2]==','
+        @smess=@smess[0..-3]
+      end
       respond_to do |format|
       	format.all { render :text => "<Response><Sms>#{@smess}</Sms></Response>" }
       end
@@ -80,9 +77,31 @@ class HomeController < ApplicationController
   end
   
   def voice
-    @smess=gen_twillio_data(49881)
+    stopid=49881
+    stops=Stop.get_stop_by_id({:id=>stopid})
+    if stops.results.empty?
+      smess = "Couldn't find stop."
+    end
+
+    response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
+    if not response.code==200
+      smess = "An error occoured! Sorry."
+    end
+    stopfound=true
+
+    smess=""
+    response.each do |item|
+      if not item['DepartureText'].include? ":"
+        smess+=item['Route']+" "+item['Terminal']+" "+item['RouteDirection']+" departing in "+item['DepartureText'].sub("Min","Minutes")+", "
+      else
+        smess+=item['Route']+" "+item['Terminal']+" "+item['RouteDirection']+" departing at "+item['DepartureText']+", "
+      end
+    end
+    if smess[-2]==','
+      smess=smess[0..-3]
+    end
     respond_to do |format|
-      format.all { render :text => "<Response><Say language='en-gb'>#{@smess}</Say></Response>" }
+      format.all { render :text => "<Response><Say language='en-gb'>#{smess}</Say></Response>" }
     end
   end
 
