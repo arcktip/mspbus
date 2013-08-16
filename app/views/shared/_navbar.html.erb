@@ -2,10 +2,16 @@
   <div class="navbar-inner">
     <div class="container">
       <a class="brand" href="/"><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %></a>
-        <button class="btn-current-location btn btn-info btn-address pull-right">
-          <i class="icon-location-arrow" style="font-size: 18px;"></i>&nbsp;&nbsp;<div style="display:inline-block;vertical-align:middle;font-size:8pt;line-height:10pt">Find<br>Me</div></button>
-      <button class="btn btn-info pull-right" style="margin-right:5px; height:35px; font-size:18pt;" id="btn-help"><i class="icon-question"></i></button>
-      <button class="btn btn-info pull-right" style="margin-right:5px; height:35px;" id="btn-fav"><i class="icon-star star star-yellow"></i></button>
+
+        <button class="btn btn-info pull-right" style="height:35px; font-size:18pt;" id="btn-help">
+          <i class="icon-question"></i>
+        </button>
+        <button class="btn btn-info pull-right" style="margin-right:10px; height:35px;" id="btn-fav">
+          <i class="icon-star star star-yellow"></i>
+        </button>
+        <button class="btn-current-location btn btn-primary btn-address pull-right" style="height:35px;margin-right:10px">
+          <i class="icon-location-arrow" style="font-size:23px;"></i>
+        </button>
       <div id="searchbox" class="input-append">
         <input type="text" id="q" placeholder="Find stops near&hellip;" list="search-history" autocomplete="off" />
         <button class="btn add-on" id="qsub"> <i class="icon-search"></i></button>
