@@ -101,7 +101,7 @@ class HomeController < ApplicationController
       smess=smess[0..-3]
     end
     respond_to do |format|
-      format.all { render :text => "<Response><Say language='en-gb'>#{smess}</Say></Response>" }
+      format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
     end
   end
 
