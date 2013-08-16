@@ -1,3 +1,14 @@
+$.fn.enterKey = function (fnc) {
+    return this.each(function () {
+        $(this).keypress(function (ev) {
+            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+            if (keycode == '13') {
+                fnc.call(this, ev);
+            }
+        })
+    })
+}
+
 var MapView = Backbone.View.extend({
   
   map: null,
@@ -370,6 +381,8 @@ var RouteInputView = Backbone.View.extend({
     
     this.destination = this.$el.find('#destination');
     this.destination_container = this.$el.find('.destination-container');
+    
+    $(this.destination).enterKey( this.process_route_parameters );
   },
 
   hide: function() {
