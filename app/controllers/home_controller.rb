@@ -78,6 +78,12 @@ class HomeController < ApplicationController
       puts "Space"
     end
   end
+  
+  def voice
+    respond_to do |format|
+      format.all { render :text => "<Response><Say>Testing 1 2 3</Say></Response>" }
+    end
+  end
 
   def about
 
