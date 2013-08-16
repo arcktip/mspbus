@@ -34,6 +34,8 @@ class HomeController < ApplicationController
   end
 
   def sms
+    render :layout => false
+    
     #  Twilio POST request parameters
     #  Parameter	Description
     #  SmsSid	A 34 character unique identifier for the message. May be used to later retrieve this message from the REST API.
@@ -70,8 +72,6 @@ class HomeController < ApplicationController
     else
       puts "Space"
     end
-
-    render :layout => false
   end
 
   def about
