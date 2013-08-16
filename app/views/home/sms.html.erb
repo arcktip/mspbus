@@ -1,9 +1,4 @@
 
 <Response>
-	<% if not @stopfound %>
-	<Sms>Couldn't find Stop #<%= @stopid %>.</Sms>
-	<% elsif @error %>
-	<Sms>Could not retrieve stop information.</Sms>
-	<% end %>
     <Sms><%= @smess %></Sms>
 </Response>
