@@ -51,6 +51,7 @@ MspBus::Application.routes.draw do
   root :to           => 'home#index'
   post '/table'      => 'home#table'
   post '/sms'        => 'home#sms'
+  post '/voice'      => 'home#voice'
   get '/fav'         => 'home#fav'
   post '/favlist'    => 'home#favlist'
   get 'route/:id'    => 'route#show'

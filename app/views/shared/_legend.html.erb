@@ -1,19 +1,21 @@
-<span style="font-weight:bold;font-size:120%">LEGEND:</span><br>
-<b>Arriving in:</b><br>
+<div style="margin-top:-0.5em" class="legend">
+<span style="font-family:OpenSansSemiBold;">Arriving in:</span><br>
 <span class="label label-important">0&ndash;5 Min</span>
 <span class="label label-warning">5&ndash;12 Min</span>
 <span class="label label-success">12&ndash;20 Min</span>
 <span class="label label-info">&gt;20 Min</span>
 <span class="label"><i class="icon-question-sign"></i> = Real-time unavailable</span>
-<br>
-<b>Direction:</b><br>
-<span class="label dir_label"><i class="icon-arrow-up"></i> = NORTHBOUND</span>
-<span class="label dir_label"><i class="icon-arrow-down"></i> = SOUTHBOUND</span>
-<span class="label dir_label"><i class="icon-arrow-right"></i> = EASTBOUND</span>
-<span class="label dir_label"><i class="icon-arrow-left"></i> = WESTBOUND</span>
-<br>
-<b>Map:</b><br>
-<span class="label dir_label"><%= image_tag("bus-stop.png", :size => "19x19", :alt => "Bus Stop Icon") %> = Bus Stop</span>
-<span class="label dir_label"><%= image_tag("you-are-here.png", :size => "20x20", :alt => "You Are Here") %> = You Are Here</span><br>
-<b>Sources:</b><br>
-<span class="label dir_label">Metro Transit, <img src="/assets/transit-logos/umn.png"> - University of Minnesota, NiceRide</span>
+<div style="margin-top:0.5em">
+  <span style="font-family:OpenSansSemiBold;">Direction:</span><br>
+  <span class="label dir_label"><i class="icon-arrow-up"></i> = NORTHBOUND</span>
+  <span class="label dir_label"><i class="icon-arrow-down"></i> = SOUTHBOUND</span>
+  <span class="label dir_label"><i class="icon-arrow-right"></i> = EASTBOUND</span>
+  <span class="label dir_label"><i class="icon-arrow-left"></i> = WESTBOUND</span>
+  </div>
+
+  <div style="margin-top:0.5em">
+  <span style="font-family:OpenSansSemiBold;">Map:</span><br>
+  <span class="label" style="background-color:white; color:black;"><%= image_tag("bus-stop.png", :size => "19x19", :alt => "Bus Icon") %> = Bus Stop</span>
+  <span class="label" style="background-color:white; color:black;"><%= image_tag("you-are-here.png", :size => "20x20", :alt => "You Are Here") %> = You Are Here</span>
+  </div>
+</div>

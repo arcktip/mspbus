@@ -1,3 +1,5 @@
+
+
 class HomeController < ApplicationController
   def index
 
@@ -34,6 +36,8 @@ class HomeController < ApplicationController
   end
 
   def sms
+    #render :layout => false
+    
     #  Twilio POST request parameters
     #  Parameter	Description
     #  SmsSid	A 34 character unique identifier for the message. May be used to later retrieve this message from the REST API.
@@ -42,36 +46,63 @@ class HomeController < ApplicationController
     #  To	The phone number of the recipient.
     #  Body	The text body of the SMS message. Up to 160 characters long.
     if not params[:Body].index(' ')
-      @stopid=params[:Body]
-      @stops=Stop.get_stop_by_id({:id=>@stopid})
-      if @stops.results.empty?
-        @stopfound=false
-        return
+      stopid=params[:Body]
+      puts '===='
+      puts stopid
+      stops=Stop.get_stop_by_id({:id=>stopid})
+      if stops.results.empty?
+        @smess = "Couldn't find stop."
       end
 
-      response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{@stopid}?format=json")
-      puts "http://svc.metrotransit.org/NexTrip/#{@stopid}?format=json"
+      response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
       if not response.code==200
-        @error=true
-        return
+        @smess = "An error occoured! Sorry."
       end
-      @stopfound=true
-      puts response.body, response.code, response.message, response.headers.inspect
-      arrivals = JSON.parse response.body
+      stopfound=true
 
       @smess=""
       response.each do |item|
         @smess+=item['RouteDirection'][0]+item['Route']+item['Terminal']+" "+item['DepartureText']+", "
       end
       @smess=@smess[0..159]
-      if @smess[-2]==','
+      if smess[-2]==','
         @smess=@smess[0..-3]
+      end
+      respond_to do |format|
+      	format.all { render :text => "<Response><Sms>#{@smess}</Sms></Response>" }
       end
     else
       puts "Space"
     end
+  end
+  
+  def voice
+    stopid=49881
+    stops=Stop.get_stop_by_id({:id=>stopid})
+    if stops.results.empty?
+      smess = "Couldn't find stop."
+    end
 
-    render :layout => false
+    response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
+    if not response.code==200
+      smess = "An error occoured! Sorry."
+    end
+    stopfound=true
+
+    smess=""
+    response.each do |item|
+      if not item['DepartureText'].include? ":"
+        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
+      else
+        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
+      end
+    end
+    if smess[-2]==','
+      smess=smess[0..-3]
+    end
+    respond_to do |format|
+      format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+    end
   end
 
   def about

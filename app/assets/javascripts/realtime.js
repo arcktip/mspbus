@@ -131,6 +131,7 @@ function got_coordinates(lat, lon) {
   $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
     $("#outside").show();
+    setTimeout(function(){$("#outside").fadeOut();},5000);
     center = config.default_center;
   }
 
@@ -187,6 +188,11 @@ function geocode(address, bounds){
 }
 
 function address_search(address){
+  if(address.replace(/^\s*\d{1,3}\s*\w?\s*$/,'yep',1)=='yep'){
+  	$("#noroute").show();
+  	setTimeout(function(){$("#noroute").fadeOut();},3000);
+  	return;
+  }
   if(address.replace(/\s/g,'').length==0){
     update_coordinates();
     return;
@@ -205,7 +211,12 @@ function address_search(address){
 }
 
 function geocode_failure(){
-  $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation.</div>');
+  $("#table-results").html('<div class="alert alert-info">Failed to retrieve geolocation, using cached position.</div>');
+  geocenter=$.cookie("geocenter");
+  if(typeof(geocenter)!=="undefined"){
+    geocenter=JSON.parse(geocenter);
+    got_coordinates(geocenter.lat, geocenter.lon);
+  }
 }
 
 function update_coordinates(){
@@ -215,6 +226,7 @@ function update_coordinates(){
     navigator.geolocation.getCurrentPosition(function(pos){
       clearTimeout(geosucc);
       geocenter={lat:pos.coords.latitude, lon:pos.coords.longitude};
+      $.cookie("geocenter", JSON.stringify(geocenter));
       got_coordinates(pos.coords.latitude, pos.coords.longitude);
     }, geocode_failure);
   else //TODO: Alert user that they cannot do geocoding
