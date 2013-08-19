@@ -285,27 +285,31 @@
     // text-overflow: ellipsis;
     background: #3a87ad;
   }
+}
 
-  .directions-travel-mode-icon {
-    background: transparent url('/assets/sprite-1x.png') no-repeat 0 0;
-    background-size: 120px 15px;
-    width: 15px;
-    height: 15px;
-    vertical-align: middle;
-    margin: 4px 0 4px 0;
-  }
+.directions-travel-mode-icon {
+  background: transparent url('/assets/sprite-1x.png') no-repeat 0 0;
+  background-size: 120px 15px;
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  margin: 4px 0 4px 0;
+}
 
-  .directions-walk-icon {
-    background-position: -24px 0;
-  }
+.directions-walk-icon {
+  background-position: -24px 0;
+}
 
-  .directions-transit-icon {
-    background-position: -96px 0;
-  }
+.directions-transit-icon {
+  background-position: -96px 0;
+}
 
-  .directions-driving-icon {
-    background-position: -48px 0;
-  }
+.directions-bike-icon {
+  background-position: -72px 0;
+}
+
+.directions-driving-icon {
+  background-position: -48px 0;
 }
 
 .star {

@@ -11,10 +11,35 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130603163719) do
+ActiveRecord::Schema.define(:version => 20130816153725) do
+
+  create_table "source_stops", :id => false, :force => true do |t|
+    t.integer  "source_id",                                                           :null => false
+    t.integer  "stop_id"
+    t.string   "external_stop_id",                                                    :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
+    t.decimal  "external_lat",                          :precision => 9, :scale => 6
+    t.decimal  "external_lon",                          :precision => 9, :scale => 6
+    t.string   "external_stop_name",                                                  :null => false
+    t.string   "external_stop_desc"
+    t.string   "external_zone_id",       :limit => 100
+    t.string   "external_stop_url"
+    t.string   "external_stop_street"
+    t.string   "external_stop_city"
+    t.string   "external_stop_region"
+    t.string   "external_stop_postcode", :limit => 50
+    t.string   "external_stop_country",  :limit => 100
+  end
+
+  create_table "sources", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "realtime_url"
+  end
 
   create_table "stops", :force => true do |t|
-    t.string  "stop_id",                            :null => false
     t.string  "stop_code"
     t.string  "stop_name",                          :null => false
     t.string  "stop_desc"

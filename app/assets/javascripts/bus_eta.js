@@ -103,7 +103,8 @@ var BusETACollection = Backbone.Collection.extend({
   model: BusETAModel,
   
   url: function() {
-    return config.api_url(this.stop_id);
+    console.log(this.realtime_url);
+    return this.realtime_url;
   },
 
   process_models: function(num_models) {

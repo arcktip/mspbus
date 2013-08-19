@@ -1,7 +1,13 @@
 <% _.each(data, function(item) { %>
   <span class="label route-chip" style="background-color:<%= item.priority %>" data-route="<%= item.Route %>">
     <i class="<%= item.direction %>"></i> 
-    <b><%= item.Route %><%= item.Terminal %></b>
+    <b>
+      <% if (logo) { %>
+        <img src="<%= logo %>"> 121
+      <% } else { %>
+        <%= item.Route %><%= item.Terminal %>
+      <% } %>
+    </b>
     <span class="route-chip-italic"><%= item.ChipText %></span>
   </span>
 <% }); %>

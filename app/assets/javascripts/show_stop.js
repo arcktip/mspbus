@@ -79,33 +79,64 @@ var StopView = Backbone.View.extend({
   
   initialize: function() {
     _.bindAll(this);
-    this.collection = new BusETACollection();
-    this.collection.stop_id = this.el.id;
+
+    this.realtime_sources = this.$el.data('realtime');
+    if ( this.realtime_sources ) {
+        //console.log(this.realtime_sources.length);
+      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+        this['collection' + i] = new BusETACollection();
+        
+        var r_collection = this['collection' + i];
+        r_collection.stop_id = this.realtime_sources[i].external_stop_id;
+        r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
+        r_collection.logo = this.realtime_sources[i].logo;
+
+        // if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
+        //   this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
+        // }
+        
+      }
+
+    }
   },
 
-  render: function() {
+  render: function(collection) {
 
-    if ( this.collection.models.length === 0 ) {
-      this.$el.parent().html("No buses found.");
-      return;
+    // if ( this.collection.models.length === 0 ) {
+    //   this.$el.parent().html("No buses found.");
+    //   return;
+    // }
+
+    if( collection.length === 0 ) {
+      //this.$el.parent().parent().hide();
+    } else {
+      console.log('Render :: ' + collection.stop_id);
+      this.$el.append(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
     }
-
-    this.$el.html( realtime_template({ data: this.format_data() }) );
-
   },
 
   update: function() {
     var self = this;
     
-    this.collection.fetch({ success: function() {
-      self.process_data();
-    } });
+    if ( this.realtime_sources ) {
+      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+          var realtime_collection = this['collection' + i];
+        
+          realtime_collection.fetch({ success: function(collection) {
+            self.process_data(collection);
+          } });
+      }
+
+      // this.collection.fetch({ success: function() {
+      //   self.process_data();
+      // } });
+    }
 
   },
 
-  process_data: function(num_models) {
-    this.collection.process_models(num_models);
-    this.render();
+  process_data: function(collection, num_models) {
+    collection.process_models(num_models);
+    this.render(collection);
   },
 
   format_data: function() {

@@ -15,7 +15,7 @@
 <thead>
   <tr style="font-weight:bold"><th style="padding-left:33px">Rt</th><th>Description</th><th>Arrival</th></tr>
 </thead>
-<tbody id="<%= params[:id] %>" class="result">
+<tbody id="<%= params[:id] %>" class="result" data-realtime='[{ "url": "http://svc.metrotransit.org/NexTrip/<%= params[:id] %>?callback=?&format=json", "id": "<%= params[:id] %>" }, { "url": "/realtime/umn?a=umn-twin&stop_id=31", "id": "31", "logo": "assets/transit-logos/umn.png" }]'>
 </tbody>
 </table>
 

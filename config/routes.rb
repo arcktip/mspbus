@@ -62,6 +62,11 @@ MspBus::Application.routes.draw do
   get 'about'        => 'home#about'
   get 'feedback'     => 'home#feedback'
   get 'legal'        => 'home#legal'
+  
+  # realtime apis
+  get 'realtime/umn' => 'realtime#umn' 
+  get 'realtime/nextrip' => 'realtime#nextrip'
+  get 'realtime/niceride' => 'realtime#niceride'
 
   # See how all your routes lay out with "rake routes"
 

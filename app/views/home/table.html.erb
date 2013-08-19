@@ -2,11 +2,16 @@
   <div class="alert alert-info">No stops found.</div>
 
 <% end %>
-
 <div class="btn-group btn-group-vertical" style="width:100%;">
+  <div class="btn btn-success niceride" data-stopid="" style="color:#fff;text-align:left; background: #a1d340;">
+    <span class="pull-left directions-travel-mode-icon directions-bike-icon"></span> &nbsp;Hennepin & Central Avenue NE (10 Bikes)
+    <div style="position:absolute;top:-5px; right:5px;color:#fff;" class="distance-label">
+      200 ft
+    </div>
+  </div>
   <% @stops.results.first(10).each do |stop| %>
-    <div class="btn stopbutton" data-stopid="<%= stop.stop_id %>">
-      <a href="stop/<%= stop.stop_id %>">
+    <div class="btn stopbutton" data-stopid="<%= stop.id %>">
+      <a href="stop/<%= stop.id %>">
         <div style="position:absolute;right:5px" class="distance-label">
           <%= 
           if (stop.sort[0].nil?)
@@ -20,7 +25,7 @@
           end %>
         </div>
         <span class="stop-name"><%= stop.stop_name %></span> 
-        <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>"></div>
+        <div class="real-time clearfix" id="<%= stop.id %>" data-attr="<%= stop.id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.source_stops.to_json.to_s %>'></div>
       </a>
     </div>
     <% end %>

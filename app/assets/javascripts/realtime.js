@@ -13,36 +13,96 @@ var RealTimeView = Backbone.View.extend({
 
   template: JST['templates/eta_label'],
   
-  initialize: function() {
+  initialize: function(args) {
     _.bindAll(this);
-    this.collection = new BusETACollection();
-    this.collection.stop_id = this.el.id;
+    //this.realtime_sources = this.$el.data('realtime');
+    if ( args.id ) {
+      this.id = args.id;
+    } else {
+      this.realtime_sources = this.$el.data('realtime');
+
+      if ( this.realtime_sources ) {
+        //console.log(this.realtime_sources.length);
+        for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+          this['collection' + i] = new BusETACollection();
+          
+          var r_collection = this['collection' + i];
+          r_collection.stop_id = this.realtime_sources[i].external_stop_id;
+          r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
+          r_collection.logo = this.realtime_sources[i].logo;
+
+          if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
+            this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
+          }
+          
+        }
+
+      }
+    }
+
+    //this.collection = new BusETACollection();
+    //this.collection.stop_id = this.el.id;
   },
 
-  render: function() {
-    if( this.collection.length === 0 ) {
-      this.$el.parent().parent().hide();
+  render: function(collection) {
+    if( collection.length === 0 ) {
+      //this.$el.parent().parent().hide();
     } else {
-      this.$el.html(this.template({ data: this.collection.toJSON() }));
+      console.log('Render :: ' + collection.stop_id);
+      this.$el.find('.collection' + collection.stop_id ).html(this.template({ logo: collection.logo , data: collection.toJSON() }));
     }
   },
 
   update: function(callback, skip_fetch) {
     var self = this;
     
-    if( !skip_fetch && this.collection.length === 0 ) {
-      this.collection.fetch({ success: function() {
-        self.process_data(5);
-        if(callback) { callback(); }
-      } });
-    } else {
-      if(callback) { callback(); }
+    // if( this.id ) {
+    //   if ( this.realtime_sources ) {
+    //     if( !skip_fetch && this.collection.length === 0 ) {
+    //       this.collection.fetch({ success: function() {
+    //         self.process_data(5);
+    //         if(callback) { callback(); }
+    //       } });
+    //     } else {
+    //       if(callback) { callback(); }
+    //     }
+    //   }
+    // } else {
+    //   for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+    //     if ( this.realtime_sources ) {
+    //       if( !skip_fetch && this['collection1'].length === 0 ) {
+    //         this['collection1'].fetch({ success: function() {
+    //           self.process_data(5);
+    //           if(callback) { callback(); }
+    //         } });
+    //       } else {
+    //         if(callback) { callback(); }
+    //       }
+    //     }
+    //   }
+    // }
+
+    if ( this.realtime_sources ) {
+      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+        var realtime_collection = this['collection' + i];
+        
+        if( !skip_fetch && realtime_collection.length === 0 ) {
+          
+          realtime_collection.fetch({ success: function(collection) {
+            self.process_data(collection, 5);
+            if(callback) { callback(); }
+          } });
+        } else {
+          if(callback) { callback(); }
+        }
+      }
     }
+    
   },
 
-  process_data: function(num_models) {
-    this.collection.process_models(num_models);
-    this.render();
+  process_data: function(collection, num_models) {   
+    collection.process_models(num_models);
+    this.render(collection);
   }
 });
 
