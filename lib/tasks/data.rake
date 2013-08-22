@@ -20,7 +20,7 @@ task :load_msp_metro_transit_stops => :environment do
       stop.external_stop_name = row['stop_name']
       stop.external_stop_desc = row['stop_desc']
       stop.external_zone_id = row['zone_id']
-      stop.external_stop_url = "http://svc.metrotransit.org/NexTrip/#{row['stop_id']}?callback=?&format=json"
+      stop.external_stop_url = "http://svc.metrotransit.org/NexTrip/#{row['stop_id']}?callback=?&format=json&parser=nextrip"
       stop.external_stop_street = row['stop_street']
       stop.external_stop_city = row['stop_city']
       stop.external_stop_region = row['stop_region']

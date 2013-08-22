@@ -23,6 +23,7 @@
 //= require jquery.getUrlParam
 //= require url-parser
 //= require matchMedia
+//= require parser
 //= require bus_eta
 //= require views/navbar
 // require jquery.storage

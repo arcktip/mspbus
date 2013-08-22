@@ -3,7 +3,7 @@
     <i class="<%= item.direction %>"></i> 
     <b>
       <% if (logo) { %>
-        <img src="<%= logo %>"> 121
+        <img src="/assets/transit-logos/<%= logo %>"> <%= item.Route %>
       <% } else { %>
         <%= item.Route %><%= item.Terminal %>
       <% } %>

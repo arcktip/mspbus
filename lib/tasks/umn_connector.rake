@@ -59,7 +59,7 @@ namespace :mspbus do
           ss.external_stop_id = "#{stop.stop_id}"
           ss.external_lat = "#{stop.latitude}"
           ss.external_lon = "#{stop.longitude}"
-          ss.external_stop_url = "/realtime/umn?a=umn-twin&stop_id=#{stop.stop_id}"
+          ss.external_stop_url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png"
           ss.external_stop_name = "#{stop.title}"
           ss.save!
         end

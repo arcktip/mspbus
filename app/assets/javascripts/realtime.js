@@ -11,7 +11,8 @@ var stops;
 
 var RealTimeView = Backbone.View.extend({
 
-  template: JST['templates/eta_label'],
+  eta_template: JST['templates/eta_label'],
+  nice_ride_template: JST['templates/nice_ride'],
   
   initialize: function(args) {
     _.bindAll(this);
@@ -29,8 +30,12 @@ var RealTimeView = Backbone.View.extend({
           var r_collection = this['collection' + i];
           r_collection.stop_id = this.realtime_sources[i].external_stop_id;
           r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
-          r_collection.logo = this.realtime_sources[i].logo;
+          var query_options = Parsers.utils.parseQueryString( r_collection.realtime_url );
 
+          r_collection.format = query_options.format;
+          r_collection.parser = query_options.parser;
+          r_collection.logo = query_options.logo;
+         
           if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
             this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
           }
@@ -45,11 +50,11 @@ var RealTimeView = Backbone.View.extend({
   },
 
   render: function(collection) {
-    if( collection.length === 0 ) {
-      //this.$el.parent().parent().hide();
+    if ( collection.length === 0 ) {
+      this.$el.parent().parent().hide();
     } else {
-      console.log('Render :: ' + collection.stop_id);
-      this.$el.find('.collection' + collection.stop_id ).html(this.template({ logo: collection.logo , data: collection.toJSON() }));
+      console.log(collection.logo);
+      this.$el.find('.collection' + collection.stop_id ).html(this[collection.template]({ logo: collection.logo , data: collection.toJSON() }));
     }
   },
 

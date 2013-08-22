@@ -4,6 +4,7 @@ class RealtimeController < ApplicationController
   def umn
     url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=#{params[:a]}&stopId=#{params[:stop_id]}"
     response = HTTParty.get(url)
+    raise response.parsed_response['body']['predictions'][1].to_yaml
     data = response.parsed_response['body']['predictions']['direction']['prediction']
     
     formated_response = []
@@ -33,11 +34,8 @@ class RealtimeController < ApplicationController
   def niceride
     url = 'https://secure.niceridemn.org/data2/bikeStations.xml'
     response = HTTParty.get(url)
-    respond_with(response.parsed_response['stations'].to_json)
-  end
-
-  def as_umn_json
-
+    stops = response.parsed_response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
+    respond_with(stops.to_json)
   end
 
 end

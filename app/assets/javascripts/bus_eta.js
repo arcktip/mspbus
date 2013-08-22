@@ -45,6 +45,8 @@ var BusETAModel = Backbone.Model.extend({
       this.set('direction', 'icon-arrow-right');
     } else if(route === 'WESTBOUND') {
       this.set('direction', 'icon-arrow-left');
+    } else if(route === 'LOOP') {
+      this.set('direction', 'icon-refresh');
     }
   },
 
@@ -103,24 +105,45 @@ var BusETACollection = Backbone.Collection.extend({
   model: BusETAModel,
   
   url: function() {
-    console.log(this.realtime_url);
     return this.realtime_url;
   },
 
   process_models: function(num_models) {
+    var self = this;
 
     // Process the times for sorting purposes.
-    this.map(function(model) {
-      model.process_eta();
-    });
+    if ( this.callback ) {
+      this.map(function(model) {
+        model[self.callback]();
+      });
 
-    // Sort models by closest
-    this.models = this.sortBy(function(model) { return model.get('arrtime'); });
-    
-    // Slice only the first five for display
-    if ( num_models ) {
-      this.models = this.models.slice(0,num_models);
+      // Sort models by closest
+      if ( this.models.length > 1 ) {
+        this.models = this.sortBy(function(model) { return model.get('arrtime'); });
+      }
+
+      
+      // Slice only the first five for display
+      if ( num_models ) {
+        this.models = this.models.slice(0,num_models);
+      }
     }
+  },
+
+  fetch: function( options ) {
+    options = options || {};
+    options.dataType = this.format;
+
+    Backbone.Collection.prototype.fetch.call(this, options);
+  },
+
+  parse: function( response ) {
+    var resp = Parsers[this.parser](response);
+    
+    this.template = resp.template;
+    this.callback = resp.callback;
+
+    return resp.content;
   }
 
 });
