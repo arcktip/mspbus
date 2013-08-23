@@ -3,7 +3,7 @@
 
 <% end %>
 <div class="btn-group btn-group-vertical" style="width:100%;">
-  <% @stops.results.first(14).each do |stop| %>
+  <% @stops.results.first(10).each do |stop| %>
     <% if isNiceRide(stop.source_stops) %>
       <div class="btn btn-success niceride" data-stopid="<%= stop.id %>">
         <div class="distance-label" style="position:absolute;top:-5px; right:5px;color:#fff !important;">

@@ -1,27 +1,26 @@
 namespace :mspbus do
-  task :load_msp_metro_transit_stops => :environment do
+
+  # =========================================================================
+  # Generic task to load gtfs data.  Should be called from helper methods.
+  # =========================================================================
+
+  task :load_gtfs_data, [:source_id, :path, :realtime_url] => :environment do |t, args|
     require 'csv'
-    SourceStop.delete_all
+
+    # Remove all previous rows.
+    SourceStop.delete_all(["source_id = ?", args.source_id])
     
     # disable mass assignment restrictions
     SourceStop.send(:attr_protected)
-    #SourceStop.attr_accessible :source_id, :stop_id, :external_stop_id, :external_lat, :external_lon
 
-    csv = CSV.parse(File.read(Rails.root.join('setup/msp_gtfs', 'stops.txt')), headers: true) do |row|
-      # Stop.create!(row.to_hash)
-      #raise row.to_yaml
-
-      SourceStop.find_or_initialize_by_source_id_and_external_stop_id(1, row['stop_id']) do |stop|
-        #raise row['stop_lat'].to_f.to_yaml
-        # stop.update_attributes(
-
-        # )
+    csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
+      SourceStop.find_or_initialize_by_source_id_and_external_stop_id(args.source_id, row['stop_id']) do |stop|
         stop.external_lat = row['stop_lat']
         stop.external_lon = row['stop_lon']
         stop.external_stop_name = row['stop_name']
         stop.external_stop_desc = row['stop_desc']
         stop.external_zone_id = row['zone_id']
-        stop.external_stop_url = "http://svc.metrotransit.org/NexTrip/#{row['stop_id']}?callback=?&format=json&parser=nextrip"
+        stop.external_stop_url = args.realtime_url.gsub('{stop_id}', row['stop_id'])
         stop.external_stop_street = row['stop_street']
         stop.external_stop_city = row['stop_city']
         stop.external_stop_region = row['stop_region']
@@ -29,37 +28,24 @@ namespace :mspbus do
         stop.external_stop_country = row['stop_country']
         stop.save!
       end
-
-      # SourceStop.create_or_create_by_source_id_and_external_stop_id!({
-      #   source_id: 1, # msp_gtfs
-      #   external_stop_id: row[0],
-      #   external_lat: row[3],
-      #   external_lon: row[4],
-      #   external_stop_name: row[1],
-      #   external_stop_desc: row[2],
-      #   external_zone_id: row[10],
-      #   external_stop_url: row[11],
-      #   external_stop_street: row[5],
-      #   external_stop_city: row[6],
-      #   external_stop_region: row[7],
-      #   external_stop_postcode: row[8], 
-      #   external_stop_country: row[9]
-      # })
-
-  # stop_id,
-  # stop_name,
-  # stop_desc,
-  # stop_lat,
-  # stop_lon,
-  # stop_street,
-  # stop_city,
-  # stop_region,
-  # stop_postcode,
-  # stop_country,
-  # zone_id,
-  # stop_url
     end
   end
+
+  task :load_msp_gtfs => :environment do
+    Rake::Task['mspbus:load_gtfs_data'].invoke(1, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip")
+  end
+
+  task :load_portland_gtfs => :environment do
+    Rake::Task['mspbus:load_gtfs_data'].invoke(4, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet")
+  end
+
+  task :load_chicago_gtfs => :environment do
+    Rake::Task['mspbus:load_gtfs_data'].invoke(5, 'setup/chicago_gtfs', "")
+  end
+
+  # ================================================================
+  # Reindexes stops from master stops into the stops table.
+  # ================================================================
 
   task :reset_stops => :environment do
     puts "Deleting Stops"

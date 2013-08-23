@@ -52,7 +52,7 @@ namespace :mspbus do
   end
 
   task :load_umn_stops => :environment do
-    SourceStop.where(source_id: 2).each{ |stop| stop.destroy }
+    SourceStop.delete_all("source_id = 2")
     UMN_Connector::Route.get_routes.each do |route|
       route.stops.each do |stop|
         SourceStop.find_or_initialize_by_source_id_and_external_stop_id(2, "#{stop.stop_id}") do |ss|

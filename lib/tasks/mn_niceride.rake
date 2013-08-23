@@ -41,7 +41,8 @@ namespace :mspbus do
   end
 
   task :load_mn_bikes => :environment do
-    SourceStop.where(source_id: 3).each { |stop| stop.destroy }
+    SourceStop.delete_all("source_id = 3")
+
     NiceRide::Stops.get_stops.each do |stop|
       SourceStop.find_or_initialize_by_source_id_and_external_stop_id(3, "#{stop.stop_id}") do |ss|
         ss.external_stop_id = "#{stop.stop_id}"

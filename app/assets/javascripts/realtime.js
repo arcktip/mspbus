@@ -53,7 +53,6 @@ var RealTimeView = Backbone.View.extend({
     if ( collection.length === 0 ) {
       this.$el.parent().parent().hide();
     } else {
-      console.log(collection.logo);
       this.$el.find('.collection' + collection.stop_id ).html(this[collection.template]({ logo: collection.logo , data: collection.toJSON() }));
     }
   },

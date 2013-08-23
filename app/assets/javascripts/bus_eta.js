@@ -10,9 +10,18 @@ var BusETAModel = Backbone.Model.extend({
 
   set_dtext: function() {
     var dtime = this.get('dtime');
-    var ChipText = this.get('DepartureText');
-    var StopText = this.get('DepartureText');
+    var ChipText, StopText;
 
+    if ( this.get('DepartureText') !== '' ) {
+      ChipText = this.get('DepartureText');
+    } else {
+      console.log(dtime);
+      ChipText = Math.round(dtime) + ' Min'
+    }
+    
+    StopText = ChipText;
+
+    // Check for the case where the time is acutally hh:mm
     if(dtime < 20 && ChipText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
       ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
     } else if(dtime >= 20) {                         //Ex: 4:30 (and it is now 4:00)
@@ -22,6 +31,7 @@ var BusETAModel = Backbone.Model.extend({
     }
     this.set('ChipText', ChipText);
 
+    // Check for case when time is less than 1 and replace with NOW.
     if(dtime < 1) {
       StopText = "Now";
       if(StopText.indexOf(":") !== -1)
@@ -75,16 +85,13 @@ var BusETAModel = Backbone.Model.extend({
 
   process_eta: function() {
     var departure_time = this.get('DepartureTime');
-
+    
     //TODO: Does this work over midnight?
-    var seconds = departure_time.substr(6,10);
-    var offset = departure_time.substr(19,3);
-    var arrtime = moment(seconds, "X");
-    var ctime = moment();
-    var dtime = (arrtime - ctime ) / 1000 / 60; //Convert to minutes
-
-    this.set('arrtime', arrtime);
-    this.set('dtime', dtime);
+    //var arrtime = moment(departure_time, 'X');
+    var dt = (new Date(departure_time * 1000) - (new Date).getTime() ) / 1000 / 60; //Convert to minutes
+    
+    //this.set('arrtime', arrtime);
+    this.set('dtime', dt);
     this.set_priority();
     this.set_departure_text();
     this.set_direction_class();
@@ -119,7 +126,7 @@ var BusETACollection = Backbone.Collection.extend({
 
       // Sort models by closest
       if ( this.models.length > 1 ) {
-        this.models = this.sortBy(function(model) { return model.get('arrtime'); });
+        this.models = this.sortBy(function(model) { return model.get('DepartureTime'); });
       }
 
       

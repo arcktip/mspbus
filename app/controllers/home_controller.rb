@@ -9,11 +9,11 @@ class HomeController < ApplicationController
     params[:radius] = 1
 
     @inbounds=true
-    if not (44.47<=params[:lat].to_f and params[:lat].to_f<=45.42 and -94.01<=params[:lon].to_f and params[:lon].to_f<=-92.73)
-      params[:lat] = 44.979971
-      params[:lon] = -93.269797
-      @inbounds=false
-    end
+    # if not (44.47<=params[:lat].to_f and params[:lat].to_f<=45.42 and -94.01<=params[:lon].to_f and params[:lon].to_f<=-92.73)
+    #   params[:lat] = 44.979971
+    #   params[:lon] = -93.269797
+    #   @inbounds=false
+    # end
 
     @stops = Stop.search(params)
     @lat=params[:lat]

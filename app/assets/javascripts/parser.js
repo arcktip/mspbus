@@ -17,17 +17,67 @@ var Parsers = {
    
       return params;
     }
+    // convertToEpoch: function() {
+    //   var seconds = departure_time.substr(6,10);
+    //   var offset = departure_time.substr(19,3);
+    //   var arrtime = moment(seconds, "X");
+    // }
   }
 };
 
 Parsers.nextrip = function(content) {
+  
+  var obj = [];
+
+  for(var i = 0, len = content.length; i < len; i++) {
+    obj.push({
+      'DepartureText': content[i].DepartureText,
+      'DepartureTime': content[i].DepartureTime.substr(6,10),
+      'RouteDirection': content[i].RouteDirection,
+      'Route': content[i].Route
+    });
+  }
+
+
   var data = {
     template: 'eta_template',
     callback: 'process_eta', 
-    content: content
+    content: obj
   }
+
   return data;
 };
+
+Parsers.trimet = function(content) {
+  var obj = [],
+      arrivals = content.resultSet.arrival,
+      dir = content.resultSet.location.dir;
+
+  for(var i = 0, len = arrivals.length; i < len; i++) {
+    //console.log(arrivals[i].estimated);
+    var arrival_time;
+
+    if( arrivals[i].estimated ) {
+      arrival_time = arrivals[i].estimated;
+    } else {
+      arrival_time = arrivals[i].scheduled;
+    }
+
+    obj.push({
+      'DepartureText': '',
+      'DepartureTime': (new Date(arrival_time)).getTime() / 1000,
+      'RouteDirection': dir,
+      'Route': arrivals[i].route
+    });
+  }
+
+  var data = {
+    template: 'eta_template',
+    callback: 'process_eta', 
+    content: obj
+  }
+  return data;
+}
 
 Parsers.nextbus = function(content) {
   var predictions = $(content).find('prediction');
@@ -47,17 +97,19 @@ Parsers.nextbus = function(content) {
     }
 
     if ( dirTag !== 'LOOP' ) {
-      dirTag = dirTag + 'BOUND'
+      dirTag = dirTag + 'BOUND';
     }
-        
+    // var epoc = (item.attr('epochTime') - (new Date).getTime() ) / 1000 / 60;
+
+    //     console.log(' NextBUs :: ', epoc);
     obj.push({
-      'DepartureText': dText,
-      'DepartureTime': '/Date(' + item.attr('epochTime') + '-0500)/',
+      'DepartureText': '',
+      'DepartureTime': item.attr('epochTime') / 1000,
       'RouteDirection': dirTag,
       'Route': item.parent().parent().attr('routeTag')
     });
   }
-
+  console.log(obj);
   var data = {
     template: 'eta_template',
     callback: 'process_eta', 

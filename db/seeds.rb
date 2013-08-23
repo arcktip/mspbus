@@ -9,7 +9,8 @@
 [
  { id: 1, name: "MSP_GTFS", url: 'http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip' },
  { id: 2, name: "UMN", url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId={stop_id}&format=xml&parser=nextbus' },
- { id: 3, name: "NEXTRIP", url: '/realtime/niceride?stop_id={stop_id}&format=json&parser=mn_niceride' }
+ { id: 3, name: "NEXTRIP", url: '/realtime/niceride?stop_id={stop_id}&format=json&parser=mn_niceride' },
+ { id: 4, name: "PORTLAND_GTFS", url: 'http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true' }
 ].each do |source|
   Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
 end
