@@ -25,6 +25,14 @@ var Parsers = {
   }
 };
 
+/*
+|----------------------------------------------------------------------------------------------------
+| NexTrip API
+| Cities: Minneapolis
+| Format: json
+|----------------------------------------------------------------------------------------------------
+*/
+
 Parsers.nextrip = function(content) {
   
   var obj = [];
@@ -47,6 +55,57 @@ Parsers.nextrip = function(content) {
 
   return data;
 };
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Clever API
+| Cities: Chicago
+| Format: json
+|----------------------------------------------------------------------------------------------------
+*/
+
+Parsers.clever = function(content) {
+  var predictions = $(content).find('prd');
+  var obj = [];
+
+  for(var i = 0, len = predictions.length; i < len; i++) {
+    
+    var item = $(predictions[i]);
+    
+    // A - Arrivals, D - Departures.
+    if( item.attr('typ') === 'A') {
+      var est_time = item.attr('prdtm');
+      var time_arr = est_time.split(' ');
+      var first_date = time_arr[0];
+
+      est_time = first_date.substr(0,4) + '-' + first_date.substr(4,2) + '-' + first_date.substr(6,2) + ' ' + time_arr[1];
+
+      obj.push({
+        'DepartureText': '',
+        'DepartureTime': (new Date(est_time)).getTime() / 1000,
+        'RouteDirection': item.attr('rtdir').toUpperCase(),
+        'Route': item.attr('rt')
+      });  
+    }
+  }
+
+  var data = {
+    template: 'eta_template',
+    callback: 'process_eta', 
+    content: obj
+  }
+
+  return data;
+};
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Trimet API
+| Cities: Portland
+| Format: json
+| Multiple: true
+|----------------------------------------------------------------------------------------------------
+*/
 
 Parsers.trimet = function(content) {
   var obj = [],
@@ -79,6 +138,43 @@ Parsers.trimet = function(content) {
   return data;
 }
 
+/*
+|----------------------------------------------------------------------------------------------------
+| WMATA API
+| Cities: Washington DC
+| Format: json
+|----------------------------------------------------------------------------------------------------
+*/
+
+Parsers.wmata = function(content) {
+  var obj = [],
+      arrivals = content.Predictions;
+
+  for(var i = 0, len = arrivals.length; i < len; i++) {
+    obj.push({
+      'DepartureText': '',
+      'DepartureTime': new Date( (new Date() ).getTime() + arrivals[i].Minutes * 60000) / 1000,
+      'RouteDirection': arrivals[i].DirectionNum,
+      'Route': arrivals[i].RouteID
+    });
+  }
+
+  var data = {
+    template: 'eta_template',
+    callback: 'process_eta', 
+    content: obj
+  }
+  return data;
+}
+
+/*
+|----------------------------------------------------------------------------------------------------
+| NextBus API
+| Cities: UMN Campus Connector
+| Format: xml
+|----------------------------------------------------------------------------------------------------
+*/
+
 Parsers.nextbus = function(content) {
   var predictions = $(content).find('prediction');
   
@@ -109,7 +205,7 @@ Parsers.nextbus = function(content) {
       'Route': item.parent().parent().attr('routeTag')
     });
   }
-  console.log(obj);
+  
   var data = {
     template: 'eta_template',
     callback: 'process_eta', 
@@ -118,6 +214,14 @@ Parsers.nextbus = function(content) {
 
   return data;
 };
+
+/*
+|----------------------------------------------------------------------------------------------------
+| NiceRide API
+| Cities: Minneapolis
+| Format: json
+|----------------------------------------------------------------------------------------------------
+*/
 
 Parsers.mn_niceride = function(content) {
   var data = {
