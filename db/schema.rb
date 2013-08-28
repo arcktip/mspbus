@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130816153725) do
+ActiveRecord::Schema.define(:version => 20130826204334) do
 
   create_table "source_stops", :id => false, :force => true do |t|
     t.integer  "source_id",                                                           :null => false
@@ -37,6 +37,25 @@ ActiveRecord::Schema.define(:version => 20130816153725) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.string   "realtime_url"
+  end
+
+  create_table "spatial_ref_sys", :id => false, :force => true do |t|
+    t.integer "srid",                      :null => false
+    t.string  "auth_name", :limit => 256
+    t.integer "auth_srid"
+    t.string  "srtext",    :limit => 2048
+    t.string  "proj4text", :limit => 2048
+  end
+
+  create_table "stop_times", :id => false, :force => true do |t|
+    t.integer  "source_id",      :null => false
+    t.integer  "trip_id",        :null => false
+    t.date     "arrival_time"
+    t.date     "departure_time"
+    t.integer  "stop_id",        :null => false
+    t.integer  "stop_sequence"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "stops", :force => true do |t|
