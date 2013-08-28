@@ -2,11 +2,33 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
 .navbar-fixed-top, .navbar-fixed-bottom {
   position: relative;
 }
 
+.navbar {
+  .brand {
+    padding: 7px 0px 0 20px;
+  }
+  .nav-button {
+    margin: 3px 5px 0 5px;
+    padding: 5px;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  i {
+    font-size: 1.5em;
+  }
+}
+
 .stopbutton {
+  display: block;
+  width: 100%;
   padding: 5px;
   text-align: left;
   text-shadow: none;
@@ -74,7 +96,7 @@
 #view-map {position:relative;}
 #map-canvas {
   height:500px;
-  border: 1px solid #ccc;
+  top: -5px;
 }
 
 #viewchanger {margin-left:5px;}
@@ -85,11 +107,11 @@
   #view-map-btn { display: block; }
 }
 
-@media (min-width: 768px) {
-  //#viewchanger {display:none;}
-  #view-table-btn { display: none; }
-  #view-map-btn { display: none; }
-}
+// @media (min-width: 768px) {
+//   //#viewchanger {display:none;}
+//   #view-table-btn { display: none; }
+//   #view-map-btn { display: none; }
+// }
 
 .infocontents {
   width: 200px;
@@ -118,7 +140,8 @@
   padding: 10px;
   color: grey;
   position:absolute;
-  right:5px;
+  right: 5px;
+  z-index: 4;
 }
 
 .real-time {
@@ -131,7 +154,7 @@
 }
 .route-chip {
   display: block;
-  height: 15px;
+  height: 20px;
   float: left;
 /*  cursor: pointer;*/
   border-radius: 2px;
@@ -348,7 +371,38 @@
 }
 
 .niceride {
+  border-radius: 0;
+  position: relative;
+  display: block;
+  padding: 5px;
+  width: 100%;
   text-shadow: none;
   text-align: left;
   background: #a1d340;
+}
+
+.navbar-secondary {
+  background:#161616;
+  height: 40px;
+  width: 100%;
+  color: #b3b3b3;
+
+  a {
+    text-align: center;
+    display: block;
+    padding: 5px;
+    margin: 5px 5px 10px 5px;
+    color: #b3b3b3;
+  }
+
+  a:hover {
+    color: #08c;
+    //border-bottom: 4px solid #08c;
+    text-decoration: none;
+
+  }
+
+  i {
+    font-size: 1.3em;
+  }
 }

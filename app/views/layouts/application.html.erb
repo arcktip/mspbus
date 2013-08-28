@@ -49,6 +49,19 @@
       <%= render 'shared/legend' %>
     </div>
   </div>
+  <div class="navbar-secondary">
+    <div class="container clearfix">
+      <span id="table-list-item">
+        <a id="view-table-btn" href="/#table-list-item" class="pull-left"><i class="icon-list-ul"></i></a>
+      </span>
+      <span id="map-list-item">
+        <a id="view-map-btn" href="/#map-list-item" class="pull-left"><i class="icon-map-marker"></i></a>
+      </span>
+      <a id="view-route-btn" href="/#route-list-item" class="pull-left"> <i class="icon-compass"></i></a>
+      <a href="/fav" class="pull-right"><i class="icon-star"></i></a>
+      <a href="#" id="btn-help" class="pull-right"><i class="icon-info-sign"></i></a>
+    </div>
+  </div>
 
   <div class="app-container container">
     <%= yield %>

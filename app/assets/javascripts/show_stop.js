@@ -85,16 +85,15 @@ var StopView = Backbone.View.extend({
         //console.log(this.realtime_sources.length);
       for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
         this['collection' + i] = new BusETACollection();
-        
+          
         var r_collection = this['collection' + i];
         r_collection.stop_id = this.realtime_sources[i].external_stop_id;
         r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
-        r_collection.logo = this.realtime_sources[i].logo;
+        var query_options = Parsers.utils.parseQueryString( r_collection.realtime_url );
 
-        // if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
-        //   this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
-        // }
-        
+        r_collection.format = query_options.format;
+        r_collection.parser = query_options.parser;
+        r_collection.logo = query_options.logo;
       }
 
     }
@@ -110,7 +109,6 @@ var StopView = Backbone.View.extend({
     if( collection.length === 0 ) {
       //this.$el.parent().parent().hide();
     } else {
-      console.log('Render :: ' + collection.stop_id);
       this.$el.append(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
     }
   },

@@ -2,11 +2,11 @@
   <div class="alert alert-info">No stops found.</div>
 
 <% end %>
-<div class="btn-group btn-group-vertical" style="width:100%;">
+<div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
     <% if isNiceRide(stop.source_stops) %>
       <div class="btn btn-success niceride" data-stopid="<%= stop.id %>">
-        <div class="distance-label" style="position:absolute;top:-5px; right:5px;color:#fff !important;">
+        <div class="distance-label" style="position:absolute;top:-5px; right:5px;color:#fff !important;background:none;">
           <%= calculate_distance(stop) %>
         </div>
         <div class="clearfix">
@@ -18,7 +18,7 @@
     <% else %>
       <div class="btn stopbutton" data-stopid="<%= stop.id %>">
         <a href="stop/<%= stop.id %>">
-          <div style="position:absolute;right:5px" class="distance-label">
+          <div style="position:absolute;right:5px;" class="distance-label">
             <%= calculate_distance(stop) %>
           </div>
           <span class="stop-name">

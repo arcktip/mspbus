@@ -1,9 +1,9 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container">
+    <div class="container" style="position:relative;">
       <a class="brand" href="/"><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %></a>
 
-        <button class="btn btn-info pull-right" style="height:35px; font-size:18pt;" id="btn-help">
+        <!-- <button class="btn btn-info pull-right" style="height:35px; font-size:18pt;" id="btn-help">
           <i class="icon-question"></i>
         </button>
         <button class="btn btn-info pull-right" style="margin-right:10px; height:35px;" id="btn-fav">
@@ -15,8 +15,11 @@
       <div id="searchbox" class="input-append">
         <input type="text" id="q" placeholder="Find stops near&hellip;" list="search-history" autocomplete="off" />
         <button class="btn add-on" id="qsub"> <i class="icon-search"></i></button>
-      </div>
+      </div> -->
+      <input type="text" id="q" placeholder="Find stops near&hellip;" list="search-history" autocomplete="off" style="border: 1px solid #ccc;border-radius:3px;position:absolute; right: 85px;top: 3px;padding:15px; 0 15px 0;" />
+      <a href="#" class="btn-current-location btn-address nav-button pull-right"><i class="icon-location-arrow"></i></a>
+      <a href="#" class="nav-button pull-right" id="qsub"><i class="icon-search"></i></a>
     </div>
   </div>
   <datalist id="search-history"></datalist>
-</div>  
+</div>

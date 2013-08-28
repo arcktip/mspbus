@@ -202,7 +202,7 @@ Parsers.nextbus = function(content) {
       'DepartureText': '',
       'DepartureTime': item.attr('epochTime') / 1000,
       'RouteDirection': dirTag,
-      'Route': item.parent().parent().attr('routeTag')
+      'Route': item.parent().parent().attr('routeTag').substr(0,2)
     });
   }
   

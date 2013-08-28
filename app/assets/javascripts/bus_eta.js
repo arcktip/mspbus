@@ -15,7 +15,6 @@ var BusETAModel = Backbone.Model.extend({
     if ( this.get('DepartureText') !== '' ) {
       ChipText = this.get('DepartureText');
     } else {
-      console.log(dtime);
       ChipText = Math.round(dtime) + ' Min'
     }
     
