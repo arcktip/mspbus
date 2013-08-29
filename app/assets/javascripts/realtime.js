@@ -64,8 +64,6 @@ function update_table(){
 function got_coordinates(lat, lon) {
   center={'lat':lat, 'lon':lon};
 
-  EventBus.trigger("center_map", lat, lon);
-
   ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', lat.toString() + "," + lon.toString() );
 
   $("#outside").hide();
@@ -74,6 +72,8 @@ function got_coordinates(lat, lon) {
     setTimeout(function(){$("#outside").fadeOut();},5000);
     center = config.default_center;
   }
+
+  EventBus.trigger("center_map", lat, lon);
 
   $.ajax({
     url: "/table",
