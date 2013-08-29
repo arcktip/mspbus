@@ -73,7 +73,7 @@ function got_coordinates(lat, lon) {
     center = config.default_center;
   }
 
-  EventBus.trigger("center_map", lat, lon);
+  EventBus.trigger("center_map", center.lat, center.lon);
 
   $.ajax({
     url: "/table",
