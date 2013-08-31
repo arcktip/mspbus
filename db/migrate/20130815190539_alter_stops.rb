@@ -1,6 +1,6 @@
 class AlterStops < ActiveRecord::Migration
   def up
-    execute("CREATE EXTENSION postgis;") # enable postgis so we can add a geometry data point
+    #execute("CREATE EXTENSION postgis;") # enable postgis so we can add a geometry data point
     #add_column :stops, :geo_point, :geometry
     #execute "update stops set GEO_POINT = ST_GeomFromText('POINT(' || stop_lon || '' || stop_lat || ')')"
     
