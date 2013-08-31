@@ -1,3 +1,4 @@
+require "rvm/capistrano"
 require "bundler/capistrano"
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
@@ -17,19 +18,20 @@ desc "Run on development server"
 task :development do
   # set :branch, "map-refactor"
   set :rails_env,   "development"
-  set :deploy_to, "/var/www/mspbus-dev"
+  set :deploy_to, "/var/www/omgtransit-dev"
 end
 
 task :production do
-  set :deploy_to, "/var/www/mspbus"
+  set :branch, "master-stops"
+  set :deploy_to, "/var/www/omgtransit"
 end
 
-role :web, "debian2.brobston.com"
-role :app, "debian2.brobston.com"
-role :db,  "debian2.brobston.com", :primary => true
+role :web, "omgtransit.com"
+role :app, "omgtransit.com"
+role :db,  "omgtransit.com", :primary => true
 
 # if you want to clean up old releases on each deploy uncomment this:
-after 'deploy:update_code', :setup_group
+#after 'deploy:update_code', :setup_group
 after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
