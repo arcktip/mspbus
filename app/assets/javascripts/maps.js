@@ -13,7 +13,6 @@ var MapView = Backbone.View.extend({
   
   map: null,
   map_markers: [],
-  bus_markers: [],
   infobox: null,
   ran: false,
   lat: 0,
@@ -99,8 +98,6 @@ var MapView = Backbone.View.extend({
     //idle event fires once when the user stops panning/zooming
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
 
-    //window.setTimeout(this.update_bus_locations, 3000);
-    //window.setInterval(this.update_bus_locations, 60000);
     this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
   },
   
@@ -151,57 +148,6 @@ var MapView = Backbone.View.extend({
     var self=this;
     var center = new google.maps.LatLng(lat, lon);
     self.map.panTo(center);
-  },
-
-  create_bus_marker: function(stop_id, obj) {
-    var icon, bus, self = this;
-
-    if( $.isNumeric( obj.get('Route') ) )
-      icon='/assets/bus.png';
-    else
-      icon='/assets/train.png';
-
-    bus = new google.maps.Marker({
-      position: new google.maps.LatLng( obj.VehicleLatitude, obj.VehicleLongitude ),
-      map: this.map,
-      draggable: false,
-      icon: icon,
-      animation: google.maps.Animation.DROP,
-      stopid: stop_id,
-      zIndex: 0
-    });
-
-    this.bus_markers.push(bus);
-
-    google.maps.event.addListener(bus, 'mouseover', function() {
-      self.mapElement.html('<span class="label">Bus #' + obj.Route + obj.Terminal + " " + obj.RouteDirection+'</span>');
-    });
-    
-    // Hide tooltip on mouseout event.
-    google.maps.event.addListener(bus, 'mouseout', function() {
-      self.mapElement.html("");
-    });
-  },
-
-  update_bus_locations: function() {
-    this.clear_bus_markers();
-
-    var bus_list = [],
-        self = this;
-
-    for(var i=0, len=stops.length; i < len; i++) {
-      var stop = stops[i];
-      var view = views[stop.id];
-      if (view) {
-        view.collection.each(function(model) {
-          if(model.get('VehicleLongitude') === 0) return;
-          
-          self.create_bus_marker(stop.id, model);
-        });
-        view.update();
-      }
-    }
-
   },
 
   hover_on_marker: function(stopid) {
@@ -315,13 +261,6 @@ var MapView = Backbone.View.extend({
     var decodedSets = google.maps.geometry.encoding.decodePath(path);
     var path = this.poly.getPath();
     path.push(decodedSets);
-  },
-
-  clear_bus_markers: function() {
-    _.each(this.bus_markers, function(bus) {
-      bus.setMap(null);
-    });
-    this.bus_markers = [];
   },
 
   map_bounds_changed: function() {
