@@ -58,7 +58,6 @@ var HomeView = Backbone.View.extend({
   show_map: function() {
     //this.viewchanger.find("li").removeClass("active");
     //this.map_list_item.addClass("active");
-    console.log(this);
     this.view_table.hide();
     this.view_map.show();
 
