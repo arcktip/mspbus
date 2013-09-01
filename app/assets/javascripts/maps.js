@@ -207,12 +207,10 @@ var MapView = Backbone.View.extend({
   hover_on_marker: function(stopid) {
     var view = views[stopid], self = this;
 
-    view.update(function() {
-      if(view.collection.models.length !== 0)
-        self.mapElement.html(view.$el.html());
-      else
-        self.mapElement.html('<span class="label route-chip" style="background-color:black">No Data</span>');
-    });
+    if(view.$el.html().length !== 0)
+      self.mapElement.html(view.$el.html());
+    else
+      self.mapElement.html('<span class="label route-chip" style="background-color:black">No Data</span>');
   },
 
   add_stop: function(new_stop){
@@ -275,16 +273,14 @@ var MapView = Backbone.View.extend({
         this.setOptions({zIndex:10});
         this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
     null, null, null, new google.maps.Size(22,22)));
-        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#E6E6E6");
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
-        self.mapElement.html("");
+        //self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
         this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
     null, null, null, new google.maps.Size(22,22)));
-        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","");
       });
     }
 
