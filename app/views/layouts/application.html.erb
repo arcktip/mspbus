@@ -5,9 +5,9 @@
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <meta http-equiv="Content-Language" content="en">
-  <meta name="keywords" content="metro transit schedule,real time bus schedule,real time bus tracking,minneapolis bus schedule,st paul bus schedule,twin cities bus schedule,bus arrival times,light rail arrival times,msp bus,mspbus" />
+  <meta name="keywords" content="metro transit schedule,real time bus schedule,real time bus tracking,minneapolis bus schedule,st paul bus schedule,twin cities bus schedule,bus arrival times,light rail arrival times,msp bus,mspbus,omg transit,omgtransit" />
 
-  <meta property="og:image" content="http://mspbus.org/assets/logo-med.png" />
+  <meta property="og:image" content="http://omgtransit.com/assets/logo-med.png" />
   <meta property="og:type" content="website" />
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/logo57.png" />
@@ -16,17 +16,17 @@
   <link rel="apple-touch-icon" sizes="144x144" href="/assets/logo144.png" />
 
 <% if @stop.nil? %>
-  <title>mspbus.org - Real-time bus schedules and transit information </title>
-  <meta name="description" content="mspbus.org provides real-time bus schedules and transit information for the Minneapolis/St. Paul area" />
-  <meta property="og:title" content="mspbus.org - Real-time bus schedules and transit information" />
-  <meta property="og:description" content="mspbus.org provides real-time bus schedules and transit information for the Minneapolis/St. Paul area" />
-  <meta property="og:url" content="http://mspbus.org" />
+  <title>omgtransit.com - Real-time bus schedules and transit information </title>
+  <meta name="description" content="omgtransit.com provides real-time bus schedules and transit information for the Minneapolis/St. Paul area" />
+  <meta property="og:title" content="omgtransit.com - Real-time bus schedules and transit information" />
+  <meta property="og:description" content="omgtransit.com provides real-time bus schedules and transit information for the Minneapolis/St. Paul area" />
+  <meta property="og:url" content="http://omgtransit.com" />
 <% else %>
-  <title><%= @stop.stop_name %> real-time bus schedules and transit information - mspbus.org</title>
+  <title><%= @stop.stop_name %> real-time bus schedules and transit information - omgtransit.com</title>
   <meta name="description" content="Real-time bus schedules and transit information for <%= @stop.stop_name %> in Minneapolis/St. Paul" />
-  <meta property="og:title" content="<%= @stop.stop_name %> real-time bus schedules and transit information - mspbus.org" />
+  <meta property="og:title" content="<%= @stop.stop_name %> real-time bus schedules and transit information - omgtransit.com" />
   <meta property="og:description" content="Real-time bus schedules and transit information for <%= @stop.stop_name %> in Minneapolis/St. Paul" />
-  <meta property="og:url" content="http://mspbus.org/stop/<%= @stop.stop_id %>" />
+  <meta property="og:url" content="http://omgtransit.com/stop/<%= @stop.stop_id %>" />
 <% end %>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -77,7 +77,7 @@
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-41367617-1', 'mspbus.org');
+    ga('create', 'UA-41367617-1', 'omgtransit.com');
     ga('send', 'pageview');
 
     function show_confused() { $("#confused_modal").modal('show'); }
