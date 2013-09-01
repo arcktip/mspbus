@@ -1,10 +1,15 @@
 require "rvm/capistrano"
 require "bundler/capistrano"
+
+#before 'deploy:setup', 'rvm:install_rvm'
+
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
+set :default_shell, :bash
+set :current_path, "/var/www/omgtransit/"
 
-set :application, "MSP Bus"
+set :application, "omgtransit"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
@@ -36,8 +41,7 @@ after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
   run "sudo /bin/chmod -R g+w #{deploy_to}*"
-  run "sudo /bin/chgrp -R mspbus #{deploy_to}*"
-  #   run "chgrp mspbus #{deploy_to} -R"
+  run "sudo /bin/chgrp -R omguser #{deploy_to}*"
 end
 
 # if you're still using the script/reaper helper you will need
