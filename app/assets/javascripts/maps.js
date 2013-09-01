@@ -276,7 +276,7 @@ var MapView = Backbone.View.extend({
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
-        //self.mapElement.html("");
+        self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
         this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
