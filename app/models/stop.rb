@@ -16,6 +16,7 @@ class Stop < ActiveRecord::Base
     indexes :stop_street, type: :string
 
     indexes :location, type: 'geo_point', as: 'location'
+
     indexes :source_stops do
       indexes :source_id, type: :string, analyzer: 'snowball'
       indexes :external_stop_id, type: :string, analyzer: 'snowball'
