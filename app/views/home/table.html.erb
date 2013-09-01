@@ -5,13 +5,13 @@
 <div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
     <% if isNiceRide(stop.source_stops) %>
-      <div class="btn btn-success niceride" data-stopid="<%= stop.id %>">
-        <div class="distance-label" style="position:absolute;top:-5px; right:5px;color:#fff !important;background:none;">
+      <div class="btn niceride" data-stopid="<%= stop.id %>">
+        <div class="distance-label" style="position:absolute;top:-5px; right:5px;background:none;">
           <%= calculate_distance(stop) %>
         </div>
         <div class="clearfix">
           <span class="pull-left directions-travel-mode-icon directions-bike-icon"></span>
-          <span class="pull-left">&nbsp; <%= stop.stop_name %></span>
+          <span class="pull-left" style="font-weight:bold;">&nbsp; <%= stop.stop_name %></span>
           <span class="real-time clearfix pull-left" style="width: auto; margin-left: 10px;" id="<%= stop.id %>" data-attr="<%= stop.id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.source_stops.to_json.to_s %>'></span>
         </div>
       </div>
