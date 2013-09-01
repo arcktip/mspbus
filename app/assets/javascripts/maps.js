@@ -212,7 +212,6 @@ var MapView = Backbone.View.extend({
 
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
-        //self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
