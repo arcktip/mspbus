@@ -48,7 +48,8 @@ Loading the Database
  2. Run `rake db:migrate`
  3. Run `rake mspbus:load_msp_gtfs` (Or what have you, this draws from the `setup/` folders).
  4. Repeat Step 3 as needed
- 5. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
+ 5. Run `rake mspbus:reset_stops`
+ 6. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
 
 Start the Server
 ----------------
