@@ -23,8 +23,6 @@ var MapView = Backbone.View.extend({
 
     window.EventBus.on("center_map",this.center_map);
     window.EventBus.on("pan_map",this.center_map);
-    window.EventBus.on("mouseover_stopbutton",this.mouseover_stopbutton);
-    window.EventBus.on("mouseleave_stopbutton",this.mouseleave_stopbutton);
 
     if (this.ran === true)
       return;

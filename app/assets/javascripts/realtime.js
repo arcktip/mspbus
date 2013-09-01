@@ -148,9 +148,6 @@ function got_coordinates(lat, lon) {
     },
   }).done(function(data){
     $("#table-results").html(data);
-    if(!HomeView.mobile){
-      $(".stopbutton").mouseover(function(){EventBus.trigger("mouseover_stopbutton", $(this).data('stopid'));}).mouseleave(function(){EventBus.trigger("mouseleave_stopbutton", $(this).data('stopid'));});
-    }
     update_table();
   });
 }
