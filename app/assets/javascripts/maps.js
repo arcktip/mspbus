@@ -103,38 +103,6 @@ var MapView = Backbone.View.extend({
 
   },
 
-  mouseover_stopbutton: function(id) {
-    var look_up=false; //TODO: Fix stops array to eliminate these kinds of searches
-    for(i in stops){
-      if( stops[i].id == id ){
-        look_up=i;
-        break;
-      }
-    }
-    if(look_up===false) return;
-
-    marker=stops[look_up].marker;
-    marker.setOptions({zIndex:10});
-    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg', null, null, null, new google.maps.Size(22,22)));
-    marker.Icon.size(new google.maps.Size(22,22));
-    console.log(marker);
-  },
-
-  mouseleave_stopbutton: function(id) {
-    var look_up=false;
-    for(i in stops){
-      if( stops[i].id == id ){
-        look_up=i;
-        break;
-      }
-    }
-    if(look_up===false) return;
-
-    marker=stops[look_up].marker;
-    marker.setOptions({zIndex:1});
-    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg', null, null, null, new google.maps.Size(22,22)));
-  },
-
   center_map: function(lat, lon){
     var self=this;
     var center = new google.maps.LatLng(lat, lon);
