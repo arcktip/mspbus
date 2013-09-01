@@ -12,7 +12,6 @@ Setup
  4. Install Bundle
  5. Run `bundle`
    * May need `sudo apt-get install libpq-dev`
-   * May need `sudo apt-get install libsqlite3-dev`
  6. Start Elastic Search with `sudo service elasticsearch start`
  7. Set up the database credentials (see below)
  8. rake db:migrate
