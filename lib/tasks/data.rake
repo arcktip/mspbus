@@ -17,17 +17,18 @@ namespace :omgtransit do
       SourceStop.find_or_initialize_by_source_id_and_external_stop_id(args.source_id, row["#{args.replace_column}"]) do |stop|
 
         unless row["#{args.replace_column}"].nil?
-          stop.external_lat = row['stop_lat']
-          stop.external_lon = row['stop_lon']
+          stop.external_lat       = row['stop_lat']
+          stop.external_lon       = row['stop_lon']
           stop.external_stop_name = row['stop_name']
           stop.external_stop_desc = row['stop_desc']
-          stop.external_zone_id = row['zone_id']
-          stop.external_stop_url = args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"])
-          stop.external_stop_street = row['stop_street']
-          stop.external_stop_city = row['stop_city']
-          stop.external_stop_region = row['stop_region']
+          stop.external_zone_id   = row['zone_id']
+          stop.external_stop_url  = args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"])
+          stop.external_stop_street   = row['stop_street']
+          stop.external_stop_city     = row['stop_city']
+          stop.external_stop_region   = row['stop_region']
           stop.external_stop_postcode = row['stop_postcode']
-          stop.external_stop_country = row['stop_country']
+          stop.external_stop_country  = row['stop_country']
+          stop.stop_type              = 1
           stop.save!
         end
       end
