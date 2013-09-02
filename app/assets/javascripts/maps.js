@@ -97,6 +97,12 @@ var MapView = Backbone.View.extend({
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
 
     this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
+
+    //Precreate Marker Images
+    this.bus_normal_icon=new google.maps.MarkerImage(config.icons[1].icon, null, null, null, new google.maps.Size(22,22));
+    this.bus_hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));
+    this.bike_normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
+    this.bike_hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
   },
   
   render: function() {
@@ -144,11 +150,11 @@ var MapView = Backbone.View.extend({
     var normal_icon='';
     var hover_icon=''
     if(stop_type==1){
-      normal_icon=new google.maps.MarkerImage(config.icons[1].icon, null, null, null, new google.maps.Size(22,22));
-      hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));    
+      normal_icon=self.bus_normal_icon;
+      hover_icon =self.bus_normal_icon;
     } else if(stop_type==2) {
-      normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
-      hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
+      normal_icon=self.bike_normal_icon;
+      hover_icon =self.bike_normal_icon;
     }
 
     //Make a new marker
