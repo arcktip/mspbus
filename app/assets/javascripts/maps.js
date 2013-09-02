@@ -140,14 +140,24 @@ var MapView = Backbone.View.extend({
     if(look_up!==false && typeof(stops[look_up].marker)!=='undefined')
       return; //Yes, it already has a marker. Don't make another!
 
+    var source_id=new_stop.source_stops[0].source_id;
+    var normal_icon='';
+    var hover_icon=''
+    if(typeof(config.source_types[source_id])==='undefined'){
+      normal_icon=new google.maps.MarkerImage(config.icons['bus'].icon, null, null, null, new google.maps.Size(22,22));
+      hover_icon=new google.maps.MarkerImage(config.icons['bus'].hover, null, null, null, new google.maps.Size(22,22));    
+    } else if(config.source_types[source_id]=='bike') {
+      normal_icon=new google.maps.MarkerImage(config.icons['bike'].icon);
+      hover_icon=new google.maps.MarkerImage(config.icons['bike'].hover);
+    }
+
     //Make a new marker
     
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
       draggable: false,
-      icon: new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)),
+      icon: normal_icon,
       //animation: google.maps.Animation.DROP,
       stopid: new_stop.id,
       zIndex: 1
@@ -182,16 +192,14 @@ var MapView = Backbone.View.extend({
       google.maps.event.addListener(marker, 'mouseover', function() {
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
-    null, null, null, new google.maps.Size(22,22)));
+        this.setIcon( hover_icon );
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
         self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)));
+        this.setIcon( normal_icon );
       });
     }
 
