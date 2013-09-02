@@ -177,20 +177,37 @@ Parsers.wmata = function(content) {
 
 Parsers.nextbus = function(content) {
   var predictions = $(content).find('prediction');
-  
+
   var obj = [];
 
   for(var i = 0, len = predictions.length; i < len; i++) {
-    
+
     var item = $(predictions[i]);
     var dText;
-    var dirTag = item.attr('dirTag').toUpperCase();
+    var dirTag   = item.attr('dirTag').toUpperCase();
+    var routeName = item.parent().parent().attr('routeTag')
+
+    if(routeName=='connector')
+      routeName='CC';
+    else if (routeName=='eastbank')
+      routeName='EBC';
+    else if (routeName=='stpaul')
+      routeName='StPC';
+
+    /*
+    <route tag="bdda" title="BDD Shuttle A"/>    Academic Health Care Shuttle
+    <route tag="bddb" title="BDD Shuttle B"/>    Academic Health Care Shuttle
+    <route tag="connector" title="Campus Connector"/>
+    <route tag="eastbank" title="East Bank Circulator" shortTitle="East Bank"/>
+    <route tag="stpaul" title="St Paul Circulator" shortTitle="St Paul"/>
+    */
 
     if (item.attr('minutes') === 0) {
       dText = 'Due';
     } else {
       dText =  item.attr('minutes') + ' min';
     }
+
 
     if ( dirTag !== 'LOOP' ) {
       dirTag = dirTag + 'BOUND';
@@ -202,7 +219,7 @@ Parsers.nextbus = function(content) {
       'DepartureText': '',
       'DepartureTime': item.attr('epochTime') / 1000,
       'RouteDirection': dirTag,
-      'Route': item.parent().parent().attr('routeTag').substr(0,2)
+      'Route': routeName
     });
   }
   
