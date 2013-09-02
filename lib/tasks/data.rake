@@ -64,15 +64,15 @@ namespace :omgtransit do
 
   task :reset_stops => :environment do
     puts "Deleting Stops"
-    ActiveRecord::Base.connection.execute("delete FROM STOPS")
+    ActiveRecord::Base.connection.execute("DELETE FROM stops")
     puts "Re-inserting Stops"
-    ActiveRecord::Base.connection.execute("insert into stops
+    ActiveRecord::Base.connection.execute("INSERT INTO stops
       (stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_street, stop_city, stop_region, stop_postcode, stop_country)
       SELECT
       external_stop_id, external_stop_name, external_stop_desc,external_lat, external_lon, external_zone_id, 
       external_stop_street, external_stop_city, external_stop_region, external_stop_postcode, external_stop_country
       FROM source_stops")
     puts "Populating source stops from stops"
-    ActiveRecord::Base.connection.execute("update source_stops set stop_id = (SELECT ID FROM STOPS WHERE STOP_CODE = EXTERNAL_STOP_ID and stop_name = external_stop_name)")
+    ActiveRecord::Base.connection.execute("UPDATE source_stops SET stop_id = (SELECT id FROM stops WHERE stop_code = external_stop_id AND stop_name = external_stop_name)")
   end
 end
