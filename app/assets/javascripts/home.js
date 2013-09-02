@@ -8,18 +8,18 @@ var HomeView = Backbone.View.extend({
     this.map_view = new MapView();
 
     $('#view-table-btn').on('click', this.show_table);
-    $('#view-map-btn').on('click', this.show_map);
+    $('#view-map-btn').on('click',   this.show_map);
     $('#view-route-btn').on('click', this.show_route);
     
     // Cache selectors for other actions.
     //this.viewchanger = this.$el.find('#viewchanger');
-    this.views = this.$el.find('.views');
+    this.views      = this.$el.find('.views');
     this.view_table = this.$el.find('#view-table');
-    this.view_map = this.$el.find('#view-map');
+    this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
 
     this.table_list_item = this.$el.find('#table-list-item');
-    this.map_list_item = this.$el.find('#map-list-item');
+    this.map_list_item   = this.$el.find('#map-list-item');
 
     this.update_screen_size();
 
@@ -99,19 +99,6 @@ var HomeView = Backbone.View.extend({
         $('#view-table').hide();
       else if ($.cookie('home_current_view')==='table_list_item')
         $('#view-map').hide();
-
-      // this.view_table.removeClass('span6');
-      // this.view_table.addClass('span12');
-      // this.view_map.removeClass('span6');
-      // this.view_map.addClass('span12');
-    // } else {
-    //   this.view_map.show();
-    //   this.view_table.show();
-    //   this.view_table.removeClass('span12');
-    //   this.view_table.addClass('span6');
-    //   this.view_map.removeClass('span12');
-    //   this.view_map.addClass('span6');
-    // }
   },
 
   update_screen_size: function() {
