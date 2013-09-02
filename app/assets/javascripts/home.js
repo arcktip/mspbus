@@ -102,7 +102,7 @@ var HomeView = Backbone.View.extend({
   },
 
   update_screen_size: function() {
-    this.screen_width = screen.width;
+    this.screen_width  = screen.width;
     this.screen_height = screen.height;
   }
 
