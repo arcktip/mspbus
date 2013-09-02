@@ -1,4 +1,4 @@
-namespace :mspbus do
+namespace :omgtransit do
   require 'rubygems'
   require 'bundler'
   Bundler.setup
