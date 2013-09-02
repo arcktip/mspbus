@@ -399,6 +399,10 @@
     color: #b3b3b3;
   }
 
+  a.active {
+    color: red;
+  }
+
   a:hover {
     color: #08c;
     //border-bottom: 4px solid #08c;

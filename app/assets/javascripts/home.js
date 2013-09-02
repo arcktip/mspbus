@@ -50,8 +50,8 @@ var HomeView = Backbone.View.extend({
     //this.viewchanger.find("li").removeClass("active");
     //this.table_list_item.addClass("active");
 
-    $('#view-table-btn').css('color','red');
-    $('#view-map-btn').css  ('color', '#b3b3b3');
+    $('#view-table-btn').addClass("active");
+    $('#view-map-btn').removeClass("active");
 
     this.view_map.hide();
     this.view_route.hide();
@@ -60,11 +60,8 @@ var HomeView = Backbone.View.extend({
   },
 
   show_map: function() {
-    //this.viewchanger.find("li").removeClass("active");
-    //this.map_list_item.addClass("active");
-
-    $('#view-table-btn').css('color','#b3b3b3');
-    $('#view-map-btn').css  ('color','red');
+    $('#view-table-btn').removeClass("active");
+    $('#view-map-btn').addClass("active");
 
     this.view_table.hide();
     this.view_map.show();
