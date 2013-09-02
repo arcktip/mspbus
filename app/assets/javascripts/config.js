@@ -6,12 +6,8 @@ var config = {
   //and to bias the address geocoding look-up
   bounds: {west:-94.01, east:-92.73, north:45.42, south:44.47},
 
-  source_types: {
-    '3': 'bike' //NiceRide
-  },
-
   icons: {
-    'bike': {icon:'/assets/bike_station.png', hover:'/assets/bike_station_hover.png', no_bikes:'/assets/bike_station_empty.png', full: '/assets/bike_station_full.png'},
-    'bus':  {icon:'/assets/bus-icon.svg', hover:'/assets/bus-icon-hover.svg'}
+    1:  {icon:'/assets/bus-icon.svg', hover:'/assets/bus-icon-hover.svg'},
+    2: {icon:'/assets/bike_station.png', hover:'/assets/bike_station_hover.png', no_bikes:'/assets/bike_station_empty.png', full: '/assets/bike_station_full.png'}
   }
 };
