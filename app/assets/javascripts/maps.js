@@ -170,8 +170,8 @@ var MapView = Backbone.View.extend({
     });
 
     if (!views[new_stop.id]) {
-      views[new_stop.id] = new RealTimeView({ id: new_stop.id });
-      views[new_stop.id].$el.data('name', new_stop.name);
+      views[new_stop.id] = new RealTimeView({ map_stop: new_stop });
+      views[new_stop.id].update();
     }
 
     google.maps.event.addListener(marker, 'click', function() {
