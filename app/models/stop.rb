@@ -18,14 +18,15 @@ class Stop < ActiveRecord::Base
     indexes :location, type: 'geo_point', as: 'location'
 
     indexes :source_stops do
-      indexes :source_id, type: :string, analyzer: 'snowball'
-      indexes :external_stop_id, type: :string, analyzer: 'snowball'
-      indexes :external_stop_url, type: :string, analyzer: 'snowball'
+      indexes :source_id,         type: :string,  analyzer: 'snowball'
+      indexes :external_stop_id,  type: :string,  analyzer: 'snowball'
+      indexes :external_stop_url, type: :string,  analyzer: 'snowball'
+      indexes :stop_type,         type: :integer, analyzer: 'snowball'
     end
   end
 
   def to_indexed_json
-    to_json(:include => { source_stops: { only: [:source_id, :external_stop_id, :external_stop_url] } }, :methods => [:location])
+    to_json(:include => { source_stops: { only: [:source_id, :external_stop_id, :external_stop_url, :stop_type] } }, :methods => [:location])
   end
 
   def location
