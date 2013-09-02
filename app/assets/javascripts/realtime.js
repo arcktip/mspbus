@@ -21,8 +21,10 @@ var RealTimeView = Backbone.View.extend({
       this.realtime_sources = args.map_stop.source_stops;
       this.$el=$('<span></span>');
       this.$el.data('name',args.map_stop.name);
+      this.map_stop=true;
     } else {
       this.realtime_sources = this.$el.data('realtime');
+      this.map_stop=false;
     }
 
     if ( this.realtime_sources ) {
@@ -51,7 +53,7 @@ var RealTimeView = Backbone.View.extend({
   },
 
   render: function(collection) {
-    if ( collection.length === 0 ) {
+    if ( collection.length === 0 && !this.map_stop ) {
       this.$el.parent().parent().hide(); //TODO: Should generalize this out of here
     } else {
       this.$el.find('.collection' + collection.stop_id ).html(this[collection.template]({ logo: collection.logo , data: collection.toJSON() }));
