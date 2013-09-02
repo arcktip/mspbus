@@ -14,14 +14,14 @@
 ActiveRecord::Schema.define(:version => 20130826204334) do
 
   create_table "source_stops", :id => false, :force => true do |t|
-    t.integer  "source_id",                                                           :null => false
+    t.integer  "source_id",              :null => false
     t.integer  "stop_id"
-    t.string   "external_stop_id",                                                    :null => false
-    t.datetime "created_at",                                                          :null => false
-    t.datetime "updated_at",                                                          :null => false
-    t.decimal  "external_lat",                          :precision => 9, :scale => 6
-    t.decimal  "external_lon",                          :precision => 9, :scale => 6
-    t.string   "external_stop_name",                                                  :null => false
+    t.string   "external_stop_id",       :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.decimal  "external_lat",           :precision => 9, :scale => 6
+    t.decimal  "external_lon",           :precision => 9, :scale => 6
+    t.string   "external_stop_name",     :null  => false
     t.string   "external_stop_desc"
     t.string   "external_zone_id",       :limit => 100
     t.string   "external_stop_url"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20130826204334) do
   end
 
   create_table "spatial_ref_sys", :id => false, :force => true do |t|
-    t.integer "srid",                      :null => false
+    t.integer "srid",      :null  => false
     t.string  "auth_name", :limit => 256
     t.integer "auth_srid"
     t.string  "srtext",    :limit => 2048
@@ -60,10 +60,10 @@ ActiveRecord::Schema.define(:version => 20130826204334) do
 
   create_table "stops", :force => true do |t|
     t.string  "stop_code"
-    t.string  "stop_name",                          :null => false
+    t.string  "stop_name",           :null  => false
     t.string  "stop_desc"
-    t.string  "stop_lat",                           :null => false
-    t.string  "stop_lon",                           :null => false
+    t.string  "stop_lat",            :null  => false
+    t.string  "stop_lon",            :null  => false
     t.string  "zone_id",             :limit => 100
     t.string  "stop_url"
     t.string  "stop_timezone"
