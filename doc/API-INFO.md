@@ -414,8 +414,8 @@ NiceRide API
 =================================
 
 The [NiceRide](https://secure.niceridemn.org) system rents bicycles on an
-hourly basis through Minneapolis and St. Paul. Bikes may be rented or returned
-from automated stations.
+hourly basis throughout Minneapolis and St. Paul. Bikes may be rented or
+returned from automated stations.
 
 The NiceRide API can be used to get the location of these stations, as well as
 the number of bikes available.
@@ -444,4 +444,34 @@ The following is the start of this file:
       <latestUpdateTime>1375230969269</latestUpdateTime>
       </station>
 
+Washington DC Bike Share API
+==========================================================
+The [Capitol Bike Share](http://www.capitalbikeshare.com/) system rents
+bicycles on an hourly basis in the DC area. Bikes may be rented or returned
+from automated stations.
 
+The NiceRide API can be used to get the location of these stations, as well as
+the number of bikes available.
+
+The API takes the form a single XML file available at
+http://www.capitalbikeshare.com/data/stations/bikeStations.xml
+
+The following is the start of the file:
+    <stations lastUpdate="1378089568987" version="2.0">
+      <station>
+      <id>1</id>
+      <name>20th & Bell St</name>
+      <terminalName>31000</terminalName>
+      <lastCommWithServer>1378089538797</lastCommWithServer>
+      <lat>38.8561</lat>
+      <long>-77.0512</long>
+      <installed>true</installed>
+      <locked>false</locked>
+      <installDate>1316059200000</installDate>
+      <removalDate/>
+      <temporary>false</temporary>
+      <public>true</public>
+      <nbBikes>1</nbBikes>
+      <nbEmptyDocks>9</nbEmptyDocks>
+      <latestUpdateTime>1378088198251</latestUpdateTime>
+      </station>
