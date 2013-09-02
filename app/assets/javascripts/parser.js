@@ -1,7 +1,7 @@
 var Parsers = {
   utils: {
     parseQueryString: function( url ) {
-      var parser = document.createElement('a');
+      var parser = document.createElement('a'); //TODO: Why are we creating an element here?
       parser.href = url;
       
       var params = {}, queries, temp, i, l;
@@ -11,8 +11,8 @@ var Parsers = {
    
       // Convert the array of strings into an object
       for ( i = 0, l = queries.length; i < l; i++ ) {
-          temp = queries[i].split('=');
-          params[temp[0]] = temp[1];
+        temp = queries[i].split('=');
+        params[temp[0]] = temp[1];
       }
    
       return params;
