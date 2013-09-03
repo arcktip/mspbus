@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130826204334) do
+ActiveRecord::Schema.define(:version => 20130902012457) do
 
   create_table "source_stops", :id => false, :force => true do |t|
     t.integer  "source_id",                                                           :null => false
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20130826204334) do
     t.string   "external_stop_region"
     t.string   "external_stop_postcode", :limit => 50
     t.string   "external_stop_country",  :limit => 100
+    t.integer  "stop_type"
   end
 
   create_table "sources", :force => true do |t|

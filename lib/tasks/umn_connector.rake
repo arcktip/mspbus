@@ -1,4 +1,4 @@
-namespace :mspbus do
+namespace :omgtransit do
   require 'rubygems'
   require 'bundler'
   Bundler.setup
@@ -56,11 +56,12 @@ namespace :mspbus do
     UMN_Connector::Route.get_routes.each do |route|
       route.stops.each do |stop|
         SourceStop.find_or_initialize_by_source_id_and_external_stop_id(2, "#{stop.stop_id}") do |ss|
-          ss.external_stop_id = "#{stop.stop_id}"
-          ss.external_lat = "#{stop.latitude}"
-          ss.external_lon = "#{stop.longitude}"
-          ss.external_stop_url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png"
+          ss.external_stop_id   = "#{stop.stop_id}"
+          ss.external_lat       = "#{stop.latitude}"
+          ss.external_lon       = "#{stop.longitude}"
+          ss.external_stop_url  = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png"
           ss.external_stop_name = "#{stop.title}"
+          ss.stop_type          = 1
           ss.save!
         end
       end

@@ -4,7 +4,7 @@
 <% end %>
 <div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
-    <% if isNiceRide(stop.source_stops) %>
+    <% if isBikeStop(stop.source_stops) %>
       <div class="btn niceride" data-stopid="<%= stop.id %>">
         <div class="distance-label" style="position:absolute;top:-5px; right:5px;background:none;">
           <%= calculate_distance(stop) %>

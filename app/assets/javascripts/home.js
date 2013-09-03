@@ -8,25 +8,24 @@ var HomeView = Backbone.View.extend({
     this.map_view = new MapView();
 
     $('#view-table-btn').on('click', this.show_table);
-    $('#view-map-btn').on('click', this.show_map);
+    $('#view-map-btn').on('click',   this.show_map);
     $('#view-route-btn').on('click', this.show_route);
     
     // Cache selectors for other actions.
     //this.viewchanger = this.$el.find('#viewchanger');
-    this.views = this.$el.find('.views');
+    this.views      = this.$el.find('.views');
     this.view_table = this.$el.find('#view-table');
-    this.view_map = this.$el.find('#view-map');
+    this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
 
     this.table_list_item = this.$el.find('#table-list-item');
-    this.map_list_item = this.$el.find('#map-list-item');
+    this.map_list_item   = this.$el.find('#map-list-item');
 
     this.update_screen_size();
 
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       HomeView.mobile=true; //TODO: Is this the right place to attach this?
-      this.determine_view();
     } else {
       HomeView.mobile=false; //TODO: Is this the right place to attach this?
     }
@@ -35,6 +34,8 @@ var HomeView = Backbone.View.extend({
     //     this.map_view.ran = true;
     //   }
     // }
+
+    this.determine_view();
   },
 
   determine_view: function() {
@@ -49,6 +50,9 @@ var HomeView = Backbone.View.extend({
     //this.viewchanger.find("li").removeClass("active");
     //this.table_list_item.addClass("active");
 
+    $('#view-table-btn').addClass("active");
+    $('#view-map-btn').removeClass("active");
+
     this.view_map.hide();
     this.view_route.hide();
     this.view_table.show();
@@ -56,9 +60,9 @@ var HomeView = Backbone.View.extend({
   },
 
   show_map: function() {
-    //this.viewchanger.find("li").removeClass("active");
-    //this.map_list_item.addClass("active");
-    console.log(this);
+    $('#view-table-btn').removeClass("active");
+    $('#view-map-btn').addClass("active");
+
     this.view_table.hide();
     this.view_map.show();
 
@@ -100,23 +104,10 @@ var HomeView = Backbone.View.extend({
         $('#view-table').hide();
       else if ($.cookie('home_current_view')==='table_list_item')
         $('#view-map').hide();
-
-      // this.view_table.removeClass('span6');
-      // this.view_table.addClass('span12');
-      // this.view_map.removeClass('span6');
-      // this.view_map.addClass('span12');
-    // } else {
-    //   this.view_map.show();
-    //   this.view_table.show();
-    //   this.view_table.removeClass('span12');
-    //   this.view_table.addClass('span6');
-    //   this.view_map.removeClass('span12');
-    //   this.view_map.addClass('span6');
-    // }
   },
 
   update_screen_size: function() {
-    this.screen_width = screen.width;
+    this.screen_width  = screen.width;
     this.screen_height = screen.height;
   }
 

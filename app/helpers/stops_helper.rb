@@ -1,7 +1,7 @@
 module StopsHelper
 
-  def isNiceRide(source_stops)
-    m = source_stops.select { |s| s.source_id == 3 }
+  def isBikeStop(source_stops)
+    m = source_stops.select { |s| s.stop_type == 2 }
 
     unless m.empty?
       true

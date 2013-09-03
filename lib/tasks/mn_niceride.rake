@@ -1,4 +1,4 @@
-namespace :mspbus do
+namespace :omgtransit do
   require 'rubygems'
   require 'bundler'
   Bundler.setup
@@ -45,11 +45,12 @@ namespace :mspbus do
 
     NiceRide::Stops.get_stops.each do |stop|
       SourceStop.find_or_initialize_by_source_id_and_external_stop_id(3, "#{stop.stop_id}") do |ss|
-        ss.external_stop_id = "#{stop.stop_id}"
-        ss.external_lat = "#{stop.latitude}"
-        ss.external_lon = "#{stop.longitude}"
-        ss.external_stop_url = "/realtime/niceride?stop_id=#{stop.stop_id}&format=json&parser=mn_niceride"
+        ss.external_stop_id   = "#{stop.stop_id}"
+        ss.external_lat       = "#{stop.latitude}"
+        ss.external_lon       = "#{stop.longitude}"
+        ss.external_stop_url  = "/realtime/niceride?stop_id=#{stop.stop_id}&format=json&parser=mn_niceride"
         ss.external_stop_name = "#{stop.title}"
+        ss.stop_type          = 2
         ss.save!
       end
     end

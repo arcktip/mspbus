@@ -97,6 +97,12 @@ var MapView = Backbone.View.extend({
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
 
     this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
+
+    //Precreate Marker Images
+    this.bus_normal_icon=new google.maps.MarkerImage(config.icons[1].icon, null, null, null, new google.maps.Size(22,22));
+    this.bus_hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));
+    this.bike_normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
+    this.bike_hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
   },
   
   render: function() {
@@ -140,22 +146,32 @@ var MapView = Backbone.View.extend({
     if(look_up!==false && typeof(stops[look_up].marker)!=='undefined')
       return; //Yes, it already has a marker. Don't make another!
 
+    var stop_type=new_stop.source_stops[0].stop_type;
+    var normal_icon='';
+    var hover_icon=''
+    if(stop_type==1){
+      normal_icon=self.bus_normal_icon;
+      hover_icon =self.bus_normal_icon;
+    } else if(stop_type==2) {
+      normal_icon=self.bike_normal_icon;
+      hover_icon =self.bike_normal_icon;
+    }
+
     //Make a new marker
     
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
       draggable: false,
-      icon: new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)),
+      icon: normal_icon,
       //animation: google.maps.Animation.DROP,
       stopid: new_stop.id,
       zIndex: 1
     });
 
     if (!views[new_stop.id]) {
-      views[new_stop.id] = new RealTimeView({ id: new_stop.id });
-      views[new_stop.id].$el.data('name', new_stop.name);
+      views[new_stop.id] = new RealTimeView({ map_stop: new_stop });
+      views[new_stop.id].update();
     }
 
     google.maps.event.addListener(marker, 'click', function() {
@@ -182,16 +198,14 @@ var MapView = Backbone.View.extend({
       google.maps.event.addListener(marker, 'mouseover', function() {
         self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
-    null, null, null, new google.maps.Size(22,22)));
+        this.setIcon( hover_icon );
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
         self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)));
+        this.setIcon( normal_icon );
       });
     }
 

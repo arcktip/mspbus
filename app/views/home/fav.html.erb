@@ -2,9 +2,6 @@
   <div id="table-results">
 
   </div>
-  <div style="margin-top:1em;margin-left:5px;" class="legend">
-    <%= render 'shared/legend' %>
-  </div>
 </div>
 
 <script>
@@ -55,6 +52,8 @@
   }
 
   $(document).ready(function(){
+    $('#fav-list-item').addClass('active');
+
     var favs=$.cookie('favs');
     $.ajax({
       url: "/favlist",

@@ -1,4 +1,4 @@
-mspbus.org
+omgtransit.com
 ==============================
 ![Screenshot](doc/screenshot.jpg)
 
@@ -44,12 +44,13 @@ the folder `setup/msp_gtfs`.
 
 Loading the Database
 --------------------
- 1. Run `rake db:setup`
- 2. Run `rake db:migrate`
- 3. Run `rake mspbus:load_msp_gtfs` (Or what have you, this draws from the `setup/` folders).
-  * Run `rake mspbus:load_mn_bikes`
+ 1. Run `rake db:migrate`
+ 2. Run `rake db:seed`
+ 3. Run `rake omgtransit:load_msp_gtfs` (Or what have you, this draws from the `setup/` folders).
+  * Run `rake omgtransit:load_mn_bikes`
+  * Run `rake omgtransit:load_umn_stops`
  4. Repeat Step 3 as needed
- 5. Run `rake mspbus:reset_stops`
+ 5. Run `rake omgtransit:reset_stops`
  6. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
 
 Start the Server

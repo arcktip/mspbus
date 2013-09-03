@@ -6,9 +6,8 @@ var config = {
   //and to bias the address geocoding look-up
   bounds: {west:-94.01, east:-92.73, north:45.42, south:44.47},
 
-  //Assuming a system with only one transit provider, this formats the API
-  //call to get the stop information based on the stopid
-  //TODO: The API call functionality needs to be abstracted away from the
-  //particulars of a given system
-  api_url: function(stopid) { return 'http://svc.metrotransit.org/NexTrip/' + stopid + '?callback=?&format=json'; }
+  icons: {
+    1:  {icon:'/assets/bus-icon.svg', hover:'/assets/bus-icon-hover.svg'},
+    2: {icon:'/assets/bike_station.png', hover:'/assets/bike_station_hover.png', no_bikes:'/assets/bike_station_empty.png', full: '/assets/bike_station_full.png'}
+  }
 };
