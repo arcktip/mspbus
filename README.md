@@ -36,7 +36,7 @@ Specification (GTFS) files. More information on these files is available
 
 GTFS data is available at the [GTFS Exchange](http://www.gtfs-data-exchange.com/).
 
-Download these data files and put them in appropriate named folders in `setup/`.
+Download these data files and put them in appropriately named folders in `setup/`.
 
 For instance, you can download the Minneapolis Metro Transit feed from
 [here](ftp://gisftp.metc.state.mn.us/google_transit.zip). And unzip this into
