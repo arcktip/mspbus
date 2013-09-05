@@ -10,10 +10,45 @@ $(document).ready(function() {
   // Favorites View
   var favoritesView = new FavortiesView();
 
+  // Yelp View
+  var yelpView = new YelpView();
+
   window.setInterval(view.update, 60000);
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
   $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
+  $('#yelp-btn').on('click', function() {
+    yelpView.fetch();
+  });
+});
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Yelp View
+|----------------------------------------------------------------------------------------------------
+*/
+
+var YelpView = Backbone.View.extend({
+  el: '.yelp-table',
+  template: JST['templates/yelp_results'],
+
+  initialize: function() {
+    _.bindAll(this);
+  },
+
+  fetch: function() {
+    $.ajax({
+      dataType: 'json',
+      url: "http://api.yelp.com/business_review_search?category=restaurants&lat=" + mapcenter.lat + "&long=" + mapcenter.lon + "&radius=10&limit=10&ywsid=GIxmrRLcqn3pRF9cjNoqOw&callback=?",
+      success: this.render
+    });
+  },
+
+  render: function(response) {
+    this.$el.find('tbody').html( this.template({ data: response.businesses }) );
+    $("#yelp").show();
+  }
+
 });
 
 /*
@@ -109,7 +144,7 @@ var StopView = Backbone.View.extend({
     if( collection.length === 0 ) {
       //this.$el.parent().parent().hide();
     } else {
-      this.$el.append(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
+      this.$el.html(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
     }
   },
 

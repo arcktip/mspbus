@@ -2,22 +2,31 @@ var HomeView = Backbone.View.extend({
 
   el: '.app-container',
 
+  current_view: null,
+  current_view_btn: null,
+
   initialize: function() {
     _.bindAll(this);
 
     this.map_view = new MapView();
-
-    $('#view-table-btn').on('click', this.show_table);
-    $('#view-map-btn').on('click',   this.show_map);
-    $('#view-route-btn').on('click', this.show_route);
     
-    // Cache selectors for other actions.
-    //this.viewchanger = this.$el.find('#viewchanger');
+    // Views
     this.views      = this.$el.find('.views');
     this.view_table = this.$el.find('#view-table');
     this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
 
+    // Buttons
+    this.view_table_btn = $('#view-table-btn');
+    this.view_map_btn = $('#view-map-btn');
+    this.view_route_btn = $('#view-route-btn');
+
+    // Events
+    this.view_table_btn.on('click', this.show_table);
+    this.view_map_btn.on('click',   this.show_map);
+    this.view_route_btn.on('click', this.show_route);
+
+    // Tables
     this.table_list_item = this.$el.find('#table-list-item');
     this.map_list_item   = this.$el.find('#map-list-item');
 
@@ -29,65 +38,71 @@ var HomeView = Backbone.View.extend({
     } else {
       HomeView.mobile=false; //TODO: Is this the right place to attach this?
     }
-    //   if( $('#view-map').css('display') !== 'none' ) {
-    //     this.map_view.init();
-    //     this.map_view.ran = true;
-    //   }
-    // }
 
     this.determine_view();
   },
 
   determine_view: function() {
-    if ( $.cookie('home_current_view') === 'map_list_item' ) {
+    var view_state = $.cookie('home_current_view');
+    if ( view_state === 'map_list_item' ) {
       this.show_map();
+    } else if ( view_state === 'route_list_item') {
+      this.show_route();
     } else {
       this.show_table();
     }
   },
 
+  swap_view: function( view, view_btn, cookie_key ) {
+    
+    if ( this.current_view ) {
+      this.current_view.hide();
+      this.current_view_btn.removeClass('active');
+    }
+
+    this.current_view = view;
+    this.current_view_btn = view_btn;
+    
+    view_btn.addClass('active');
+    view.show();
+
+    $.cookie('home_current_view', cookie_key);
+  },
+
+  init_map: function() {
+    if ( !this.map_view.ran ) {
+      this.map_view.init();
+      this.map_view.ran = true;
+    }
+  },
+
   show_table: function() {
-    //this.viewchanger.find("li").removeClass("active");
-    //this.table_list_item.addClass("active");
-
-    $('#view-table-btn').addClass("active");
-    $('#view-map-btn').removeClass("active");
-
-    this.view_map.hide();
-    this.view_route.hide();
-    this.view_table.show();
-    $.cookie('home_current_view', 'table_list_item');
+    this.swap_view( this.view_table, this.view_table_btn, 'table_list_item' );
   },
 
   show_map: function() {
-    $('#view-table-btn').removeClass("active");
-    $('#view-map-btn').addClass("active");
-
-    this.view_table.hide();
-    this.view_map.show();
-
-    this.map_view.init();
-    this.map_view.ran = true;
-
+    this.swap_view( this.view_map, this.view_map_btn, 'map_list_item' );
+    this.init_map();
     google.maps.event.trigger(this.map_view.map, "resize");
-    $.cookie('home_current_view', 'map_list_item');
   },
 
   show_route: function(e) {
+    this.swap_view( this.view_route, this.view_route_btn, 'route_list_item' );
+    this.init_map();
     
     // Only goto anchor link if on mobile screens
-    if ( matchMedia('only screen and (min-width: 767px)').matches ) {
-      e.preventDefault();
-    }
+    // if ( matchMedia('only screen and (min-width: 767px)').matches ) {
+    //   e.preventDefault();
+    // }
 
-    if(!this.view_route.is(":visible")){
-      if($.cookie('home_current_view') !== 'map_list_item') {
-        this.show_map();
-      }
+    //if(!this.view_route.is(":visible")){
+      //if($.cookie('home_current_view') !== 'map_list_item') {
+        //this.show_map();
+      //}
 
-      this.view_route.show();
-    } else
-      this.view_route.hide();
+    //  this.view_route.show();
+    //} else
+    //  this.view_route.hide();
   },
 
   resize_helper: function() {

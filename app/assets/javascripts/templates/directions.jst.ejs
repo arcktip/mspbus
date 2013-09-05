@@ -1,11 +1,9 @@
-<div class="directions-box">
-  <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
+<div class="directions-inner-box">
   <div class="clearfix directions-header-container">
-    <h4 class="directions-header pull-left">Route</h4>
-    <button class="btn btn-primary pull-right btn-route-back"><i class="icon-reply"></i></button>
+    <h4 class="directions-header pull-left"><i class="icon-compass"></i> Directions</h4>
   </div>
   
-  <div class="directions-leg" style="font-size:11px;" >
+  <div class="directions-leg">
   	<% var total_time_walk=0 %>
   	<% var total_time_bus=0 %>
   	<% var total_distance_walk=0.0 %>
@@ -20,63 +18,80 @@
     	} %>
       <div class="directions-step" data-index="<%= index %>">
         <div class="clearfix">
-          <i class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>" style="margin:0px 0 4px 0;"></i>&nbsp;
-          <% if ( step.transit ) { %>
+          <div class="timeline-info">
+            <div class="timeline-icon timeline-<%= determine_travel_mode(step.travel_mode) %>">
+              <i class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>" style="margin:9px 0 0 10px;"></i>
+            </div>
+          </div>
+          <div class="widget-box">
+            <% if ( step.transit ) { %>
             <span class="pull-left label">
 
-            	<%= step.transit.line.short_name %>
-            	<% if (step.instructions.indexOf("North") != -1){%>
-            		<i class="icon-arrow-up"></i>
-            	<% } %>
-            	<% if (step.instructions.indexOf("South") != -1){%>
-            		<i class="icon-arrow-down"></i>
-            	<% } %>
-            	<% if (step.instructions.indexOf("East") != -1){%>
-            		<i class="icon-arrow-right"></i>
-            	<% } %>
-            	<% if (step.instructions.indexOf("West") != -1){%>
-            		<i class="icon-arrow-left"></i>
-            	<% } %>
+              <%= step.transit.line.short_name %>
+              <% if (step.instructions.indexOf("North") != -1){%>
+                <i class="icon-arrow-up"></i>
+              <% } %>
+              <% if (step.instructions.indexOf("South") != -1){%>
+                <i class="icon-arrow-down"></i>
+              <% } %>
+              <% if (step.instructions.indexOf("East") != -1){%>
+                <i class="icon-arrow-right"></i>
+              <% } %>
+              <% if (step.instructions.indexOf("West") != -1){%>
+                <i class="icon-arrow-left"></i>
+              <% } %>
             
-            </span><% } %>
+            </span>
+            <% } %>
           
-          <span class="pull-right" style="font-family:OpenSansSemibold;">&nbsp;&nbsp;
-          <% if (!step.transit){ %>
-            <%= step.duration.text.replace('s','') %> (<%= step.distance.text %>)        	
-          <% }else{ %>
-          	<%= step.duration.text.replace('s','') %> (<%= step.transit.num_stops %> Stops)
-          <% } %>
-          </span>
-          <% if (step.transit){ %>
-          	<br>Get off at <%= step.transit.arrival_stop.name %>
-          <% } else if (index==steps.length-1){ %>
-            <%= step.instructions
-                    .replace('to','to:<br>',1)
-                    .replace("/Taxi",'',1)
-                    .replace(":<br>",":<span class='directions-end' style='color:white;font-family:OpenSansSemibold;'>",1)
-                    .replace(/([^,]*,[^,]*).*/,"$1")
-            %>
-          </span>
-          <% } else { %>
-            <%= step.instructions
-                    .replace('to','to:<br>',1)
-                    .replace("/Taxi",'',1)
-            %>
-          <% } %>
+            <span class="pull-right" style="font-family:OpenSansSemibold; font-size:12px;">&nbsp;&nbsp;
+            <% if (!step.transit){ %>
+              <%= step.duration.text.replace('s','') %> (<%= step.distance.text %>)         
+            <% }else{ %>
+              <%= step.duration.text.replace('s','') %> (<%= step.transit.num_stops %> Stops)
+            <% } %>
+            </span>
+            <% if (step.transit){ %>
+              <br>Get off at <%= step.transit.arrival_stop.name %>
+            <% } else if (index==steps.length-1){ %>
+              <%= step.instructions
+                      .replace('to','to:<br>',1)
+                      .replace("/Taxi",'',1)
+                      .replace(":<br>",":<span class='directions-end' style='color:white;font-family:OpenSansSemibold;'>",1)
+                      .replace(/([^,]*,[^,]*).*/,"$1")
+              %>
+            </span>
+            <% } else { %>
+              <%= step.instructions
+                      .replace('to','to:<br>',1)
+                      .replace("/Taxi",'',1)
+              %>
+            <% } %>
         </div>
+          </div>
           
       </div>
     <% }); %>
-    <div class="directions-step" data-index="<%= steps.length + 1 %>">
-      <b style="font-size:17px;font-family">Totals:</b><br>
-      <i class="pull-left directions-travel-mode-icon directions-walk-icon"style="margin:0px 0 4px 0;"></i>&nbsp;WALK&nbsp;
-      <b style="font-size:12px"><%= total_time_walk %> min (<%= String(total_distance_walk).slice(0,String(total_distance_walk).indexOf(".")+2) %> mi)</b>
-      <br>
-      <i class="pull-left directions-travel-mode-icon directions-transit-icon"style="margin:0px 0 4px 0;"></i>&nbsp;BUS&nbsp;
-      <b style="font-size:12px"><%= total_time_bus %> min (<%= String(total_distance_bus).slice(0,String(total_distance_bus).indexOf(".")+2) %> mi)</b>
-      <br>
-      <b style="font-size:20px">=</b>&nbsp;&nbsp;&nbsp;ALL&nbsp;
+  </div>
+  <div class="directions-step" data-index="<%= steps.length + 1 %>">
+    <div class="totals-container">
+      <div class="totals-step pull-left">
+        <div class="timeline-icon timeline-directions-walk-icon">  
+          <i class="pull-left directions-travel-mode-icon directions-walk-icon" style="margin:9px 0 0 10px;"></i>
+        </div><br>WALK<br>
+        <b style="font-size:12px"><%= total_time_walk %> min (<%= String(total_distance_walk).slice(0,String(total_distance_walk).indexOf(".")+2) %> mi)</b>
+      </div>
+      <div class="totals-step pull-left">
+        <div class="timeline-icon timeline-directions-transit-icon">  
+          <i class="pull-left directions-travel-mode-icon directions-transit-icon"style="margin:9px 0 0 10px;"></i>
+        </div><br>BUS<br>
+        <b style="font-size:12px"><%= total_time_bus %> min (<%= String(total_distance_bus).slice(0,String(total_distance_bus).indexOf(".")+2) %> mi)</b>
+      </div>
+    </div>
+    <div style="margin-top:10px;text-align:center; font: OpenSansSemibold !important;">
+      ALL
       <b style="font-size:12px"><%= total_time_bus+total_time_walk %> min (<%= String(total_distance_bus+total_distance_walk).slice(0,String(total_distance_bus+total_distance_walk).indexOf(".")+2) %> mi)</b>
     </div>
+    
   </div>
 </div>

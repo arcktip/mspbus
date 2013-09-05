@@ -283,8 +283,8 @@ var RouteInputView = Backbone.View.extend({
     
     // Setup Route inpute events.
     this.$el.on('click', '#btn-route', this.process_route_parameters);
-    this.$el.on('click', '.btn-route-back', this.show_route_input);
-    this.$el.on('click', '.btn-hide-route', this.hide);
+    //this.$el.on('click', '.btn-route-back', this.show_route_input);
+    //this.$el.on('click', '.btn-hide-route', this.hide);
     this.$el.on('click', '.btn-exchange', this.exchange);
     this.$el.on('click', '.loc-arrow', this.set_current_location);
 
@@ -306,7 +306,7 @@ var RouteInputView = Backbone.View.extend({
   },
 
   exchange: function() {
-    
+    console.log('exchange');
     var origin = this.origin.val();
     var destination = this.destination.val();
 
@@ -315,6 +315,7 @@ var RouteInputView = Backbone.View.extend({
   },
 
   set_current_location: function(e) {
+    console.log('set');
     var input = $(e.currentTarget).data('input');
     if ( input === 'origin' ) {
       this.origin.val('Current Location');
@@ -434,7 +435,6 @@ var RouteInputView = Backbone.View.extend({
       var legs = route.routes[0].legs[0];
       var steps = legs.steps;
 
-      this.route_input.hide();
       this.directions_box.html( this.direction_template({
         steps: steps,
         determine_travel_mode: this.determine_travel_mode,
@@ -485,7 +485,7 @@ var RouteInputView = Backbone.View.extend({
 
   show_route_input: function () {
     this.route_input.show();
-    this.directions_box.hide();
+    //this.directions_box.hide();
 
     this.clear_direction_markers();
     this.map_parent.clear_path();
