@@ -151,10 +151,10 @@ var MapView = Backbone.View.extend({
     var hover_icon=''
     if(stop_type==1){
       normal_icon=self.bus_normal_icon;
-      hover_icon =self.bus_normal_icon;
+      hover_icon =self.bus_hover_icon;
     } else if(stop_type==2) {
       normal_icon=self.bike_normal_icon;
-      hover_icon =self.bike_normal_icon;
+      hover_icon =self.bike_hover_icon;
     }
 
     //Make a new marker
@@ -196,9 +196,9 @@ var MapView = Backbone.View.extend({
 
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
-        self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
         this.setIcon( hover_icon );
+        self.hover_on_marker(new_stop.id);
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
