@@ -18,12 +18,12 @@ var HomeView = Backbone.View.extend({
 
     // Buttons
     this.view_table_btn = $('#view-table-btn');
-    this.view_map_btn = $('#view-map-btn');
+    this.view_map_btn   = $('#view-map-btn');
     this.view_route_btn = $('#view-route-btn');
 
     // Events
     this.view_table_btn.on('click', this.show_table);
-    this.view_map_btn.on('click',   this.show_map);
+    this.view_map_btn.on  ('click', this.show_map);
     this.view_route_btn.on('click', this.show_route);
 
     // Tables
