@@ -13,12 +13,13 @@ Installation
  2. Install Ruby 1.9.3
  3. Install Rails
    * Be sure that Rails is not trying to use Ruby 1.8, it will not work
- 4. Install Bundle
- 5. Run `bundle`
+ 4. Install postgresql
+ 5. Install Bundle
+ 6. Run `bundle`
    * May need `sudo apt-get install libpq-dev`
- 6. Start Elastic Search with `sudo service elasticsearch start`
- 7. Set up the configuration variables in `app/assets/javascripts/config.js`
- 8. Set your own `config.google_maps_api_key` inside **development.rb**, **production.rb** and **test.rb** located in `config/environments`
+ 7. Start Elastic Search with `sudo service elasticsearch start`
+ 8. Set up the configuration variables in `app/assets/javascripts/config.js`
+ 9. Set your own `config.google_maps_api_key` inside **development.rb**, **production.rb** and **test.rb** located in `config/environments`
 
 Database Setup
 --------------
