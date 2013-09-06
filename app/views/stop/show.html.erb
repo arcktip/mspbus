@@ -5,10 +5,25 @@
 <div class="stop-header">
   <img src="/assets/bus-stop.png">
   <span id="thestop" data-attr="<%= @stop.stop_id %>" style="font-weight:bold;margin:0"><%= @stop.stop_name %></span>
-  <div class="btn pull-right" id="mapshow" style="margin-top:0"><i class="icon-picture" style="font-size: 18px; color: grey;"></i></div>
+  <!-- <div class="btn pull-right" id="yelp-btn"><i class="icon-food"></i></div> -->
+  <div class="btn pull-right" id="mapshow" style="margin-top:0;margin-right:5px;"><i class="icon-picture" style="font-size: 18px; color: grey;"></i></div>
   <div class="btn pull-right" id="makefav" style="margin-top:0;margin-right:5px;" title="Make this stop a favorite">
     <i class="icon-star star"></i>
   </div>
+</div>
+
+<div id="yelp">
+  <table class="table yelp-table" width="100%">
+    <thead>
+      <tr style="font-weight:bold">
+        <th></th>
+        <th>Title</th>
+        <th>Categories</th>
+        <th>Reviews</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 
 <table class="table stop-table">
@@ -33,6 +48,10 @@
 
 <script>
   var stopid=<%= params[:id] %>;
+  var mapcenter = {
+    lat: "<%= @lat %>",
+    lon: "<%= @lon %>"
+  };
 </script>
 
 <%= javascript_include_tag "show_stop" %>
