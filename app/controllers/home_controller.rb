@@ -27,7 +27,10 @@ class HomeController < ApplicationController
     if params[:favs]
 
       params[:favs][1..-1].split(',').each do |stop|
-        @stops.push(Stop.get_stop_by_id({:id=>stop}).results.first())
+        res=Stop.get_stop_by_id({:id=>stop}).results
+        if not res.empty?
+          @stops.push(Stop.get_stop_by_id({:id=>stop}).results.first())
+        end
       end
 
     end
