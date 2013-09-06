@@ -43,7 +43,13 @@ var HomeView = Backbone.View.extend({
   },
 
   determine_view: function() {
-    var view_state = $.cookie('home_current_view');
+    var view_state;
+
+    if ( location.hash.replace('#', '') )
+      view_state=location.hash.replace('#', '');
+    else
+      view_state = $.cookie('home_current_view');
+
     if ( view_state === 'map_list_item' ) {
       this.show_map();
     } else if ( view_state === 'route_list_item') {
