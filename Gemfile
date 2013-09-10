@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 #gem 'sqlite3'
 gem 'pg'
 gem 'polylines'
@@ -28,6 +25,12 @@ gem 'tire' # elasticsearch wrapper
 gem 'bcdatabase' # database credential management
 gem 'nokogiri'
 gem 'rvm-capistrano'
+
+# User profiles
+gem 'devise'
+gem 'omniauth-facebook'
+gem 'omniauth-openid' #Google
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

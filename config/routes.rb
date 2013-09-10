@@ -1,4 +1,6 @@
 MspBus::Application.routes.draw do
+  devise_for :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -65,8 +67,6 @@ MspBus::Application.routes.draw do
   get 'legal'        => 'home#legal'
   
   # realtime apis
-  get 'realtime/umn' => 'realtime#umn' 
-  get 'realtime/nextrip' => 'realtime#nextrip'
   get 'realtime/niceride' => 'realtime#niceride'
 
   # See how all your routes lay out with "rake routes"

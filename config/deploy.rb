@@ -36,7 +36,7 @@ role :app, "omgtransit.com"
 role :db,  "omgtransit.com", :primary => true
 
 # if you want to clean up old releases on each deploy uncomment this:
-#after 'deploy:update_code', :setup_group
+after 'deploy:update_code', :setup_group
 after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
