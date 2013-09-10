@@ -20,7 +20,7 @@
         <div class="clearfix">
           <div class="timeline-info">
             <div class="timeline-icon timeline-<%= determine_travel_mode(step.travel_mode) %>">
-              <i class="pull-left directions-travel-mode-icon <%= determine_travel_mode(step.travel_mode) %>" style="margin:9px 0 0 10px;"></i>
+              <i class="pull-left directions-travel-mode-icon-white <%= determine_travel_mode(step.travel_mode) %>" style="margin:9px 0 0 10px;"></i>
             </div>
           </div>
           <div class="widget-box">
@@ -77,13 +77,13 @@
     <div class="totals-container">
       <div class="totals-step pull-left">
         <div class="timeline-icon timeline-directions-walk-icon">  
-          <i class="pull-left directions-travel-mode-icon directions-walk-icon" style="margin:9px 0 0 10px;"></i>
+          <i class="pull-left directions-travel-mode-icon-white directions-walk-icon" style="margin:9px 0 0 10px;"></i>
         </div><br>WALK<br>
         <b style="font-size:12px"><%= total_time_walk %> min (<%= String(total_distance_walk).slice(0,String(total_distance_walk).indexOf(".")+2) %> mi)</b>
       </div>
       <div class="totals-step pull-left">
         <div class="timeline-icon timeline-directions-transit-icon">  
-          <i class="pull-left directions-travel-mode-icon directions-transit-icon"style="margin:9px 0 0 10px;"></i>
+          <i class="pull-left directions-travel-mode-icon-white directions-transit-icon"style="margin:9px 0 0 10px;"></i>
         </div><br>BUS<br>
         <b style="font-size:12px"><%= total_time_bus %> min (<%= String(total_distance_bus).slice(0,String(total_distance_bus).indexOf(".")+2) %> mi)</b>
       </div>
