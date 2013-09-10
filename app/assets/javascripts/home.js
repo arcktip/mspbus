@@ -18,12 +18,12 @@ var HomeView = Backbone.View.extend({
 
     // Buttons
     this.view_table_btn = $('#view-table-btn');
-    this.view_map_btn = $('#view-map-btn');
+    this.view_map_btn   = $('#view-map-btn');
     this.view_route_btn = $('#view-route-btn');
 
     // Events
     this.view_table_btn.on('click', this.show_table);
-    this.view_map_btn.on('click',   this.show_map);
+    this.view_map_btn.on  ('click', this.show_map);
     this.view_route_btn.on('click', this.show_route);
 
     // Tables
@@ -43,7 +43,13 @@ var HomeView = Backbone.View.extend({
   },
 
   determine_view: function() {
-    var view_state = $.cookie('home_current_view');
+    var view_state;
+
+    if ( location.hash.replace('#', '') )
+      view_state=location.hash.replace('#', '');
+    else
+      view_state = $.cookie('home_current_view');
+
     if ( view_state === 'map_list_item' ) {
       this.show_map();
     } else if ( view_state === 'route_list_item') {
