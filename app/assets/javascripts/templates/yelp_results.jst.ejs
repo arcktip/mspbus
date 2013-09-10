@@ -1,0 +1,14 @@
+<% _.each(data, function(item) { %>
+  <tr>
+    <td>
+      <img src="<%= item.rating_img_url_small %>">
+      <br><%= item.distance.toFixed(2) %> mi
+    </td>
+    <td>
+      <%= item.name %><br>
+      <%= item.address1 %>
+    </td>
+    <td><%= _.pluck(item.categories, 'name').join(', ') %></td>
+    <td><%= item.review_count %></td>
+  </tr>
+<% }); %>
