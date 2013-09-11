@@ -7,7 +7,7 @@ require "bundler/capistrano"
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
 set :default_shell, :bash
-set :current_path, "/var/www/omgtransit/"
+set :current_path, "/var/www/omgtransit/current"
 
 set :application, "omgtransit"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
