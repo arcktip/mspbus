@@ -53,6 +53,7 @@ Loading the Database
  4. Repeat Step 3 as needed
  5. Run `rake omgtransit:reset_stops`
  6. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
+  * Occasionally, it may useful to force the environment with `rake environment tire:import CLASS='Stop' FORCE=true RAILS_ENV=production`
 
 Start the Server
 ----------------

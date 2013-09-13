@@ -7,7 +7,6 @@ require "bundler/capistrano"
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
 set :default_shell, :bash
-set :current_path, "/var/www/omgtransit/"
 
 set :application, "omgtransit"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
@@ -22,12 +21,15 @@ set :ssh_options, { :forward_agent => true }
 desc "Run on development server" 
 task :development do
   # set :branch, "map-refactor"
+  set :current_path, "/var/www/omgtransit-dev/current"
   set :rails_env,   "development"
   set :deploy_to, "/var/www/omgtransit-dev"
 end
 
 task :production do
+  set :current_path, "/var/www/omgtransit/current"
   set :branch, "master-stops"
+  set :rails_env, "production"
   set :deploy_to, "/var/www/omgtransit"
 end
 

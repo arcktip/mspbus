@@ -36,8 +36,8 @@ function got_coordinates(lat, lon) {
     url: "/table",
     method: "post",
     data: {
-      lat:lat,
-      lon:lon
+      lat:center.lat,
+      lon:center.lon
     },
   }).done(function(data){
     $("#table-results").html(data);
