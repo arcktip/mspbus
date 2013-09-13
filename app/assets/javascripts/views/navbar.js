@@ -9,7 +9,8 @@ var NavbarView = Backbone.View.extend({
   el: '.navbar',
 
   events:  {
-    'click #btn-fav': "goto_favorites"
+    'click #btn-fav': "goto_favorites",
+    'click #btn-sidebar': "toggle_sidebar"
   },
 
   search_history: null,
@@ -26,6 +27,8 @@ var NavbarView = Backbone.View.extend({
     // Setup search history options based on a cookie.
     this.search_template = JST['templates/search_history'];
     this.find_search_history();
+
+    this.sidebar_container = $('.sidebar-container');
 
     // Setup event handlers that are outside of what backbone can do for handlers.
     this.$el.find('.btn-current-location').on('click', update_coordinates);
@@ -85,5 +88,10 @@ var NavbarView = Backbone.View.extend({
 
   goto_favorites: function() {
     window.location.href = "/fav";
+  },
+
+  toggle_sidebar: function(e) {
+    e.preventDefault();
+    this.sidebar_container.toggleClass('sidebar-expanded');
   }
 });

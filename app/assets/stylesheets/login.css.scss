@@ -1,0 +1,105 @@
+.signin-container {
+  margin: 0 auto;
+  text-align: center;
+  display: table;
+  color: #e1e1e1;
+
+  .btn-signin, input[type=text], input[type=password] {
+    width: 90%;
+  }
+  .account-link {
+    display: block;
+    padding-top: 7px;
+  }
+  a.account-link:hover {
+    color: #fff;
+  }
+  input[type="checkbox"] {
+    margin: 0;
+  }
+}
+
+.user-icon-container {
+  padding: 25px;
+
+  .icon-user {
+    border-radius: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 8px 12px 8px 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 40px;
+    text-align: center;
+  }
+  .black {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.sign-out-btn {
+  position: absolute;
+  left: 20px;
+  bottom: 50px;
+  width: 90%;
+}
+
+.profile-user {
+  border-radius: 15px;
+  font-size: 17px;
+  padding: 6px 8px;
+  margin: 5px;
+  float: left;
+  background: rgba(255, 255, 255, 0.3);  
+}
+
+.profile-email {
+  font-weight: normal;
+  float: left;
+  margin: 10px 0 0 5px;
+
+}
+
+.social-or-login {
+  margin: 13px 0 13px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.social-or-login :first-child {
+  display: inline-block;
+  background: #313134;
+  padding: 0px 8px;
+  color: #e1e1e1;
+  font-size: 13px;
+}
+
+.social-or-login::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  border-top: 1px dotted rgba(255, 255, 255, 0.3);
+}
+
+.social-login a {
+  border-radius: 100%;
+  width: 42px;
+  height: 42px;
+  line-height: 46px;
+  padding: 0px;
+  margin: 0px 1px;
+  border: 0px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+}
+
+.social-login a > [class*="icon-"] {
+  font-size: 24px;
+  margin: 0px;
+}

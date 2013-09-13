@@ -1,0 +1,39 @@
+<div class="sidebar-container">
+  <div class="sidebar">
+    <% if user_signed_in? %>
+      <div class="list-header">
+        <div class="profile-user"><i class="icon-user"></i></div> <div class="profile-email"><%= current_user.email %></div>  
+      </div>
+      <ul>
+        <li><a href="/fav"><i class="icon-star"></i> &nbsp;Favorites</li></a>
+        <li class="disabled"><i class="icon-group"></i> &nbsp;Social</li>
+        <li class="disabled"><i class="icon-tags"></i> &nbsp;Promotions</li>
+      </ul>
+      <a href="/users/sign_out" class="btn btn-danger sign-out-btn">Sign Out</a>
+    <% else %>
+      <form action="/users/sign_in" method="post">
+      <div class="signin-container">
+        <div class="user-icon-container">
+          <i class="icon-user"></i>
+        </div>
+        
+        <input type="text" id="user_email" name="user[email]" placeholder="Email">
+        <input type="password" id="user_password" name="user[password]" placeholder="Password">
+        <div style="text-align:left; margin: 5px 0 15px 15px;"><%= check_box_tag 'user[remember_me]', '1', :as => :boolean %> Remember Me</div>
+        <div>
+          <button class="btn btn-primary btn-signin">Sign In</button>
+        </div>
+        <div class="social-or-login">
+          <span>Or Login Using</span>
+        </div>
+        <div class="social-login">
+          <a class="btn btn-info"><i class="icon-twitter"></i></a>
+          <a class="btn btn-danger"><i class="icon-google-plus"></i></a>
+        </div>
+        <a href="/users/sign_up" class="account-link">Need an account?</a>
+      </div>
+      </form>
+    <% end %>
+  </div>
+</div>
+

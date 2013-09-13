@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130906020957) do
+ActiveRecord::Schema.define(:version => 20130913013946) do
+
+  create_table "favorites", :force => true do |t|
+    t.integer  "stop_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "source_stops", :id => false, :force => true do |t|
     t.integer  "source_id",                                                           :null => false

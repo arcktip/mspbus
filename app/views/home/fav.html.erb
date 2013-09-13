@@ -1,82 +1,56 @@
 <div class="span12 favorites-container">
-  <div id="table-results">
-
-  </div>
+  <% unless user_signed_in? %>
+    <h2>Favorites</h2>
+    <p>You need to be logged in view your favorites.</p>
+    <div class="center">
+      <a href="users/sign_in" class="btn btn-primary">Sign In</a>
+      <a href="users/sign_up" class="btn">Need an Account?</a>
+    </div>
+  <% else %>
+    <div id="table-results"></div>
+  <% end %>
 </div>
 
+<%= javascript_include_tag "general_navbar" %>
+<% if user_signed_in? %>
 <script>
-  var RealTimeView = Backbone.View.extend({
-
-    template: JST['templates/eta_label'],
-    
-    initialize: function() {
-      _.bindAll(this);
-      this.collection = new BusETACollection();
-      this.collection.stop_id = this.el.id;
-    },
-
-    render: function() {
-      if( this.collection.length === 0 ) {
-        this.$el.parent().parent().hide();
-      } else {
-        this.$el.html(this.template({ data: this.collection.toJSON() }));
-      }
-    },
-
-    update: function(callback, skip_fetch) {
-      var self = this;
-      
-      if( !skip_fetch && this.collection.length === 0 ) {
-        this.collection.fetch({ success: function() {
-          self.process_data(5);
-          if(callback) { callback(); }
-        } });
-      } else {
-        if(callback) { callback(); }
-      }
-    },
-
-    process_data: function(num_models) {
-      this.collection.process_models(num_models);
-      this.render();
-    }
-  });
-
   var views = {};
+  var favoriteModel = new FavoriteModel();
 
-  function update_table(){
-    $(".real-time").each(function(index, item) {
-      views[item.id] = new RealTimeView({ el: item });
-      views[item.id].update();
-    });
+  function update_table( collection ) {
+    $('#table-results').html( JST['templates/favlist']({ stops: collection }) );
+    
+    if ( collection.size() > 0 ) {
+      
+      $(".real-time").each(function(index, item) {
+        views[item.id] = new RealTimeView({ el: item });
+        views[item.id].update();
+      });
+
+      $("#table-results").on('click', '.trashstop', function() {
+        var par=$(this).parent();
+        var stopid=par.data("stopid");
+        par.hide();
+
+        favoriteModel.set('id', stopid);
+        favoriteModel.destroy();
+      });
+    }
   }
 
   $(document).ready(function(){
     $('#fav-list-item').addClass('active');
 
-    var favs=$.cookie('favs');
-    $.ajax({
-      url: "/favlist",
-      method: "post",
-      data: {
-        favs:favs
-      },
-    }).done(function(data){
-      $("#table-results").html(data);
-      update_table();
-
-      $(".trashstop").click(function(){
-        var par=$(this).parent();
-        var stopid=par.data("stopid");
-        par.hide();
-
-        var favs=$.cookie("favs");
-        favs=favs.replace(","+stopid+",",",");
-        $.cookie("favs",favs,{path:'/'});
-      });
-
+    var Favorites = Backbone.Collection.extend({
+      url: '/favorite',
     });
+
+    var favoritesCollection = new Favorites();
+    favoritesCollection.fetch({ success: function() {
+      update_table(favoritesCollection);
+    }});
 
     window.setInterval(update_table, 60000);
   });
 </script>
+<% end %>

@@ -11,7 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 // require jquery
-//= require config
 // require jquery_ujs
 //= require bootstrap.min
 //= require underscore-min
@@ -21,11 +20,16 @@
 //= require jquery.cookie
 //= require jquery.throttle
 //= require jquery.getUrlParam
+//= require config
 //= require url-parser
 //= require matchMedia
 //= require parser
-//= require bus_eta
-//= require views/navbar
-// require jquery.storage
+
 //= require_tree ./templates
+//= require models/favorite
+//= require views/realtime
+//= require views/navbar
+
+//= require bus_eta
+// require jquery.storage
 // require_tree .

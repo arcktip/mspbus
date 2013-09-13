@@ -1,0 +1,15 @@
+<% if ( stops.size() === 0 ) { %>
+  <div class="alert alert-info">You haven't chosen any favourite stops yet.</div>
+<% } else { %>
+  <div class="btn-group btn-group-vertical" style="width:100%;">
+    <% stops.each( function(stop) { %>
+      <div class="btn stopbutton" data-stopid="<%= stop.get('stop_id') %>">
+        <div class="btn btn-danger trashstop pull-right" style="font-size:30px"><i class="icon-trash"></i></div>
+        <a href="stop/<%= stop.get('stop_id') %>">
+          <span class="stop-name"><%= stop.get('stop_name') %></span>
+          <div class="real-time clearfix" id="<%= stop.get('stop_id') %>" data-attr="<%= stop.get('stop_id') %>" data-name="<%= stop.get('stop_name') %>" data-realtime='<%= JSON.stringify( stop.get("source_stops") ) %>'></div>
+        </a>
+      </div>
+      <% }); %>
+  </div>
+<% } %>

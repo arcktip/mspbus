@@ -51,6 +51,7 @@ var YelpView = Backbone.View.extend({
 
 });
 
+
 /*
 |----------------------------------------------------------------------------------------------------
 | FavoritesView
@@ -61,42 +62,52 @@ var FavortiesView = Backbone.View.extend({
   
   el: '#makefav',
   favs: null,
+  is_fav: false,
 
   initialize: function() {
     _.bindAll(this);
-    this.favs = $.cookie("favs");
-    
-    if(typeof(this.favs) !== 'undefined' && this.favs.indexOf("," + stopid + "," )!=-1) {
+
+    this.model = new FavoriteModel({ id: stopid });
+    this.model.fetch({ success: this.process_favorite });
+  },
+
+  process_favorite: function() {
+    if ( this.model.hasChanged('stop_id') ) {      
       this.activate();
+    } else {
+      this.clear_model();
     }
 
     this.$el.on('click', this.togglefav);
   },
 
   activate: function() {
+    this.is_fav = true;
     this.$el.find('i').addClass('star-yellow');
   },
 
   deactivate: function() {
+    this.is_fav = false;
     this.$el.find('i').removeClass('star-yellow');
   },
 
+  clear_model: function() {
+    this.model.set('id', null);
+    this.model.set('stop_id', stopid);
+  },
+
   togglefav: function () {
-    var favs = $.cookie("favs");
-    
-    if(typeof(this.favs) === 'undefined') {
-      this.favs = ",";
-    }
 
-    if(this.favs.indexOf(","+stopid+",") !== -1 ) {
-      this.favs = this.favs.replace(","+stopid+",",",");
+    if ( this.is_fav ) {
       this.deactivate();
+      this.model.set('id', stopid);
+      this.model.destroy();
+      this.clear_model();
     } else {
-      this.favs += stopid + ",";
       this.activate();
+      this.model.save();
     }
 
-    $.cookie("favs", this.favs, {expires: 20*365, path:'/'});
   }
 
 });
@@ -117,7 +128,7 @@ var StopView = Backbone.View.extend({
 
     this.realtime_sources = this.$el.data('realtime');
     if ( this.realtime_sources ) {
-        //console.log(this.realtime_sources.length);
+      
       for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
         this['collection' + i] = new BusETACollection();
           
