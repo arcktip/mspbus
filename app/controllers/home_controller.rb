@@ -81,7 +81,8 @@ class HomeController < ApplicationController
   
   def voice
     respond_to do |format|
-      format.all { render :text => '<Response><Gather timeout="10" finishOnKey="*" action="http://omgtransit.org/voice_respond"><Say>Please enter the stop I D, then press star.</Say></Gather></Response>' }
+      #format.all { render :text => '<Response><Gather timeout="10" finishOnKey="*" action="http://omgtransit.org/voice_respond"><Say>Please enter the stop I D, then press star.</Say></Gather></Response>' }
+      format.all { render :text => '<Response><Say>This feature coming soon.</Say></Response>' }
     end
   end
   
