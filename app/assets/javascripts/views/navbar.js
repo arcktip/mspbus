@@ -91,7 +91,7 @@ var NavbarView = Backbone.View.extend({
   },
 
   toggle_sidebar: function(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     this.sidebar_container.toggleClass('sidebar-expanded');
   }
 });
