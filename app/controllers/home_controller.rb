@@ -86,34 +86,40 @@ class HomeController < ApplicationController
   end
   
   def voice_respond
-    stopid=params[:Digits]
-    stops=Stop.get_stop_by_id({:id=>stopid})
-    if stops.results.empty?
-      smess = "Couldn't find stop."
-    end
-
-    response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
-    if not response.code==200
-      smess = "An error occoured! Sorry."
-    end
-    stopfound=true
-
-    smess=""
-    response.each do |item|
-      if not item['DepartureText'].include? ":"
-        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
-      else
-        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
+    if not params[:Body].index(' ')
+      stopid=params[:Digits]
+      stops=Stop.get_stop_by_id({:id=>stopid})
+      if stops.results.empty?
+        smess = "Couldn't find stop."
       end
-    end
-    if smess[-2]==','
-      smess=smess[0..-3]
-    end
-    if smess==""
-      smess="Could not find stop. Please call again."
-    end
-    respond_to do |format|
-      format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+
+      response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
+      if not response.code==200
+        smess = "An error occoured! Sorry."
+      end
+      stopfound=true
+
+      smess=""
+      response.each do |item|
+        if not item['DepartureText'].include? ":"
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
+        else
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
+        end
+      end
+      if smess[-2]==','
+        smess=smess[0..-3]
+      end
+      if smess==""
+        smess="Could not find stop. Please call again."
+      end
+      respond_to do |format|
+        format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+      end
+    else
+      respond_to do |format|
+        format.all { render :text => "<Response><Say>No data was recieved.</Say></Response>" }
+      end
     end
   end
 
