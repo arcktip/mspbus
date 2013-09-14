@@ -68,7 +68,7 @@ class HomeController < ApplicationController
         @smess+=item['RouteDirection'][0]+item['Route']+item['Terminal']+" "+item['DepartureText']+", "
       end
       @smess=@smess[0..159]
-      if smess[-2]==','
+      if @smess[-2]==','
         @smess=@smess[0..-3]
       end
       respond_to do |format|
