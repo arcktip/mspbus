@@ -1,27 +1,46 @@
-<div class="devise-control-group">
+<div class="row" style="margin-bottom:2em">
+  <div class="span4" style="font-family:OpenSansRegular;font-size:12pt;font-weight:normal;margin:5px 5em;">
+    <p>For only <b>$20/yr</b> we'll make this site <b>better</b> for <b>you!</b></p>
+    <p>You'll get:</p>
+    <ul>
+      <li>Favorite Stops</li>
+      <li>SMS alerts when your bus is coming</li>
+      <li>Alerts when you should get off of your bus</li>
+    </ul>
+    <p style="text-align:center">
+      <img src="/assets/matt_decuir.jpg"     width="44" style="border-radius:5px">
+      <img src="/assets/jason_kadrmas.jpg"   width="44" style="border-radius:5px">
+      <img src="/assets/richard_barnes.jpg"  width="44" style="border-radius:5px">
+      <img src="/assets/andrew_brobston.jpg" width="44" style="border-radius:5px">
+    </p>
+    <p>OMG Transit is produced by a small development team working to provide you the <b>best</b> experience possible.</p>
+    <p>Our site has <b>no ads</b>, so we rely on subscribing users to cover our server costs and time.</p>
+  </div>
+  <div class="span5 devise-control-group">
+    <h2>Sign up</h2>
 
-<h2>Sign up</h2>
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
+      <div>
+      <%= f.email_field :email, :autofocus => true, :placeholder => 'Email' %></div>
 
-  <div>
-  <%= f.email_field :email, :autofocus => true, :placeholder => 'Email' %></div>
+      <div>
+      <%= f.password_field :password, :placeholder => 'Password' %></div>
 
-  <div>
-  <%= f.password_field :password, :placeholder => 'Password' %></div>
+      <div>
+      <%= f.password_field :password_confirmation, :placeholder => 'Confirm Password' %></div>
 
-  <div>
-  <%= f.password_field :password_confirmation, :placeholder => 'Confirm Password' %></div>
-
-  <div><%= f.submit "Sign up", class: 'btn btn-primary btn-signin' %></div>
-<% end %>
-<div class="social-or-login">
-  <span>Or Signup Using</span>
-</div>
-<div class="social-login">
-  <a class="btn btn-info"><i class="icon-twitter"></i></a>
-  <a class="btn btn-danger"><i class="icon-google-plus"></i></a>
-</div>
-<%= render "devise/shared/links" %>
+      <div><%= f.submit "Sign up", class: 'btn btn-primary btn-signin' %></div>
+    <% end %>
+    <div class="social-or-login">
+      <span>Or Signup Using</span>
+    </div>
+    <div class="social-login">
+      <a class="btn btn-info"><i class="icon-twitter"></i></a>
+      <a class="btn btn-danger"><i class="icon-google-plus"></i></a>
+    </div>
+    <%= render "devise/shared/links" %>
+    </div>
+  </div>
 </div>
