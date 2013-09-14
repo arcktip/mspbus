@@ -2,7 +2,7 @@ require "rvm/capistrano"
 require "bundler/capistrano"
 
 #before 'deploy:setup', 'rvm:install_rvm'
-
+set :rvm_type, :system
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
