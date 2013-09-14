@@ -80,7 +80,13 @@ class HomeController < ApplicationController
   end
   
   def voice
-    stopid=49881
+    respond_to do |format|
+      format.all { render :text => "<Response><Gather timeout=10 finishonkey='*' action='http://omgtransit.org/voice_respond'><Say>Please enter the stop I D, then press star.</Say></Gather></Response>" }
+    end
+  end
+  
+  def voice_respond
+    stopid=params[:Digits]
     stops=Stop.get_stop_by_id({:id=>stopid})
     if stops.results.empty?
       smess = "Couldn't find stop."
@@ -102,6 +108,9 @@ class HomeController < ApplicationController
     end
     if smess[-2]==','
       smess=smess[0..-3]
+    end
+    if smess==""
+      smess="Could not find stop. Please call again."
     end
     respond_to do |format|
       format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
