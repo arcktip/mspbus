@@ -95,20 +95,6 @@ var HomeView = Backbone.View.extend({
   show_route: function(e) {
     this.swap_view( this.view_route, this.view_route_btn, 'route_list_item' );
     this.init_map();
-    
-    // Only goto anchor link if on mobile screens
-    // if ( matchMedia('only screen and (min-width: 767px)').matches ) {
-    //   e.preventDefault();
-    // }
-
-    //if(!this.view_route.is(":visible")){
-      //if($.cookie('home_current_view') !== 'map_list_item') {
-        //this.show_map();
-      //}
-
-    //  this.view_route.show();
-    //} else
-    //  this.view_route.hide();
   },
 
   resize_helper: function() {
