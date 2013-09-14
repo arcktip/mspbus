@@ -50,9 +50,9 @@ var HomeView = Backbone.View.extend({
     else
       view_state = $.cookie('home_current_view');
 
-    if ( view_state === 'map_list_item' ) {
+    if ( view_state === 'map-list-item' ) {
       this.show_map();
-    } else if ( view_state === 'route_list_item') {
+    } else if ( view_state === 'route-list-item') {
       this.show_route();
     } else {
       this.show_table();
@@ -83,17 +83,17 @@ var HomeView = Backbone.View.extend({
   },
 
   show_table: function() {
-    this.swap_view( this.view_table, this.view_table_btn, 'table_list_item' );
+    this.swap_view( this.view_table, this.view_table_btn, 'table-list-item' );
   },
 
   show_map: function() {
-    this.swap_view( this.view_map, this.view_map_btn, 'map_list_item' );
+    this.swap_view( this.view_map, this.view_map_btn, 'map-list-item' );
     this.init_map();
     google.maps.event.trigger(this.map_view.map, "resize");
   },
 
   show_route: function(e) {
-    this.swap_view( this.view_route, this.view_route_btn, 'route_list_item' );
+    this.swap_view( this.view_route, this.view_route_btn, 'route-list-item' );
     this.init_map();
   },
 
@@ -107,9 +107,9 @@ var HomeView = Backbone.View.extend({
     this.update_screen_size();
 
     //if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
-      if($.cookie('home_current_view')==='map_list_item')
+      if($.cookie('home_current_view')==='map-list-item')
         $('#view-table').hide();
-      else if ($.cookie('home_current_view')==='table_list_item')
+      else if ($.cookie('home_current_view')==='table-list-item')
         $('#view-map').hide();
   },
 
