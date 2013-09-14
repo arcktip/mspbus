@@ -111,10 +111,13 @@ class HomeController < ApplicationController
         smess=smess[0..-3]
       end
       if smess==""
-        smess="Could not find stop. Please call again."
-      end
-      respond_to do |format|
-        format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+        respond_to do |format|
+         format.all { render :text => "<Response><Say>Could not find stop!</Say><Redirect method='POST'>http://omgtransit.com/voice</Redirect></Response>" }
+        end
+      else
+        respond_to do |format|
+          format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+        end
       end
     else
       respond_to do |format|
