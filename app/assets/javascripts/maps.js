@@ -177,7 +177,7 @@ var MapView = Backbone.View.extend({
     google.maps.event.addListener(marker, 'click', function() {
       
       var view = views[new_stop.id];
-      view.update(function() {
+      view.update(function() {	
         var data = '<a class="marker-header clearfix" href="/stop/'  + new_stop.id + '">' + view.$el.data('name') + '</a><br>';
         data += '<div class="clearfix">' + view.$el.html() + '</div>';
         data = '<div class="infocontents">'+data+'</div>';
