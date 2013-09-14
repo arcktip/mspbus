@@ -86,7 +86,7 @@ class HomeController < ApplicationController
   end
   
   def voice_respond
-    if not params[:Body].index(' ')
+    if not params[:Digits].index(' ')
       stopid=params[:Digits]
       stops=Stop.get_stop_by_id({:id=>stopid})
       if stops.results.empty?
