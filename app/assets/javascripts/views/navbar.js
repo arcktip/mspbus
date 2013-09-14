@@ -93,5 +93,6 @@ var NavbarView = Backbone.View.extend({
   toggle_sidebar: function(e) {
     if (e) e.preventDefault();
     this.sidebar_container.toggleClass('sidebar-expanded');
+    $('#btn-sidebar').toggleClass('active');
   }
 });

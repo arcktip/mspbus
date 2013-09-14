@@ -45,6 +45,9 @@
   a:hover {
     text-decoration: none;
   }
+  a.active {
+    color: red;
+  }
   i {
     font-size: 1.5em;
   }
@@ -524,11 +527,11 @@
   }
 
   a.active {
-    color: yellow;
+    color: #08c;
   }
 
   a:hover {
-    color: #08c;
+    color: white;
     //border-bottom: 4px solid #08c;
     text-decoration: none;
 
