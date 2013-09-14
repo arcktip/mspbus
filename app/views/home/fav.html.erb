@@ -12,6 +12,12 @@
 </div>
 
 <%= javascript_include_tag "general_navbar" %>
+<script>
+  $(document).ready(function(){
+    $('#fav-list-item').addClass('active');
+  });
+</script>
+
 <% if user_signed_in? %>
 <script>
   var views = {};
@@ -39,8 +45,6 @@
   }
 
   $(document).ready(function(){
-    $('#fav-list-item').addClass('active');
-
     var Favorites = Backbone.Collection.extend({
       url: '/favorite',
     });
