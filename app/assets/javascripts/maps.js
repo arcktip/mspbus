@@ -306,7 +306,6 @@ var RouteInputView = Backbone.View.extend({
   },
 
   exchange: function() {
-    console.log('exchange');
     var origin = this.origin.val();
     var destination = this.destination.val();
 
@@ -315,7 +314,6 @@ var RouteInputView = Backbone.View.extend({
   },
 
   set_current_location: function(e) {
-    console.log('set');
     var input = $(e.currentTarget).data('input');
     if ( input === 'origin' ) {
       this.origin.val('Current Location');
@@ -404,7 +402,7 @@ var RouteInputView = Backbone.View.extend({
       travelMode: google.maps.TravelMode.TRANSIT
     };
 
-    window.location.hash = '#map-list-item';
+    //window.location.hash = '#map-list-item';
 
     this.map_parent.directions_service.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
@@ -428,7 +426,6 @@ var RouteInputView = Backbone.View.extend({
   },
 
   display_route: function(route) {
-    
     if ( route.routes ) {
 
       var legs = route.routes[0].legs[0];
