@@ -81,7 +81,7 @@ class HomeController < ApplicationController
   
   def voice
     respond_to do |format|
-      format.all { render :text => '<Response><Gather timeout="10" finishOnKey="*" action="http://omgtransit.com/voice_respond" method="POST"><Say>Please enter the stop I D, then press star.</Say></Gather></Response>' }
+      format.all { render :text => '<Response><Gather timeout="30" finishOnKey="#" action="http://omgtransit.com/voice_respond" method="POST"><Say>Please enter the stop I D, then press pound.</Say></Gather></Response>' }
     end
   end
   
@@ -102,9 +102,9 @@ class HomeController < ApplicationController
       smess=""
       response.each do |item|
         if not item['DepartureText'].include? ":"
-          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is arriving in, "+item['DepartureText'].sub("Min","Minutes")+". "
         else
-          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is arriving at, "+item['DepartureText']+". "
         end
       end
       if smess[-2]==','
