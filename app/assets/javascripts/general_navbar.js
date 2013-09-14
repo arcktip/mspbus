@@ -7,6 +7,7 @@ function geocode(address){
   return;
 }
 
+var navbar_view;
 $(document).ready(function() {
-  var navbar_view = new NavbarView({ page: 'general_navbar' });
+  navbar_view = new NavbarView({ page: 'general_navbar' });
 });

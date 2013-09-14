@@ -3,7 +3,7 @@
     <h2>Favorites</h2>
     <p>You need to be logged in view your favorites.</p>
     <div class="center">
-      <a href="users/sign_in" class="btn btn-primary">Sign In</a>
+      <a id="signin" href="#" class="btn btn-primary">Sign In</a>
       <a href="users/sign_up" class="btn">Need an Account?</a>
     </div>
   <% else %>
@@ -51,6 +51,15 @@
     }});
 
     window.setInterval(update_table, 60000);
+  });
+</script>
+<% else %>
+<script>
+  $(document).ready(function(){
+    $('#signin').click(function(e){
+      e.preventDefault();
+      navbar_view.sidebar_container.toggleClass('sidebar-expanded');
+    });
   });
 </script>
 <% end %>
