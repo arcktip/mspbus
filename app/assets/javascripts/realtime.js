@@ -25,7 +25,7 @@ function got_coordinates(lat, lon) {
 
   ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', lat.toString() + "," + lon.toString() );
 
-  $("#outside").hide();
+//  $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
     $("#outside").show();
     setTimeout(function(){$("#outside").fadeOut();},5000);
@@ -52,7 +52,14 @@ function geocode(address, bounds){
 
   // If the user entered current location, let's use the current geocenter
   if ( address.toLowerCase() === 'current location' ) {
-    dfd.resolve(geocenter);
+    // But if that location's out of bounds, let's use their center
+    if(!(config.bounds.south<=geocenter.lat && geocenter.lat<=config.bounds.north && config.bounds.west<=geocenter.lon && geocenter.lon<=config.bounds.east)){
+      $("#outside").show();
+      setTimeout(function(){$("#outside").fadeOut();},5000);
+      dfd.resolve(center);
+    } else {
+      dfd.resolve(geocenter);
+    }
   } else {
     // Else, actually do a geocode.
     geocoder.geocode({'address': address, 'bounds': bounds}, function (results, status) {

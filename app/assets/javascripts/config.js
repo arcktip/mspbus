@@ -4,6 +4,7 @@ var config = {
 
   //Bounds of the map used to determine if geolocation is outside bounds
   //and to bias the address geocoding look-up
+  //These bounds are definitely large enough for the whole Twin Cities area
   bounds: {west:-94.01, east:-92.73, north:45.42, south:44.47},
 
   icons: {
