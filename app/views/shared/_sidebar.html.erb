@@ -2,7 +2,7 @@
   <div class="sidebar">
     <% if user_signed_in? %>
       <div class="list-header">
-        <div class="profile-user"><i class="icon-user"></i></div> <div class="profile-email"><%= current_user.email %></div>  
+        <div class="profile-user"><i class="icon-user"></i></div> <div class="profile-email"><%= determine_user_name(current_user) %></div>  
       </div>
       <ul>
         <li><a href="/fav"><i class="icon-star"></i> &nbsp;Favorites</li></a>
@@ -27,8 +27,8 @@
           <span>Or Login Using</span>
         </div>
         <div class="social-login">
-          <a class="btn btn-info"><i class="icon-twitter"></i></a>
-          <a class="btn btn-danger"><i class="icon-google-plus"></i></a>
+          <a href="<%= user_omniauth_authorize_path(:twitter) %>" class="btn btn-info"><i class="icon-twitter"></i></a>
+          <a href="<%= user_omniauth_authorize_path(:google_oauth2) %>" class="btn btn-danger"><i class="icon-google-plus"></i></a>
         </div>
         <a href="/users/sign_up" class="account-link">Need an account?</a>
       </div>

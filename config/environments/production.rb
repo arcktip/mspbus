@@ -64,6 +64,9 @@ MspBus::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  config.twitter_consumer_key = "dfPtznHcj6DSxwcuqr0peA"
+  config.twitter_consumer_secret = "dTLn27V2KxrIhfk7gm6rL5nadg1l7wFOTNcHrV2hL2E"
   
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
 end

@@ -20,8 +20,8 @@
   <span>Or Signup Using</span>
 </div>
 <div class="social-login">
-  <a class="btn btn-info"><i class="icon-twitter"></i></a>
-  <a class="btn btn-danger"><i class="icon-google-plus"></i></a>
+  <a href="<%= user_omniauth_authorize_path(:twitter) %>" class="btn btn-info"><i class="icon-twitter"></i></a>
+  <a href="<%= user_omniauth_authorize_path(:google_oauth2) %>" class="btn btn-danger"><i class="icon-google-plus"></i></a>
 </div>
 <%= render "devise/shared/links" %>
 </div>

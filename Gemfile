@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.14'
 
 #gem 'sqlite3'
 gem 'pg'
@@ -29,9 +29,9 @@ gem 'rvm-capistrano'
 
 # User profiles
 gem 'devise'
-gem 'omniauth-facebook'
-gem 'omniauth-openid' #Google
-
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-google-oauth2'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
