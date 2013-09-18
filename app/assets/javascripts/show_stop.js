@@ -144,7 +144,8 @@ var StopView = Backbone.View.extend({
     if( collection.length === 0 ) {
       //this.$el.parent().parent().hide();
     } else {
-      this.$el.html(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
+      var formatted=this.format_data(collection);
+      this.$el.html(realtime_template({ logo: collection.logo , data: formatted }));
     }
   },
 
@@ -172,11 +173,11 @@ var StopView = Backbone.View.extend({
     this.render(collection);
   },
 
-  format_data: function() {
-    var data = _.map(this.collection.toJSON(),
+  format_data: function(collection) {
+    var data = _.map(collection.toJSON(),
       function(obj) {
-        if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+//        if(obj.DepartureTime<20 && obj.DepartureText.indexOf(":")!=-1)
+//          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
 
         obj.sdesc=obj.Description;
         if(obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)

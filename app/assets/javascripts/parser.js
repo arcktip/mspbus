@@ -30,6 +30,8 @@ var Parsers = {
 | NexTrip API
 | Cities: Minneapolis
 | Format: json
+| Description: http://www.datafinder.org/metadata/NexTripAPI.html
+|              https://github.com/r-barnes/mspbus/blob/master/doc/API-INFO.md
 |----------------------------------------------------------------------------------------------------
 */
 
@@ -39,10 +41,11 @@ Parsers.nextrip = function(content) {
 
   for(var i = 0, len = content.length; i < len; i++) {
     obj.push({
-      'DepartureText': content[i].DepartureText,
-      'DepartureTime': content[i].DepartureTime.substr(6,10),
+      'DepartureText':  content[i].DepartureText,
+      'DepartureTime':  content[i].DepartureTime.substr(6,10),
       'RouteDirection': content[i].RouteDirection,
-      'Route': content[i].Route
+      'Route':          content[i].Route,
+      'Description':    content[i].Description
     });
   }
 
@@ -63,6 +66,7 @@ Parsers.nextrip = function(content) {
 | Format: json
 |----------------------------------------------------------------------------------------------------
 */
+//TODO: Add route description
 
 Parsers.clever = function(content) {
   var predictions = $(content).find('prd');
@@ -106,6 +110,7 @@ Parsers.clever = function(content) {
 | Multiple: true
 |----------------------------------------------------------------------------------------------------
 */
+//TODO: Add route description
 
 Parsers.trimet = function(content) {
   var obj = [],
@@ -145,6 +150,7 @@ Parsers.trimet = function(content) {
 | Format: json
 |----------------------------------------------------------------------------------------------------
 */
+//TODO: Add route description
 
 Parsers.wmata = function(content) {
   var obj = [],
@@ -174,6 +180,7 @@ Parsers.wmata = function(content) {
 | Format: xml
 |----------------------------------------------------------------------------------------------------
 */
+//TODO: Add route description
 
 Parsers.nextbus = function(content) {
   var predictions = $(content).find('prediction');
