@@ -2,89 +2,113 @@ var HomeView = Backbone.View.extend({
 
   el: '.app-container',
 
-  events: {
-    "click #view-table-btn": "show_table",
-    "click #view-map-btn": "show_map",
-    "click #view-route-btn": "show_route"
-  },
+  current_view: null,
+  current_view_btn: null,
 
   initialize: function() {
+    _.bindAll(this);
 
     this.map_view = new MapView();
     
-    // Cache selectors for other actions.
-    this.viewchanger = this.$el.find('#viewchanger');
-    this.views = this.$el.find('.views');
-    
+    // Views
+    this.views      = this.$el.find('.views');
     this.view_table = this.$el.find('#view-table');
-    this.view_map = this.$el.find('#view-map');
+    this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
 
+    // Buttons
+    this.view_table_btn = $('#view-table-btn');
+    this.view_map_btn   = $('#view-map-btn');
+    this.view_route_btn = $('#view-route-btn');
+
+    // Events
+    this.view_table_btn.on('click', this.show_table);
+    this.view_map_btn.on  ('click', this.show_map);
+    this.view_route_btn.on('click', this.show_route);
+
+    // Tables
     this.table_list_item = this.$el.find('#table-list-item');
-    this.map_list_item = this.$el.find('#map-list-item');
+    this.map_list_item   = this.$el.find('#map-list-item');
 
     this.update_screen_size();
 
     // We are on a small screen, should determine view to show.
     if ( matchMedia('only screen and (max-width: 767px)').matches ) {
       HomeView.mobile=true; //TODO: Is this the right place to attach this?
-      this.determine_view();
     } else {
       HomeView.mobile=false; //TODO: Is this the right place to attach this?
-      if( $('#view-map').css('display') !== 'none' ) {
-        this.map_view.init();
-        this.map_view.ran = true;
-      }
     }
+
+    this.determine_view();
   },
 
   determine_view: function() {
-    if ( $.cookie('home_current_view') === 'map_list_item' ) {
+    var view_state;
+
+    if ( location.hash.replace('#', '') )
+      view_state=location.hash.replace('#', '');
+    else
+      view_state = $.cookie('home_current_view');
+
+    if ( view_state === 'map_list_item' ) {
       this.show_map();
+    } else if ( view_state === 'route_list_item') {
+      this.show_route();
     } else {
       this.show_table();
     }
   },
 
-  show_table: function() {
-    this.viewchanger.find("li").removeClass("active");
-    this.table_list_item.addClass("active");
+  swap_view: function( view, view_btn, cookie_key ) {
+    
+    if ( this.current_view ) {
+      this.current_view.hide();
+      this.current_view_btn.removeClass('active');
+    }
 
-    this.view_map.hide();
-    this.view_route.hide();
-    this.view_table.show();
-    $.cookie('home_current_view', 'table_list_item');
+    this.current_view = view;
+    this.current_view_btn = view_btn;
+    
+    view_btn.addClass('active');
+    view.show();
+
+    $.cookie('home_current_view', cookie_key);
+  },
+
+  init_map: function() {
+    if ( !this.map_view.ran ) {
+      this.map_view.init();
+      this.map_view.ran = true;
+    }
+  },
+
+  show_table: function() {
+    this.swap_view( this.view_table, this.view_table_btn, 'table_list_item' );
   },
 
   show_map: function() {
-    this.viewchanger.find("li").removeClass("active");
-    this.map_list_item.addClass("active");
-    
-    this.view_table.hide();
-    this.view_map.show();
-
-    this.map_view.init();
-    this.map_view.ran = true;
-
+    this.swap_view( this.view_map, this.view_map_btn, 'map_list_item' );
+    this.init_map();
     google.maps.event.trigger(this.map_view.map, "resize");
-    $.cookie('home_current_view', 'map_list_item');
   },
 
   show_route: function(e) {
+    this.swap_view( this.view_route, this.view_route_btn, 'route_list_item' );
+    this.init_map();
     
     // Only goto anchor link if on mobile screens
-    if ( matchMedia('only screen and (min-width: 767px)').matches ) {
-      e.preventDefault();
-    }
+    // if ( matchMedia('only screen and (min-width: 767px)').matches ) {
+    //   e.preventDefault();
+    // }
 
-    if(!this.view_route.is(":visible")){
-      if($.cookie('home_current_view') !== 'map_list_item') {
-        this.show_map();
-      }
+    //if(!this.view_route.is(":visible")){
+      //if($.cookie('home_current_view') !== 'map_list_item') {
+        //this.show_map();
+      //}
 
-      this.view_route.show();
-    } else
-      this.view_route.hide();
+    //  this.view_route.show();
+    //} else
+    //  this.view_route.hide();
   },
 
   resize_helper: function() {
@@ -96,28 +120,15 @@ var HomeView = Backbone.View.extend({
     }
     this.update_screen_size();
 
-    if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
+    //if ( matchMedia('only screen and (max-width: 767px)').matches ){ //Small Screen
       if($.cookie('home_current_view')==='map_list_item')
         $('#view-table').hide();
       else if ($.cookie('home_current_view')==='table_list_item')
         $('#view-map').hide();
-
-      this.view_table.removeClass('span6');
-      this.view_table.addClass('span12');
-      this.view_map.removeClass('span6');
-      this.view_map.addClass('span12');
-    } else {
-      this.view_map.show();
-      this.view_table.show();
-      this.view_table.removeClass('span12');
-      this.view_table.addClass('span6');
-      this.view_map.removeClass('span12');
-      this.view_map.addClass('span6');
-    }
   },
 
   update_screen_size: function() {
-    this.screen_width = screen.width;
+    this.screen_width  = screen.width;
     this.screen_height = screen.height;
   }
 

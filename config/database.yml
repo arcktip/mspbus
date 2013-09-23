@@ -3,6 +3,6 @@
   bcdb = Bcdatabase.load
 %>
 
-<%= bcdb.development :mspbus, :dev %>
-<%= bcdb.test :mspbus, :test %>
-<%= bcdb.production :mspbus, :prod %>
+<%= bcdb.development :omgtransit, :development %>
+<%= bcdb.test        :omgtransit, :test        %>
+<%= bcdb.production  :omgtransit, :production  %>

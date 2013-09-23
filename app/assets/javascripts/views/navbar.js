@@ -40,6 +40,10 @@ var NavbarView = Backbone.View.extend({
   },
 
   searchbox_action: function() {
+    if (!this.q.is(":visible")){
+      this.q.fadeIn('fast');
+      return;
+    }
    
     var val = this.q.val()
     

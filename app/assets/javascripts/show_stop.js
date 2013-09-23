@@ -10,10 +10,45 @@ $(document).ready(function() {
   // Favorites View
   var favoritesView = new FavortiesView();
 
+  // Yelp View
+  var yelpView = new YelpView();
+
   window.setInterval(view.update, 60000);
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
   $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
+  $('#yelp-btn').on('click', function() {
+    yelpView.fetch();
+  });
+});
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Yelp View
+|----------------------------------------------------------------------------------------------------
+*/
+
+var YelpView = Backbone.View.extend({
+  el: '.yelp-table',
+  template: JST['templates/yelp_results'],
+
+  initialize: function() {
+    _.bindAll(this);
+  },
+
+  fetch: function() {
+    $.ajax({
+      dataType: 'json',
+      url: "http://api.yelp.com/business_review_search?category=restaurants&lat=" + mapcenter.lat + "&long=" + mapcenter.lon + "&radius=10&limit=10&ywsid=GIxmrRLcqn3pRF9cjNoqOw&callback=?",
+      success: this.render
+    });
+  },
+
+  render: function(response) {
+    this.$el.find('tbody').html( this.template({ data: response.businesses }) );
+    $("#yelp").show();
+  }
+
 });
 
 /*
@@ -79,40 +114,70 @@ var StopView = Backbone.View.extend({
   
   initialize: function() {
     _.bindAll(this);
-    this.collection = new BusETACollection();
-    this.collection.stop_id = this.el.id;
+
+    this.realtime_sources = this.$el.data('realtime');
+    if ( this.realtime_sources ) {
+        //console.log(this.realtime_sources.length);
+      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+        this['collection' + i] = new BusETACollection();
+          
+        var r_collection = this['collection' + i];
+        r_collection.stop_id = this.realtime_sources[i].external_stop_id;
+        r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
+        var query_options = Parsers.utils.parseQueryString( r_collection.realtime_url );
+
+        r_collection.format = query_options.format;
+        r_collection.parser = query_options.parser;
+        r_collection.logo = query_options.logo;
+      }
+
+    }
   },
 
-  render: function() {
+  render: function(collection) {
 
-    if ( this.collection.models.length === 0 ) {
-      this.$el.parent().html("No buses found.");
-      return;
+    // if ( this.collection.models.length === 0 ) {
+    //   this.$el.parent().html("No buses found.");
+    //   return;
+    // }
+
+    if( collection.length === 0 ) {
+      //this.$el.parent().parent().hide();
+    } else {
+      var formatted=this.format_data(collection);
+      this.$el.html(realtime_template({ logo: collection.logo , data: formatted }));
     }
-
-    this.$el.html( realtime_template({ data: this.format_data() }) );
-
   },
 
   update: function() {
     var self = this;
     
-    this.collection.fetch({ success: function() {
-      self.process_data();
-    } });
+    if ( this.realtime_sources ) {
+      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
+          var realtime_collection = this['collection' + i];
+        
+          realtime_collection.fetch({ success: function(collection) {
+            self.process_data(collection);
+          } });
+      }
+
+      // this.collection.fetch({ success: function() {
+      //   self.process_data();
+      // } });
+    }
 
   },
 
-  process_data: function(num_models) {
-    this.collection.process_models(num_models);
-    this.render();
+  process_data: function(collection, num_models) {
+    collection.process_models(num_models);
+    this.render(collection);
   },
 
-  format_data: function() {
-    var data = _.map(this.collection.toJSON(),
+  format_data: function(collection) {
+    var data = _.map(collection.toJSON(),
       function(obj) {
-        if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+//        if(obj.DepartureTime<20 && obj.DepartureText.indexOf(":")!=-1)
+//          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
 
         obj.sdesc=obj.Description;
         if(obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)

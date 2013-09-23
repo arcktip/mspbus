@@ -50,12 +50,13 @@ MspBus::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to           => 'home#index'
   post '/table'      => 'home#table'
-  post '/sms'        => 'home#sms'
-  post '/voice'      => 'home#voice'
   get '/fav'         => 'home#fav'
   post '/favlist'    => 'home#favlist'
   get 'route/:id'    => 'route#show'
   get 'stop/bounds'  => 'stop#bounds'
+  post '/sms'        => 'home#sms'
+  post '/voice'      => 'home#voice'
+  post '/voice_respond'          => 'home#voice_respond'
   get 'stop/closest_trip'        => 'stop#closest_trip'
   get 'stop/get_stop_neighbours' => 'stop#get_stop_neighbours'
   get 'stop/:stopid/arrivals'    => 'stop#arrivals'
@@ -63,6 +64,11 @@ MspBus::Application.routes.draw do
   get 'about'        => 'home#about'
   get 'feedback'     => 'home#feedback'
   get 'legal'        => 'home#legal'
+  
+  # realtime apis
+  get 'realtime/umn' => 'realtime#umn' 
+  get 'realtime/nextrip' => 'realtime#nextrip'
+  get 'realtime/niceride' => 'realtime#niceride'
 
   # See how all your routes lay out with "rake routes"
 

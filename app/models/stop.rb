@@ -4,16 +4,29 @@ class Stop < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
-  attr_accessible :stop_id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street
+  attr_accessible :id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street, :source_stops_ids
+
+  has_many :source_stops, :foreign_key => :stop_id
 
   mapping do
-    indexes :stop_id, type: :string
+    indexes :id, type: :string
     indexes :stop_desc, type: :string
     indexes :stop_name, type: :string
     indexes :stop_city, type: :string
     indexes :stop_street, type: :string
 
     indexes :location, type: 'geo_point', as: 'location'
+
+    indexes :source_stops do
+      indexes :source_id,         type: :string,  analyzer: 'snowball'
+      indexes :external_stop_id,  type: :string,  analyzer: 'snowball'
+      indexes :external_stop_url, type: :string,  analyzer: 'snowball'
+      indexes :stop_type,         type: :integer, analyzer: 'snowball'
+    end
+  end
+
+  def to_indexed_json
+    to_json(:include => { source_stops: { only: [:source_id, :external_stop_id, :external_stop_url, :stop_type] } }, :methods => [:location])
   end
 
   def location
@@ -35,7 +48,7 @@ class Stop < ActiveRecord::Base
 
   def self.get_stop_by_id(params)
     tire.search(page: params[:page], per_page: 10) do
-      filter :term, :stop_id => params[:id]
+      filter :term, :id => params[:id]
     end
   end
 

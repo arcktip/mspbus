@@ -1,9 +1,14 @@
+require "rvm/capistrano"
 require "bundler/capistrano"
+
+#before 'deploy:setup', 'rvm:install_rvm'
+set :rvm_type, :system
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
+set :default_shell, :bash
 
-set :application, "MSP Bus"
+set :application, "omgtransit"
 set :repository,  "git://github.com/r-barnes/mspbus.git"
 set :scm, :git
 
@@ -16,26 +21,29 @@ set :ssh_options, { :forward_agent => true }
 desc "Run on development server" 
 task :development do
   # set :branch, "map-refactor"
+  set :current_path, "/var/www/omgtransit-dev/current"
   set :rails_env,   "development"
-  set :deploy_to, "/var/www/mspbus-dev"
+  set :deploy_to, "/var/www/omgtransit-dev"
 end
 
 task :production do
-  set :deploy_to, "/var/www/mspbus"
+  set :current_path, "/var/www/omgtransit/current"
+  set :branch, "master-stops"
+  set :rails_env, "production"
+  set :deploy_to, "/var/www/omgtransit"
 end
 
-role :web, "debian2.brobston.com"
-role :app, "debian2.brobston.com"
-role :db,  "debian2.brobston.com", :primary => true
+role :web, "omgtransit.com"
+role :app, "omgtransit.com"
+role :db,  "omgtransit.com", :primary => true
 
 # if you want to clean up old releases on each deploy uncomment this:
-after 'deploy:update_code', :setup_group
+#after 'deploy:update_code', :setup_group
 after "deploy:restart", "deploy:cleanup"
 
 task :setup_group do
   run "sudo /bin/chmod -R g+w #{deploy_to}*"
-  run "sudo /bin/chgrp -R mspbus #{deploy_to}*"
-  #   run "chgrp mspbus #{deploy_to} -R"
+  run "sudo /bin/chgrp -R omguser #{deploy_to}*"
 end
 
 # if you're still using the script/reaper helper you will need

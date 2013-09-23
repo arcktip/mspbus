@@ -371,8 +371,7 @@ Get all buses passing through the stop:
 
 Get only buses on a particular route passing through the stop:
 
-    http://webservices.nextbus.com/service/publicXMLFeed?command=predic
-tions&a=<agency_tag>&stopId=<stop id>&routeTag=<route tag>
+    http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=<agency_tag>&stopId=<stop id>&routeTag=<route tag>
 
 Example:
 
@@ -414,8 +413,8 @@ NiceRide API
 =================================
 
 The [NiceRide](https://secure.niceridemn.org) system rents bicycles on an
-hourly basis through Minneapolis and St. Paul. Bikes may be rented or returned
-from automated stations.
+hourly basis throughout Minneapolis and St. Paul. Bikes may be rented or
+returned from automated stations.
 
 The NiceRide API can be used to get the location of these stations, as well as
 the number of bikes available.
@@ -444,4 +443,184 @@ The following is the start of this file:
       <latestUpdateTime>1375230969269</latestUpdateTime>
       </station>
 
+Washington DC Bike Share API
+==========================================================
+The [Capitol Bike Share](http://www.capitalbikeshare.com/) system rents
+bicycles on an hourly basis in the DC area. Bikes may be rented or returned
+from automated stations.
 
+The NiceRide API can be used to get the location of these stations, as well as
+the number of bikes available.
+
+The API takes the form a single XML file available at
+http://www.capitalbikeshare.com/data/stations/bikeStations.xml
+
+The following is the start of the file:
+    <stations lastUpdate="1378089568987" version="2.0">
+      <station>
+      <id>1</id>
+      <name>20th & Bell St</name>
+      <terminalName>31000</terminalName>
+      <lastCommWithServer>1378089538797</lastCommWithServer>
+      <lat>38.8561</lat>
+      <long>-77.0512</long>
+      <installed>true</installed>
+      <locked>false</locked>
+      <installDate>1316059200000</installDate>
+      <removalDate/>
+      <temporary>false</temporary>
+      <public>true</public>
+      <nbBikes>1</nbBikes>
+      <nbEmptyDocks>9</nbEmptyDocks>
+      <latestUpdateTime>1378088198251</latestUpdateTime>
+      </station>
+
+RouteShout API
+====================================
+The RouteShout API is documented [here](http://www.routeshout.com/main/api).
+
+**An API key is required.**
+
+The API covers the following transit agencies (as of 2013-09-06):
+
+Berkshire Regional Transit Authority, Massachusetts; Braswell Transportation, Testing; Breckenridge Free Ride, Colorado; CATS TRAX, Louisiana; Central Ohio Transit Authority, Ohio; City of Dekalb - DSATS Voluntary Action, Illinois; Columbia Transit, Missouri; Cottonwood Area Transit, Arizona; DuFAST Transit, Pennsylvania; Fairbanks North Star Borough, Alaska; Fort Wayne Citilink, Indiana; Franklin Regional Transit Authority, Massachusetts; GoHART, Florida; Grand Forks City Bus, North Dakota; Greater Lynchburg Transit Company, Virginia; Greeley Evans Transit, Colorado; Indiana County Transit Authority, Pennsylvania; Island Transit, Washington; JAC - Jump Around Carson, Nevada; Lake Transit Authority, California; Metropolitan Atlanta Rapid Transit Authority, Testing; Minnesota Valley Transit Authority, Minnesota; Monroe County Transit Authority, Pennsylvania; Mountain Line, Arizona; Nashua Transit System, New Hampshire; Owensboro Transit System, Kentucky; Port Authority of Allegheny County, Pennsylvania; Porterville Transit, California; The JO, Kansas; Tyler Transit, Texas; University Of Georgia, Georgia
+
+Getting Agency List
+------------------------------
+Use
+
+    http://api.routeshout.com/v1/rs.agencies.getList?key=APIKEY
+
+Example output:
+
+    {
+        "status": "ok",
+        "response": [
+            {
+                "state": "Massachusetts",
+                "title": "Berkshire Regional Transit Authority",
+                "timezone": "America/New_York",
+                "id": "brta"
+            },
+            {
+                "state": "Testing",
+                "title": "Braswell Transportation",
+                "timezone": "America/New_York",
+                "id": "braswell"
+            },
+            {
+                "state": "Colorado",
+                "title": "Breckenridge Free Ride",
+                "timezone": "America/Denver",
+                "id": "bfr"
+            },
+
+Get Route List for Agency
+-----------------------------
+
+Use:
+
+    http://api.routeshout.com/v1/rs.routes.getList?key=APIKEY&agency=nd_cat
+
+Example Output:
+
+    {
+        "status": "ok",
+        "response": [
+            {
+                "type": 3,
+                "short_name": "CAT Night Service",
+                "long_name": "CAT Night Service",
+                "id": "CAT Night Service"
+            },
+            {
+                "type": 3,
+                "short_name": "Route 10 - Black",
+                "long_name": "Route 10 - Black",
+                "id": "Route 10 - Black"
+            },
+            {
+                "type": 3,
+                "short_name": "Route 11 - Black",
+                "long_name": "Route 11 - Black",
+                "id": "Route 11 - Black"
+            },
+
+Get All Stops for an Agency
+---------------------------
+
+Use:
+
+    http://api.routeshout.com/v1/rs.stops.getList?key=APIKEY&agency=nd_cat
+
+Example Output:
+
+    {
+        "status": "ok",
+        "response": [
+            {
+                "lon": -97.0398254557124,
+                "code": "10th St & 36th Ave S",
+                "name": "10th St & 36th Ave S",
+                "lat": 47.8858791461008,
+                "id": "10th St & 36th Ave S"
+            },
+            {
+                "lon": -97.0358552441472,
+                "code": "110 Cherry St",
+                "name": "110 Cherry St",
+                "lat": 47.919983826087,
+                "id": "110 Cherry St"
+            },
+            {
+                "lon": -97.0481313723075,
+                "code": "13th Ave & 15th St",
+                "name": "13th Ave & 15th St",
+                "lat": 47.9091480312086,
+                "id": "13th Ave & 15th St"
+            },
+
+**Get stops for a route:**
+
+Use:
+
+    http://api.routeshout.com/v1/rs.stops.getList?key=APIKEY&agency=nd_cat&route=Route 10 - Black
+
+Example Output:
+
+    {
+        "status": "ok",
+        "response": [
+            {
+                "lon": -97.0365280640796,
+                "code": "17th & River Rd",
+                "name": "17th & River Rd",
+                "lat": 47.9418365089599,
+                "id": "17th & River Rd"
+            },
+            {
+                "lon": -97.0310398642313,
+                "code": "8th Ave & 20th St NW",
+                "name": "8th Ave & 20th St NW",
+                "lat": 47.9449664181019,
+                "id": "8th Ave & 20th St NW"
+            },
+            {
+                "lon": -97.025913018759,
+                "code": "Cabelas",
+                "name": "Cabelas",
+                "lat": 47.9285862670964,
+                "id": "Cabelas"
+            },
+
+Also:
+
+rs.stops.getListByTrip
+rs.stops.getListByLocation
+rs.stops.getInfo
+rs.stops.getTimes
+rs.shape.getListByTrip
+
+Other APIs
+==============================
+[Massachusetts Department of Transportation](http://www.massdot.state.ma.us/DevelopersData.aspx)

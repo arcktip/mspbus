@@ -2,11 +2,33 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
 .navbar-fixed-top, .navbar-fixed-bottom {
   position: relative;
 }
 
+.navbar {
+  .brand {
+    padding: 7px 0px 0 20px;
+  }
+  .nav-button {
+    margin: 3px 5px 0 5px;
+    padding: 5px;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  i {
+    font-size: 1.5em;
+  }
+}
+
 .stopbutton {
+  display: block;
+  width: 100%;
   padding: 5px;
   text-align: left;
   text-shadow: none;
@@ -14,6 +36,8 @@
   border-radius: 0;
   -webkit-border-radius: 0 !important;
   min-height: 2em;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  /*font-family: 'OpenSansRegular';*/
 }
 
 .stopbutton a {
@@ -74,7 +98,6 @@
 #view-map {position:relative;}
 #map-canvas {
   height:500px;
-  border: 1px solid #ccc;
 }
 
 #viewchanger {margin-left:5px;}
@@ -85,11 +108,11 @@
   #view-map-btn { display: block; }
 }
 
-@media (min-width: 768px) {
-  //#viewchanger {display:none;}
-  #view-table-btn { display: none; }
-  #view-map-btn { display: none; }
-}
+// @media (min-width: 768px) {
+//   //#viewchanger {display:none;}
+//   #view-table-btn { display: none; }
+//   #view-map-btn { display: none; }
+// }
 
 .infocontents {
   width: 200px;
@@ -114,11 +137,13 @@
 .distance-label {
   border-radius: 2px;
   font-size: 1.3em;
-  font-family: 'OpenSansLight';
+  font-weight:200;
+  /*font-family: 'OpenSansLight';*/
   padding: 10px;
   color: grey;
   position:absolute;
-  right:5px;
+  right: 5px;
+  z-index: 4;
 }
 
 .real-time {
@@ -126,19 +151,17 @@
   margin-top:2px;
 }
 .stop-name {
-  font-family: 'OpenSansRegular';
   font-weight: bold;
 }
 .route-chip {
   display: block;
-  height: 15px;
+  height: 20px;
   float: left;
 /*  cursor: pointer;*/
   border-radius: 2px;
   font-size: 0.85em;
   padding: 3px 5px 3px 5px;
   margin: 0 3px 3px 0;
-  font-family: 'OpenSansRegular';
   margin-bottom:2px;
   text-shadow: none;
 }
@@ -151,11 +174,10 @@
 
 .route-chip-italic {
   font-weight: normal;
-  font-family: 'Helvetica Neue', Arial;
 }
 
 .marker-header {
-  font-family: 'OpenSansSemibold';
+  font-family: 'OpenSansSemibold' !important;
   font-size: 1.0em;
 }
 
@@ -224,24 +246,38 @@
   margin-right: 10px;
 }
 
-#route-list-item {
-  float: right;
+.loc-arrow {
+  height: 32px !important;
+  width: 32px !important;
+}
+
+#view-route {
+  padding: 15px;
+  h4 {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    padding-bottom: 10px;
+    font-size: 1.2em;
+    font-family: 'OpenSansLight';
+    font-weight: normal;
+  }
 }
 
 .route-box {
+  margin: 10px;
   padding: 10px 0px 10px 10px;
-  width: 200px;
+  width: 100%;
   font-family: 'OpenSansLight';
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 0px;
-  position: absolute;
+  
+  border-radius: 4px;
   top: 67px;
   right: 3px;
   z-index: 100;
 
   .route-input {
     input {
+      padding: 15px 5px 15px 5px;
       width: 120px;
     }
   }
@@ -259,59 +295,135 @@
     height: 30px;
   }
 
-  .directions-leg {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    height: 300px;
-  }
-
   .btn-exchange {
-    position: absolute;
-    top: 50px;
-    right: 5px;
-    padding: 3px 7px 3px 7px;
+    margin: -10px 0 0 5px;
   }
 
-  .directions-step {
-    cursor: pointer;
-    margin-top: 5px;
-    margin-right: 5px;
-    padding: 5px;
-    background: #fff;
+}
+
+.directions-leg:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 26px;
+  top: 0;
+  bottom: 0;
+  border: 1px solid #e2e3e7;
+  background-color: #e7eaef;
+  width: 4px;
+  border-width: 0 1px;
+}
+
+.directions-box {
+  font-family: 'OpenSansLight';
+  font-size: 14px;
+  //padding: 10px 0px 10px 15px;
+  width: 100%;
+  position: relative;
+
+  h4 {
     border-bottom: 1px solid #ccc;
+    width: 100%;
+    padding-bottom: 10px;
   }
+}
 
-  .directions-end {
-    margin-right: 5px;
-    padding: 5px;
-    display: block;
-    // white-space: normal;
-    // text-overflow: ellipsis;
-    background: #3a87ad;
-  }
-  
+.totals-container {
+  display: table;   /* Allow the centering to work */
+  margin: 0 auto;
+}
 
-  .directions-travel-mode-icon {
-    background: transparent url('/assets/sprite-1x.png') no-repeat 0 0;
-    background-size: 120px 15px;
-    width: 15px;
-    height: 15px;
-    vertical-align: middle;
-    margin: 4px 0 4px 0;
-  }
+.totals-step {
+  text-align: center;
+  margin-right: 15px;
+}
 
-  .directions-walk-icon {
-    background-position: -24px 0;
-  }
+.widget-box {
+  border-left: 3px solid #dae1e5;
+  margin: 0;
+  position: relative;
+  max-width: none;
+  border-bottom: 0;
+  margin-left: 55px;
+  background-color: #f2f6f9;
+  color: #595c66;
+  padding: 7px;
+}
 
-  .directions-transit-icon {
-    background-position: -96px 0;
-  }
+.timeline-info {
+  float: left;
+  width: 45px;
+  text-align: center;
+  position: relative;
+}
 
-  .directions-driving-icon {
-    background-position: -48px 0;
-  }
+.timeline-icon {
+  border-radius: 100%;
+  display: inline-block;
+  font-size: 16px;
+  border: 3px solid #FFF!important;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+}
+
+.timeline-directions-walk-icon {
+  background-color: #2283c5!important;
+}
+
+.timeline-directions-transit-icon {
+  background-color: #87b87f!important;
+}
+
+.directions-leg {
+  position: relative;
+  // overflow-y: scroll;
+  // overflow-x: hidden;
+  // -webkit-overflow-scrolling: touch;
+  // height: 300px;
+}
+
+.directions-step {
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 5px;
+  // background: #fff;
+  // border-bottom: 1px solid #ccc;
+}
+
+.directions-end {
+  margin-right: 5px;
+  padding: 5px;
+  display: block;
+  // white-space: normal;
+  // text-overflow: ellipsis;
+  background: #3a87ad;
+}
+
+.directions-travel-mode-icon {
+  background: transparent url('/assets/sprite-1x.png') no-repeat 0 0;
+  background-size: 120px 15px;
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  margin: 4px 0 4px 0;
+}
+
+.directions-walk-icon {
+  background-position: -24px 0;
+}
+
+.directions-transit-icon {
+  background-position: -96px 0;
+}
+
+.directions-bike-icon {
+  background-position: -72px 0;
+}
+
+.directions-driving-icon {
+  background-position: -48px 0;
 }
 
 .star {
@@ -346,4 +458,54 @@
 .datalist li.active {
   background: #3875d7;
   color: white;
+}
+
+.niceride {
+  border-radius: 0;
+  position: relative;
+  display: block;
+  padding: 5px;
+  width: 100%;
+  text-shadow: none;
+  text-align: left;
+  background: #C7E58C;
+}
+
+.niceride:hover{
+  background: #9FB770;
+}
+
+.navbar-secondary {
+  background: #191919;
+  height: 40px;
+  width: 100%;
+  color: #b3b3b3;
+  overflow:hidden;
+
+  a {
+    text-align: center;
+    display: block;
+    padding: 5px;
+    margin: 5px 5px 10px 5px;
+    color: #b3b3b3;
+  }
+
+  a.active {
+    color: yellow;
+  }
+
+  a:hover {
+    color: #08c;
+    //border-bottom: 4px solid #08c;
+    text-decoration: none;
+
+  }
+
+  i {
+    font-size: 1.3em;
+  }
+}
+
+.views {
+  display: none;
 }

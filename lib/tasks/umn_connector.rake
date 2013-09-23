@@ -1,4 +1,4 @@
-namespace :mspbus do
+namespace :omgtransit do
   require 'rubygems'
   require 'bundler'
   Bundler.setup
@@ -41,7 +41,7 @@ namespace :mspbus do
         @stop_id = xml_data.attributes['stopId']
         @title = xml_data.attributes['title']
         @short_title = xml_data.attributes['shortTitle']
-        @latittude = xml_data.attributes['lat']
+        @latitude = xml_data.attributes['lat']
         @longitude = xml_data.attributes['lon']
         # xml_data.attributes['latMin']
         # xml_data.attributes['latMax']
@@ -52,12 +52,18 @@ namespace :mspbus do
   end
 
   task :load_umn_stops => :environment do
-    SourceStop.where(source_id: 2).each{ |stop| stop.destroy }
+    SourceStop.delete_all("source_id = 2")
     UMN_Connector::Route.get_routes.each do |route|
       route.stops.each do |stop|
-        SourceStop.create(source_id: 2, external_stop_id: stop.stop_id, 
-          external_lat: stop.latittude, external_lon: stop.longitude,
-          external_stop_name: stop.title)
+        SourceStop.find_or_initialize_by_source_id_and_external_stop_id(2, "#{stop.stop_id}") do |ss|
+          ss.external_stop_id   = "#{stop.stop_id}"
+          ss.external_lat       = "#{stop.latitude}"
+          ss.external_lon       = "#{stop.longitude}"
+          ss.external_stop_url  = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png"
+          ss.external_stop_name = "#{stop.title}"
+          ss.stop_type          = 1
+          ss.save!
+        end
       end
     end
   end

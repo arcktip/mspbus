@@ -10,9 +10,17 @@ var BusETAModel = Backbone.Model.extend({
 
   set_dtext: function() {
     var dtime = this.get('dtime');
-    var ChipText = this.get('DepartureText');
-    var StopText = this.get('DepartureText');
+    var ChipText, StopText;
 
+    if ( this.get('DepartureText') !== '' ) {
+      ChipText = this.get('DepartureText');
+    } else {
+      ChipText = Math.round(dtime) + ' Min'
+    }
+    
+    StopText = ChipText;
+
+    // Check for the case where the time is acutally hh:mm
     if(dtime < 20 && ChipText.indexOf(":") !== -1) { //Ex: 4:10 (and it is now 4:00)
       ChipText = '&ndash; ' + Math.round(dtime) + ' Min <i title="Real-time data unavailable" class="icon-question-sign"></i>';
     } else if(dtime >= 20) {                         //Ex: 4:30 (and it is now 4:00)
@@ -22,6 +30,7 @@ var BusETAModel = Backbone.Model.extend({
     }
     this.set('ChipText', ChipText);
 
+    // Check for case when time is less than 1 and replace with NOW.
     if(dtime < 1) {
       StopText = "Now";
       if(StopText.indexOf(":") !== -1)
@@ -45,6 +54,8 @@ var BusETAModel = Backbone.Model.extend({
       this.set('direction', 'icon-arrow-right');
     } else if(route === 'WESTBOUND') {
       this.set('direction', 'icon-arrow-left');
+    } else if(route === 'LOOP') {
+      this.set('direction', 'icon-refresh');
     }
   },
 
@@ -73,16 +84,13 @@ var BusETAModel = Backbone.Model.extend({
 
   process_eta: function() {
     var departure_time = this.get('DepartureTime');
-
+    
     //TODO: Does this work over midnight?
-    var seconds = departure_time.substr(6,10);
-    var offset = departure_time.substr(19,3);
-    var arrtime = moment(seconds, "X");
-    var ctime = moment();
-    var dtime = (arrtime - ctime ) / 1000 / 60; //Convert to minutes
-
-    this.set('arrtime', arrtime);
-    this.set('dtime', dtime);
+    //var arrtime = moment(departure_time, 'X');
+    var dt = (new Date(departure_time * 1000) - (new Date).getTime() ) / 1000 / 60; //Convert to minutes
+    
+    //this.set('arrtime', arrtime);
+    this.set('dtime', dt);
     this.set_priority();
     this.set_departure_text();
     this.set_direction_class();
@@ -103,23 +111,45 @@ var BusETACollection = Backbone.Collection.extend({
   model: BusETAModel,
   
   url: function() {
-    return config.api_url(this.stop_id);
+    return this.realtime_url;
   },
 
   process_models: function(num_models) {
+    var self = this;
 
     // Process the times for sorting purposes.
-    this.map(function(model) {
-      model.process_eta();
-    });
+    if ( this.callback ) {
+      this.map(function(model) {
+        model[self.callback]();
+      });
 
-    // Sort models by closest
-    this.models = this.sortBy(function(model) { return model.get('arrtime'); });
-    
-    // Slice only the first five for display
-    if ( num_models ) {
-      this.models = this.models.slice(0,num_models);
+      // Sort models by closest
+      if ( this.models.length > 1 ) {
+        this.models = this.sortBy(function(model) { return model.get('DepartureTime'); });
+      }
+
+      
+      // Slice only the first five for display
+      if ( num_models ) {
+        this.models = this.models.slice(0,num_models);
+      }
     }
+  },
+
+  fetch: function( options ) {
+    options = options || {};
+    options.dataType = this.format;
+
+    Backbone.Collection.prototype.fetch.call(this, options);
+  },
+
+  parse: function( response ) {
+    var resp = Parsers[this.parser](response);
+    
+    this.template = resp.template;
+    this.callback = resp.callback;
+
+    return resp.content;
   }
 
 });

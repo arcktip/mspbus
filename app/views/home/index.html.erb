@@ -3,7 +3,7 @@
 
 <div class="home-container">
 
-  <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
+  <!-- <ul id="viewchanger" class="nav nav-pills" style="margin-bottom:0">
     <li class="active" id="table-list-item">
       <a id="view-table-btn" href="#table-list-item"><i class="icon-list-ul"></i> List</a>
     </li>
@@ -13,39 +13,39 @@
     <li id="route-list-item">
       <a id="view-route-btn" href="#route-list-item"><i class="icon-compass"></i> Route</a>
     </li>
-  </ul>
+  </ul> -->
 
   <div class="container">     
-    <div class="row">
-      <div id="view-table" class="span6 views">
+    <div>
+      <div id="view-table" class="views">
         <div id="table-results">
 
         </div>
       </div>
 
-      <div id="view-map" class="span6 views">
+      <div id="view-map" class="views">
         <div id="map-canvas"></div>
       </div>
 
-      <div id="view-route" class="span6 views">
-        <div class="well route-box">
-        <div class="route-input">
-          <button class="btn-hide-route btn-danger"><i class="icon-remove"></i></button>
-          <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
-          <div class="input-prepend control-group origin-container">
-            <span class="add-on loc-arrow" data-input="origin"><i class="icon-location-arrow"></i></span>
-            <input type="text" name="origin" id="origin" placeholder="Start" value="" class="span2">
-          </div>
-          <div class="input-prepend control-group destination-container">
-            <span class="add-on loc-arrow" data-input="destination"><i class="icon-location-arrow"></i></span>
-            <input type="text" name="destination" id="destination" placeholder="Destination" value="" class="span2">
-          </div>
-          <div>
-            <button id="btn-route" class="btn btn-primary"><i class="icon-compass"></i> Route</button>
+      <div id="view-route" class="views">
+        <div class="clearfix directions-header-container">
+          <h4><i class="icon-compass"></i> Where do you want to go?</h4>
+        </div>
+        <div class="route-box">
+          <div class="route-input">
+            <div class="input-prepend control-group origin-container">
+              <span class="add-on loc-arrow" data-input="origin"><i class="icon-location-arrow"></i></span>
+              <input type="text" name="origin" id="origin" placeholder="Start" value="Current Location" class="span2">
+            </div>
+            <div class="input-prepend control-group destination-container">
+              <span class="add-on loc-arrow" data-input="destination"><i class="icon-location-arrow"></i></span>
+              <input type="text" name="destination" id="destination" placeholder="Destination" value="" class="span2">
+            </div>
+            <button class="btn btn-exchange"><i class="icon-exchange"></i></button>
+            <button id="btn-route" class="btn btn-primary" style="margin:-10px 0 0 5px;"><i class="icon-compass"></i> Route</button>
           </div>
         </div>
         <div class="directions-box"></div>
-      </div>
       </div>
     </div>
   </div>

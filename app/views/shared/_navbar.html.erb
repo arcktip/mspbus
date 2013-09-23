@@ -1,18 +1,11 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container">
+    <div class="container" style="position:relative;">
       <a class="brand" href="/"><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %></a>
-        <button class="btn btn-info pull-right" style="margin-right:2px; height:35px;" id="btn-fav">
-          <i class="icon-star star star-yellow"></i>
-        </button>
-        <button class="btn-current-location btn btn-primary btn-address pull-right" style="height:35px;margin-right:2px">
-          <i class="icon-location-arrow" style="font-size:23px;"></i>
-        </button>
-      <div id="searchbox" class="input-append">
-        <input type="text" id="q" placeholder="Find stops near&hellip;" list="search-history" autocomplete="off" />
-        <button class="btn add-on" id="qsub"> <i class="icon-search"></i></button>
-      </div>
+      <input type="text" id="q" placeholder="Find stops near&hellip;" list="search-history" autocomplete="off" style="border: 1px solid #ccc;border-radius:3px;position:absolute; right: 85px;top: 3px;padding:15px; 0 15px 0;display:none;" />
+      <a href="#" class="btn-current-location btn-address nav-button pull-right" title="Update Current Location"><i class="icon-location-arrow"></i></a>
+      <a href="#" class="nav-button pull-right" id="qsub" title="Search for Address"><i class="icon-search"></i></a>
     </div>
   </div>
   <datalist id="search-history"></datalist>
-</div>  
+</div>

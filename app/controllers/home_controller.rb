@@ -9,11 +9,11 @@ class HomeController < ApplicationController
     params[:radius] = 1
 
     @inbounds=true
-    if not (44.47<=params[:lat].to_f and params[:lat].to_f<=45.42 and -94.01<=params[:lon].to_f and params[:lon].to_f<=-92.73)
-      params[:lat] = 44.979971
-      params[:lon] = -93.269797
-      @inbounds=false
-    end
+    # if not (44.47<=params[:lat].to_f and params[:lat].to_f<=45.42 and -94.01<=params[:lon].to_f and params[:lon].to_f<=-92.73)
+    #   params[:lat] = 44.979971
+    #   params[:lon] = -93.269797
+    #   @inbounds=false
+    # end
 
     @stops = Stop.search(params)
     @lat=params[:lat]
@@ -27,7 +27,10 @@ class HomeController < ApplicationController
     if params[:favs]
 
       params[:favs][1..-1].split(',').each do |stop|
-        @stops.push(Stop.get_stop_by_id({:id=>stop}).results.first())
+        res=Stop.get_stop_by_id({:id=>stop}).results
+        if not res.empty?
+          @stops.push(Stop.get_stop_by_id({:id=>stop}).results.first())
+        end
       end
 
     end
@@ -65,7 +68,7 @@ class HomeController < ApplicationController
         @smess+=item['RouteDirection'][0]+item['Route']+item['Terminal']+" "+item['DepartureText']+", "
       end
       @smess=@smess[0..159]
-      if smess[-2]==','
+      if @smess[-2]==','
         @smess=@smess[0..-3]
       end
       respond_to do |format|
@@ -77,31 +80,49 @@ class HomeController < ApplicationController
   end
   
   def voice
-    stopid=49881
-    stops=Stop.get_stop_by_id({:id=>stopid})
-    if stops.results.empty?
-      smess = "Couldn't find stop."
-    end
-
-    response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
-    if not response.code==200
-      smess = "An error occoured! Sorry."
-    end
-    stopfound=true
-
-    smess=""
-    response.each do |item|
-      if not item['DepartureText'].include? ":"
-        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing in "+item['DepartureText'].sub("Min","Minutes")+". "
-      else
-        smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is departing at "+item['DepartureText']+". "
-      end
-    end
-    if smess[-2]==','
-      smess=smess[0..-3]
-    end
     respond_to do |format|
-      format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+      format.all { render :text => '<Response><Gather timeout="30" finishOnKey="#" action="http://omgtransit.com/voice_respond" method="POST"><Say>Please enter the stop I D, then press pound.</Say></Gather></Response>' }
+    end
+  end
+  
+  def voice_respond
+    if not params[:Digits].empty?
+      stopid=params[:Digits]
+      stops=Stop.get_stop_by_id({:id=>stopid})
+      if stops.results.empty?
+        smess = "Couldn't find stop."
+      end
+
+      response = HTTParty.get("http://svc.metrotransit.org/NexTrip/#{stopid}?format=json")
+      if not response.code==200
+        smess = "An error occoured! Sorry."
+      end
+      stopfound=true
+
+      smess=""
+      response.each do |item|
+        if not item['DepartureText'].include? ":"
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is arriving in "+item['DepartureText'].sub("Min","Minutes")+". "
+        else
+          smess+="The "+item['Route']+" "+item['Terminal']+" going "+item['RouteDirection'].sub("BOUND","")+" is arriving at "+item['DepartureText']+". "
+        end
+      end
+      if smess[-2]==','
+        smess=smess[0..-3]
+      end
+      if smess==""
+        respond_to do |format|
+         format.all { render :text => "<Response><Say>Could not find stop!</Say><Redirect method='POST'>http://omgtransit.com/voice</Redirect></Response>" }
+        end
+      else
+        respond_to do |format|
+          format.all { render :text => "<Response><Say>#{smess}</Say></Response>" }
+        end
+      end
+    else
+      respond_to do |format|
+        format.all { render :text => "<Response><Say>No data was recieved.</Say></Response>" }
+      end
     end
   end
 

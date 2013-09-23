@@ -27,10 +27,27 @@ span.desc {
   }
 }
 
+#yelp {
+  display: none;
+}
+
+.yelp-table {
+  border: 1px solid #ccc;
+  th {
+    font-family: 'OpenSansSemibold';
+    font-size: 0.8em !important;
+    background: #f5f7f7;
+  }
+  td {
+    font-family: 'OpenSansRegular';
+    font-size: 0.8em;
+  }
+}
+
 .stop-header {
   line-height: 20px;
   padding: 5px 10px 5px 10px;
-  margin-bottom:3px;
+  margin-bottom: 7px;
   margin-top: 10px;
 
   img {

@@ -1,4 +1,4 @@
-MSPBus Public License Legal Code
+omgtransit Public License Legal Code
 ================================
 
 Attribution-NonCommercial-ShareAlike
@@ -6,7 +6,7 @@ Attribution-NonCommercial-ShareAlike
 
 License
 -------
-THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS MSPBus
+THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS omgtransit
 PUBLIC LICENSE ("MBPL" or "LICENSE"). THE WORK IS PROTECTED BY COPYRIGHT
 AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS
 AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
@@ -348,10 +348,10 @@ blamed for any shortcomings or evisceration of their work.
 This License, like the original, is itself released under a
 [Creative Commons Attribution 3.0 Unported
 license](http://creativecommons.org/licenses/by/3.0/).
-Both Creative Commons and MSPBus want you to know that each is not a
+Both Creative Commons and omgtransit want you to know that each is not a
 law firm and do not
 provide legal services. Distributing of, displaying of, or linking to
-the MSPBus Public License does not create an attorney-client
+the omgtransit Public License does not create an attorney-client
 relationship. You're a chump if you adapt this without proper legal
 advice. Creative Commons would like you to know:
 
@@ -380,7 +380,7 @@ advice. Creative Commons would like you to know:
 How to Apply this license
 =========================
 
-To apply the MSPBus Public License to your
+To apply the omgtransit Public License to your
 work, attach the following boilerplate notice, with the fields enclosed
 by brackets "[]" replaced with your own identifying information. (Don't
 include the brackets!) The text should be enclosed in the appropriate
@@ -392,7 +392,7 @@ third-party archives.
     /*
      * Copyright [YEAR] [Your Name Here]
      * 
-     * Licensed under the "Attribution-NonCommercial-ShareAlike" MSPBus
+     * Licensed under the "Attribution-NonCommercial-ShareAlike" omgtransit
      * Public License (the "License"). You may not use this file except
      * in compliance with the License. Roughly speaking, non-commercial
      * users may share and modify this code, but must give credit and 

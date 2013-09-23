@@ -13,7 +13,6 @@ var MapView = Backbone.View.extend({
   
   map: null,
   map_markers: [],
-  bus_markers: [],
   infobox: null,
   ran: false,
   lat: 0,
@@ -24,8 +23,6 @@ var MapView = Backbone.View.extend({
 
     window.EventBus.on("center_map",this.center_map);
     window.EventBus.on("pan_map",this.center_map);
-    window.EventBus.on("mouseover_stopbutton",this.mouseover_stopbutton);
-    window.EventBus.on("mouseleave_stopbutton",this.mouseleave_stopbutton);
 
     if (this.ran === true)
       return;
@@ -99,45 +96,17 @@ var MapView = Backbone.View.extend({
     //idle event fires once when the user stops panning/zooming
     google.maps.event.addListener( this.map, "idle", this.map_bounds_changed );
 
-    //window.setTimeout(this.update_bus_locations, 3000);
-    //window.setInterval(this.update_bus_locations, 60000);
     this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
+
+    //Precreate Marker Images
+    this.bus_normal_icon=new google.maps.MarkerImage(config.icons[1].icon, null, null, null, new google.maps.Size(22,22));
+    this.bus_hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));
+    this.bike_normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
+    this.bike_hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
   },
   
   render: function() {
 
-  },
-
-  mouseover_stopbutton: function(id) {
-    var look_up=false; //TODO: Fix stops array to eliminate these kinds of searches
-    for(i in stops){
-      if( stops[i].id == id ){
-        look_up=i;
-        break;
-      }
-    }
-    if(look_up===false) return;
-
-    marker=stops[look_up].marker;
-    marker.setOptions({zIndex:10});
-    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg', null, null, null, new google.maps.Size(22,22)));
-    marker.Icon.size(new google.maps.Size(22,22));
-    console.log(marker);
-  },
-
-  mouseleave_stopbutton: function(id) {
-    var look_up=false;
-    for(i in stops){
-      if( stops[i].id == id ){
-        look_up=i;
-        break;
-      }
-    }
-    if(look_up===false) return;
-
-    marker=stops[look_up].marker;
-    marker.setOptions({zIndex:1});
-    marker.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg', null, null, null, new google.maps.Size(22,22)));
   },
 
   center_map: function(lat, lon){
@@ -153,66 +122,13 @@ var MapView = Backbone.View.extend({
     self.map.panTo(center);
   },
 
-  create_bus_marker: function(stop_id, obj) {
-    var icon, bus, self = this;
-
-    if( $.isNumeric( obj.get('Route') ) )
-      icon='/assets/bus.png';
-    else
-      icon='/assets/train.png';
-
-    bus = new google.maps.Marker({
-      position: new google.maps.LatLng( obj.VehicleLatitude, obj.VehicleLongitude ),
-      map: this.map,
-      draggable: false,
-      icon: icon,
-      animation: google.maps.Animation.DROP,
-      stopid: stop_id,
-      zIndex: 0
-    });
-
-    this.bus_markers.push(bus);
-
-    google.maps.event.addListener(bus, 'mouseover', function() {
-      self.mapElement.html('<span class="label">Bus #' + obj.Route + obj.Terminal + " " + obj.RouteDirection+'</span>');
-    });
-    
-    // Hide tooltip on mouseout event.
-    google.maps.event.addListener(bus, 'mouseout', function() {
-      self.mapElement.html("");
-    });
-  },
-
-  update_bus_locations: function() {
-    this.clear_bus_markers();
-
-    var bus_list = [],
-        self = this;
-
-    for(var i=0, len=stops.length; i < len; i++) {
-      var stop = stops[i];
-      var view = views[stop.id];
-      if (view) {
-        view.collection.each(function(model) {
-          if(model.get('VehicleLongitude') === 0) return;
-          
-          self.create_bus_marker(stop.id, model);
-        });
-        view.update();
-      }
-    }
-
-  },
-
   hover_on_marker: function(stopid) {
     var view = views[stopid], self = this;
 
-    view.update(function() {
-      if(view.collection.models.length !== 0)
-        self.mapElement.html(view.$el.html());
-      else
-        self.mapElement.html('<span class="label route-chip" style="background-color:black">No Data</span>');
-    });
+    if(view.$el.html().length !== 0)
+      self.mapElement.html(view.$el.html());
+    else
+      self.mapElement.html('<span class="label route-chip" style="background-color:black">No Data</span>');
   },
 
   add_stop: function(new_stop){
@@ -230,29 +146,38 @@ var MapView = Backbone.View.extend({
     if(look_up!==false && typeof(stops[look_up].marker)!=='undefined')
       return; //Yes, it already has a marker. Don't make another!
 
+    var stop_type=new_stop.source_stops[0].stop_type;
+    var normal_icon='';
+    var hover_icon=''
+    if(stop_type==1){
+      normal_icon=self.bus_normal_icon;
+      hover_icon =self.bus_hover_icon;
+    } else if(stop_type==2) {
+      normal_icon=self.bike_normal_icon;
+      hover_icon =self.bike_hover_icon;
+    }
+
     //Make a new marker
     
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
       draggable: false,
-      icon: new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)),
+      icon: normal_icon,
       //animation: google.maps.Animation.DROP,
       stopid: new_stop.id,
       zIndex: 1
     });
 
     if (!views[new_stop.id]) {
-      views[new_stop.id] = new RealTimeView({ id: new_stop.id });
-      views[new_stop.id].$el.data('name', new_stop.name);
+      views[new_stop.id] = new RealTimeView({ map_stop: new_stop });
+      views[new_stop.id].update();
     }
 
     google.maps.event.addListener(marker, 'click', function() {
       
       var view = views[new_stop.id];
-      view.update(function() {
-
+      view.update(function() {	
         var data = '<a class="marker-header clearfix" href="/stop/'  + new_stop.id + '">' + view.$el.data('name') + '</a><br>';
         data += '<div class="clearfix">' + view.$el.html() + '</div>';
         data = '<div class="infocontents">'+data+'</div>';
@@ -270,21 +195,16 @@ var MapView = Backbone.View.extend({
 
     if(!HomeView.mobile){  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
-        //self.mapElement.css({ 'height': '2em', 'background': 'rgba(0,0,0,0.3)'});
-        self.hover_on_marker(new_stop.id);
         this.setOptions({zIndex:10});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon-hover.svg',
-    null, null, null, new google.maps.Size(22,22)));
-        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","#E6E6E6");
+        this.setIcon( hover_icon );
+        self.hover_on_marker(new_stop.id);
       });
 
       google.maps.event.addListener(marker, "mouseout", function() {
         self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
-        this.setIcon( new google.maps.MarkerImage('/assets/bus-icon.svg',
-    null, null, null, new google.maps.Size(22,22)));
-        $(".stopbutton[data-stopid='" + new_stop.id + "']").css("background-color","");
+        this.setIcon( normal_icon );
       });
     }
 
@@ -319,13 +239,6 @@ var MapView = Backbone.View.extend({
     var decodedSets = google.maps.geometry.encoding.decodePath(path);
     var path = this.poly.getPath();
     path.push(decodedSets);
-  },
-
-  clear_bus_markers: function() {
-    _.each(this.bus_markers, function(bus) {
-      bus.setMap(null);
-    });
-    this.bus_markers = [];
   },
 
   map_bounds_changed: function() {
@@ -369,8 +282,8 @@ var RouteInputView = Backbone.View.extend({
     
     // Setup Route inpute events.
     this.$el.on('click', '#btn-route', this.process_route_parameters);
-    this.$el.on('click', '.btn-route-back', this.show_route_input);
-    this.$el.on('click', '.btn-hide-route', this.hide);
+    //this.$el.on('click', '.btn-route-back', this.show_route_input);
+    //this.$el.on('click', '.btn-hide-route', this.hide);
     this.$el.on('click', '.btn-exchange', this.exchange);
     this.$el.on('click', '.loc-arrow', this.set_current_location);
 
@@ -392,7 +305,7 @@ var RouteInputView = Backbone.View.extend({
   },
 
   exchange: function() {
-    
+    console.log('exchange');
     var origin = this.origin.val();
     var destination = this.destination.val();
 
@@ -401,6 +314,7 @@ var RouteInputView = Backbone.View.extend({
   },
 
   set_current_location: function(e) {
+    console.log('set');
     var input = $(e.currentTarget).data('input');
     if ( input === 'origin' ) {
       this.origin.val('Current Location');
@@ -520,7 +434,6 @@ var RouteInputView = Backbone.View.extend({
       var legs = route.routes[0].legs[0];
       var steps = legs.steps;
 
-      this.route_input.hide();
       this.directions_box.html( this.direction_template({
         steps: steps,
         determine_travel_mode: this.determine_travel_mode,
@@ -571,7 +484,7 @@ var RouteInputView = Backbone.View.extend({
 
   show_route_input: function () {
     this.route_input.show();
-    this.directions_box.hide();
+    //this.directions_box.hide();
 
     this.clear_direction_markers();
     this.map_parent.clear_path();
