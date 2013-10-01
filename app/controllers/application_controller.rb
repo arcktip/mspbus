@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   #TODO: Remove this after a while
   def redirect_if_old
-    if request.host != 'omgtransit.com'
+    if request.host != 'omgtransit.com' and request.host != 'localhost'
       redirect_to "http://omgtransit.com#{request.path}", :status => :moved_permanently 
     end
   end
