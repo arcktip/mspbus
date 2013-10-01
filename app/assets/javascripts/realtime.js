@@ -192,7 +192,7 @@ function geocode(address, bounds){
 }
 
 function address_search(address){
-  if(address.replace(/^\s*\d{1,3}\s*\w?\s*$/,'yep',1)=='yep'){
+  if(address.match(/^\s*\d{1,3}\s*\w?\s*$/)) {
   	$("#noroute").show();
   	setTimeout(function(){$("#noroute").fadeOut();},3000);
   	return;
