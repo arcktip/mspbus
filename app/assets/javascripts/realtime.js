@@ -131,7 +131,7 @@ function update_table(){
 function got_coordinates(lat, lon) {
   center={'lat':lat, 'lon':lon};
 
-  ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', lat.toString() + "," + lon.toString() );
+  ga('send', {'hitType': 'pageview', 'page': '/virtual/got_coordinate.php?q='+lat.toString() + "," +lon.toString()});
 
   $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
