@@ -54,7 +54,8 @@ var NavbarView = Backbone.View.extend({
     if ( this.page === 'realtime' ) {
       address_search( val );
     } else if ( this.page === 'general_navbar' ) {
-      geocode( val );
+      window.location.href="/?q="+encodeURIComponent(address);
+      return;
     }
   },
 
