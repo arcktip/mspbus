@@ -192,6 +192,7 @@ function geocode(address, bounds){
 }
 
 function address_search(address){
+  ga('send', {'hitType': 'pageview', 'page': '/virtual/address_search.php?q='+encodeURI(address)});
   if(address.match(/^\s*\d{1,3}\s*\w?\s*$/)) {
   	$("#noroute").show();
   	setTimeout(function(){$("#noroute").fadeOut();},3000);
