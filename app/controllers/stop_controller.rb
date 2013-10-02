@@ -32,6 +32,8 @@ class StopController < ApplicationController
     @arrivals=StopTime.arrivals(params[:stopid])
 
     puts :stopid
+    puts "========================"
+    puts @arrivals
 
     respond_to do |format|
       format.json { render :json=>@arrivals}
