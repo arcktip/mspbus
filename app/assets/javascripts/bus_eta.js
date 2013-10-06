@@ -75,8 +75,8 @@ var BusETAModel = Backbone.Model.extend({
 
   set_departure_text: function() {
     var departure_text = this.get('DepartureText');
-
-    if(departure_text === 'Due') {
+    
+    if(departure_text === 'Due'||departure_text=="0 Min") {
       this.set('DepartureText', 'Now')
     }
 
