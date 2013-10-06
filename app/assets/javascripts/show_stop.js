@@ -180,7 +180,7 @@ var StopView = Backbone.View.extend({
 //          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
 
         obj.sdesc=obj.Description;
-        if(obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)
+        if(obj.sdesc && obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)
           obj.sdesc=obj.Description.substr(0,20)+" &hellip;";
 
         return obj;
