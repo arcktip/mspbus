@@ -191,8 +191,9 @@ Parsers.nextbus = function(content) {
 
     var item = $(predictions[i]);
     var dText;
-    var dirTag   = item.attr('dirTag').toUpperCase();
-    var routeName = item.parent().parent().attr('routeTag')
+    var dirTag    = item.attr('dirTag').toUpperCase();
+    var routeName = item.parent().parent().attr('routeTag');
+    var routeDesc = item.parent().parent().attr('routeTitle');
 
     if(routeName=='connector')
       routeName='CC';
@@ -224,9 +225,10 @@ Parsers.nextbus = function(content) {
     //     console.log(' NextBUs :: ', epoc);
     obj.push({
       'DepartureText': '',
-      'DepartureTime': item.attr('epochTime') / 1000,
+      'DepartureTime':  item.attr('epochTime') / 1000,
       'RouteDirection': dirTag,
-      'Route': routeName
+      'Route':          routeName,
+      'Description':    routeDesc
     });
   }
   
