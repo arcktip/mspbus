@@ -20,7 +20,7 @@ set :ssh_options, { :forward_agent => true }
 
 desc "Run on development server" 
 task :development do
-  # set :branch, "map-refactor"
+  set :branch,       "login"
   set :current_path, "/var/www/omgtransit-dev/current"
   set :rails_env,    "development"
   set :deploy_to,    "/var/www/omgtransit-dev"
