@@ -63,12 +63,33 @@
   border-radius: 0;
   -webkit-border-radius: 0 !important;
   min-height: 2em;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  /*font-family: 'OpenSansRegular';*/
 }
 
 .stopbutton a {
   display: block;
   text-decoration:none;
   color:black;
+}
+
+.stopbutton .distance-label {
+  position:absolute;
+  right:5px;
+}
+
+.niceride {
+  background: #C7E58C;
+}
+
+.niceride:hover{
+  background: #9FB770;
+}
+
+.niceride .real-time {
+  display:inline-block;
+  width:auto;
+  margin-left:1em;
 }
 
 .btn-group {
@@ -123,7 +144,6 @@
 #view-map {position:relative;}
 #map-canvas {
   height:500px;
-  top: -5px;
 }
 
 #viewchanger {margin-left:5px;}
@@ -163,7 +183,8 @@
 .distance-label {
   border-radius: 2px;
   font-size: 1.3em;
-  font-family: 'OpenSansLight';
+  font-weight:200;
+  /*font-family: 'OpenSansLight';*/
   padding: 10px;
   color: grey;
   position:absolute;
@@ -176,7 +197,6 @@
   margin-top:2px;
 }
 .stop-name {
-  font-family: 'OpenSansRegular';
   font-weight: bold;
 }
 .route-chip {
@@ -188,7 +208,6 @@
   font-size: 0.85em;
   padding: 3px 5px 3px 5px;
   margin: 0 3px 3px 0;
-  font-family: 'OpenSansRegular';
   margin-bottom:2px;
   text-shadow: none;
 }
@@ -201,7 +220,6 @@
 
 .route-chip-italic {
   font-weight: normal;
-  font-family: 'Helvetica Neue', Arial;
 }
 
 .marker-header {
@@ -255,6 +273,10 @@
 
 #searchbox {
   margin-top:8px;
+}
+
+#searchbox input {
+  width:150px;
 }
 
 .home-container {
@@ -511,6 +533,7 @@
   height: 40px;
   width: 100%;
   color: #b3b3b3;
+  overflow:hidden;
 
   a {
     text-align: center;

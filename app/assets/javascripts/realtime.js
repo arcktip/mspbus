@@ -21,9 +21,7 @@ function update_table(){
 function got_coordinates(lat, lon) {
   center={'lat':lat, 'lon':lon};
 
-  EventBus.trigger("center_map", lat, lon);
-
-  ga('send', 'event', 'geolocations', 'got_coordinates', 'latlon', lat.toString() + "," + lon.toString() );
+  ga('send', 'event', 'location', 'coordinates', lat.toString() + "," +lon.toString());
 
 //  $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
@@ -31,6 +29,8 @@ function got_coordinates(lat, lon) {
     setTimeout(function(){$("#outside").fadeOut();},5000);
     center = config.default_center;
   }
+
+  EventBus.trigger("center_map", center.lat, center.lon);
 
   $.ajax({
     url: "/table",
@@ -89,7 +89,8 @@ function geocode(address, bounds){
 }
 
 function address_search(address){
-  if(address.replace(/^\s*\d{1,3}\s*\w?\s*$/,'yep',1)=='yep'){
+  ga('send', {'hitType': 'pageview', 'page': '/virtual/address_search.php?q='+encodeURI(address)});
+  if(address.match(/^\s*\d{1,3}\s*\w?\s*$/)) {
   	$("#noroute").show();
   	setTimeout(function(){$("#noroute").fadeOut();},3000);
   	return;

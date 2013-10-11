@@ -1,0 +1,46 @@
+@font-face {
+	font-family: 'omgtransit-map-icons';
+	src:url('/assets/omgtransit-map-icons.eot');
+	src:url('/assets/omgtransit-map-icons.eot?#iefix') format('embedded-opentype'),
+		url('/assets/omgtransit-map-icons.woff') format('woff'),
+		url('/assets/omgtransit-map-icons.ttf') format('truetype'),
+		url('/assets/omgtransit-map-icons.svg#omgtransit-map-icons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'omgtransit-map-icons';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="omgicon-"] {
+*/
+.omgicon-right-turn, .omgicon-pin-map {
+	font-family: 'omgtransit-map-icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+.omgicon-right-turn:before {
+	content: "\e001";
+}
+.omgicon-pin-map:before {
+	content: "\e000";
+}

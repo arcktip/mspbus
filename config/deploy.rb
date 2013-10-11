@@ -2,7 +2,7 @@ require "rvm/capistrano"
 require "bundler/capistrano"
 
 #before 'deploy:setup', 'rvm:install_rvm'
-
+set :rvm_type, :system
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
 set :bundle_without,  [:development, :test, :tools]
@@ -22,15 +22,15 @@ desc "Run on development server"
 task :development do
   # set :branch, "map-refactor"
   set :current_path, "/var/www/omgtransit-dev/current"
-  set :rails_env,   "development"
-  set :deploy_to, "/var/www/omgtransit-dev"
+  set :rails_env,    "development"
+  set :deploy_to,    "/var/www/omgtransit-dev"
 end
 
 task :production do
   set :current_path, "/var/www/omgtransit/current"
-  set :branch, "master-stops"
-  set :rails_env, "production"
-  set :deploy_to, "/var/www/omgtransit"
+  set :branch,       "master"
+  set :rails_env,    "production"
+  set :deploy_to,    "/var/www/omgtransit"
 end
 
 role :web, "omgtransit.com"

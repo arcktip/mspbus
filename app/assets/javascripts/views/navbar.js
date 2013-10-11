@@ -31,7 +31,7 @@ var NavbarView = Backbone.View.extend({
     this.sidebar_container = $('.sidebar-container');
 
     // Setup event handlers that are outside of what backbone can do for handlers.
-    this.$el.find('.btn-current-location').on('click', update_coordinates);
+    this.$el.find('.btn-current-location').on('click', function(){window.location.href="/";});
     this.q.on("keypress", this.on_keypress);
     this.$el.find("#qsub").on('click', this.searchbox_action);
   },
@@ -57,7 +57,8 @@ var NavbarView = Backbone.View.extend({
     if ( this.page === 'realtime' ) {
       address_search( val );
     } else if ( this.page === 'general_navbar' ) {
-      geocode( val );
+      window.location.href="/?q="+encodeURIComponent(val);
+      return;
     }
   },
 

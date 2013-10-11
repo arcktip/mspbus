@@ -371,8 +371,7 @@ Get all buses passing through the stop:
 
 Get only buses on a particular route passing through the stop:
 
-    http://webservices.nextbus.com/service/publicXMLFeed?command=predic
-tions&a=<agency_tag>&stopId=<stop id>&routeTag=<route tag>
+    http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=<agency_tag>&stopId=<stop id>&routeTag=<route tag>
 
 Example:
 

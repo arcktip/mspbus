@@ -132,14 +132,15 @@ var StopView = Backbone.View.extend({
       for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
         this['collection' + i] = new BusETACollection();
           
-        var r_collection = this['collection' + i];
-        r_collection.stop_id = this.realtime_sources[i].external_stop_id;
+        var r_collection          = this['collection' + i];
+        r_collection.stop_id      = this.realtime_sources[i].external_stop_id;
         r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
+        r_collection.stop_type    = this.realtime_sources[i].stop_type;
         var query_options = Parsers.utils.parseQueryString( r_collection.realtime_url );
 
-        r_collection.format = query_options.format;
-        r_collection.parser = query_options.parser;
-        r_collection.logo = query_options.logo;
+        r_collection.format    = query_options.format;
+        r_collection.parser    = query_options.parser;
+        r_collection.logo      = query_options.logo;
       }
 
     }
@@ -154,8 +155,15 @@ var StopView = Backbone.View.extend({
 
     if( collection.length === 0 ) {
       //this.$el.parent().parent().hide();
+    } else if ( collection.stop_type==2 ){
+      var formatted=this.format_niceride_data(collection);
+      console.log(formatted);
+      $('#niceride-disp .rental-status').html(formatted.bikes + " bikes, " + formatted.empty + " empty docks");
+      $('#niceride-disp').show();
+      $('.stop-table').hide();
     } else {
-      this.$el.html(realtime_template({ logo: collection.logo , data: collection.toJSON() }));
+      var formatted=this.format_data(collection);
+      this.$el.html(realtime_template({ logo: collection.logo , data: formatted }));
     }
   },
 
@@ -183,14 +191,19 @@ var StopView = Backbone.View.extend({
     this.render(collection);
   },
 
-  format_data: function() {
-    var data = _.map(this.collection.toJSON(),
+  format_niceride_data: function(collection) {
+    var data=collection.toJSON()[0];
+    return {name:data.name, bikes:data.nbBikes, empty:data.nbEmptyDocks};
+  },
+
+  format_data: function(collection) {
+    var data = _.map(collection.toJSON(),
       function(obj) {
-        if(obj.dtime<20 && obj.DepartureText.indexOf(":")!=-1)
-          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
+//        if(obj.DepartureTime<20 && obj.DepartureText.indexOf(":")!=-1)
+//          obj.DepartureText+='&nbsp;<i title="Bus scheduled, no real-time data available." class="icon-question-sign"></i>';
 
         obj.sdesc=obj.Description;
-        if(obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)
+        if(obj.sdesc && obj.sdesc.length>20 && matchMedia('only screen and (max-width: 480px)').matches)
           obj.sdesc=obj.Description.substr(0,20)+" &hellip;";
 
         return obj;
