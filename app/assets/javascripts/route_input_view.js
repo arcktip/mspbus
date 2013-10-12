@@ -17,8 +17,13 @@ var RouteInputView = Backbone.View.extend({
     this.$el.on('click', '.btn-exchange', this.exchange);
     this.$el.on('click', '.loc-arrow', this.set_current_location);
 
-    this.directions_box = this.$el.find('.directions-box');
+//    this.directions_box = this.$el.find('.directions-box');
+    this.directions_found_head    = this.$el.find('#directions-found-head');
+    this.directions_found_results = this.$el.find('#directions-found');
     this.route_input = this.$el.find('.route-input');
+
+    this.$el.on('click', '#flip-directions-left',  this.flip_directions_left);
+    this.$el.on('click', '#flip-directions-right', this.flip_directions_right);
 
     //Richard: Temporarily disabled map centering until we get back to drawing on the map
 //    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
@@ -128,9 +133,11 @@ var RouteInputView = Backbone.View.extend({
   calculate_route: function(origin, destination, callback) {
     var self = this;
     var request = {
-      origin:      origin,
-      destination: destination,
-      travelMode:  google.maps.TravelMode.TRANSIT
+      origin:       origin,
+      destination:  destination,
+      travelMode:   google.maps.TravelMode.TRANSIT,
+      provideRouteAlternatives: true
+      //TODO (from Richard): We may want to use "unitSystem:UnitSystem.METRIC" or "unitSystem:UnitSystem.IMPERIAL" in the future
     };
 
     //window.location.hash = '#map-list-item';
@@ -156,19 +163,42 @@ var RouteInputView = Backbone.View.extend({
     }
   },
 
-  display_route: function(route) {
-    if ( route.routes ) {
+  flip_directions_left:  function() {
+    if(this.routes_max && this.route_displayed>1){
+      this.route_displayed--;
+      this.directions_found_results.children().hide();
+      this.directions_found_results.children('.directions-box:nth-child('+this.route_displayed.toString()+')').show();
+    }
+  },
 
-      var legs = route.routes[0].legs[0];
-      var steps = legs.steps;
+  flip_directions_right: function() {
+    if(this.routes_max && this.route_displayed<this.routes_max){
+      this.route_displayed++;
+      this.directions_found_results.children().hide();
+      this.directions_found_results.children('.directions-box:nth-child('+this.route_displayed.toString()+')').show();
+    }
+  },
 
-      this.directions_box.html( this.direction_template({
-        steps: steps,
-        determine_travel_mode: this.determine_travel_mode,
-        end_address: this.destination.val()
-      }) );
-      
-      this.directions_box.show();
+  display_route: function(data) {
+    if ( data.routes ) {
+      console.log(data);
+      this.route_displayed=1;
+      this.routes_max     =data.routes.length;
+
+      for(var route=0;route<data.routes.length;route++){
+        var box=$('<div class="directions-box"></div>').appendTo(this.directions_found_results);
+        var leg   = data.routes[route].legs[0];
+        var steps = leg.steps;
+        box.html( this.direction_template({
+          steps:                 steps,
+          determine_travel_mode: this.determine_travel_mode,
+          end_address:           this.destination.val()
+        }) );
+      }
+
+      this.directions_found_head.show();
+      this.directions_found_results.show();
+      this.directions_found_results.children('.directions-box:nth-child(1)').show();
 
 /////////////////
 //Richard: The code below draws the route on the map. I've temporarily disabled it.

@@ -283,13 +283,27 @@
   position: relative;
 }
 
+#directions-found {
+  display:none;
+}
+
 .directions-header {
   color: #666;
   margin-top: 5px;
 }
 
-.directions-header-container {
+#directions-found-head {
   margin-right: 10px;
+  display:none;
+
+  a {
+    font-size:150%;
+  }
+
+  #flip-directions-right {
+    position:absolute;
+    right:25px;
+  }
 }
 
 .loc-arrow {
@@ -367,6 +381,7 @@
   //padding: 10px 0px 10px 15px;
   width: 100%;
   position: relative;
+  display:none;
 
   h4 {
     border-bottom: 1px solid #ccc;
