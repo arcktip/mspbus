@@ -15,7 +15,7 @@
 //= require bootstrap.min
 //= require underscore-min
 //= require backbone-min
-//= require moment.min
+// require moment.min
 //= require jquery.relevant-dropdown
 //= require jquery.cookie
 //= require jquery.throttle
