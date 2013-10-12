@@ -11,13 +11,69 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130915202328) do
+ActiveRecord::Schema.define(:version => 20131011182115) do
+
+  create_table "calendars", :id => false, :force => true do |t|
+    t.integer  "source_id",  :null => false
+    t.string   "service_id", :null => false
+    t.boolean  "monday"
+    t.boolean  "tuesday"
+    t.boolean  "wednesday"
+    t.boolean  "thursday"
+    t.boolean  "friday"
+    t.boolean  "saturday"
+    t.boolean  "sunday"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "favorites", :force => true do |t|
     t.integer  "stop_id"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "flat_routes", :id => false, :force => true do |t|
+    t.string  "stop_id"
+    t.string  "stop_name"
+    t.integer "stop_sequence"
+    t.string  "arrival_time"
+    t.decimal "stop_lat",      :precision => 9, :scale => 6
+    t.decimal "stop_lon",      :precision => 9, :scale => 6
+    t.string  "route_id"
+    t.integer "direction_id"
+    t.boolean "monday"
+    t.boolean "tuesday"
+    t.boolean "wednesday"
+    t.boolean "thursday"
+    t.boolean "friday"
+    t.boolean "saturday"
+    t.boolean "sunday"
+    t.date    "start_date"
+    t.date    "end_date"
+    t.string  "trip_id"
+    t.integer "agency_id"
+    t.string  "trip_headsign"
+  end
+
+  add_index "flat_routes", ["route_id"], :name => "route_id"
+  add_index "flat_routes", ["start_date", "end_date"], :name => "date_range"
+  add_index "flat_routes", ["stop_id"], :name => "stop_id"
+
+  create_table "routes", :id => false, :force => true do |t|
+    t.integer "source_id",        :null => false
+    t.string  "route_id",         :null => false
+    t.integer "agency_id",        :null => false
+    t.string  "route_short_name"
+    t.string  "route_long_name"
+    t.string  "route_desc"
+    t.integer "route_type"
+    t.string  "route_url"
+    t.string  "route_color"
+    t.string  "route_text_color"
   end
 
   create_table "source_stops", :id => false, :force => true do |t|
@@ -56,14 +112,12 @@ ActiveRecord::Schema.define(:version => 20130915202328) do
   end
 
   create_table "stop_times", :id => false, :force => true do |t|
-    t.integer  "source_id",      :null => false
-    t.integer  "trip_id",        :null => false
-    t.date     "arrival_time"
-    t.date     "departure_time"
-    t.integer  "stop_id",        :null => false
-    t.integer  "stop_sequence"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.integer "source_id",      :null => false
+    t.string  "trip_id",        :null => false
+    t.string  "arrival_time"
+    t.string  "departure_time"
+    t.string  "stop_id",        :null => false
+    t.integer "stop_sequence",  :null => false
   end
 
   create_table "stops", :force => true do |t|
@@ -81,6 +135,20 @@ ActiveRecord::Schema.define(:version => 20130915202328) do
     t.string  "stop_region"
     t.string  "stop_postcode",       :limit => 50
     t.string  "stop_country",        :limit => 100
+  end
+
+  create_table "trips", :id => false, :force => true do |t|
+    t.integer  "source_id",             :null => false
+    t.string   "route_id",              :null => false
+    t.string   "service_id",            :null => false
+    t.string   "trip_id",               :null => false
+    t.string   "trip_headsign"
+    t.integer  "block_id"
+    t.integer  "shape_id"
+    t.integer  "direction_id"
+    t.integer  "wheelchair_accessible"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
   end
 
   create_table "users", :force => true do |t|

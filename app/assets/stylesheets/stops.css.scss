@@ -25,6 +25,11 @@ span.desc {
     font-family: 'OpenSansRegular';
     color: #fff;
   }
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+  }
 }
 
 #yelp {

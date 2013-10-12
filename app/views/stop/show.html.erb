@@ -52,6 +52,23 @@
   </div>
 </div>
 
+<div class="modal hide" id="stop-list">
+  <div class="modal-header">
+    <button type="button" class="close" id="close-ambiguity" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3><%= image_tag("logo-small.png", :size => "24x24", :alt => "MSP Bus Logo") %>&nbsp;Stop List</h3>
+  </div>
+  <div class="modal-body" style="text-align:center;">
+    <table class="table routes-table" id="stop-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Stop Name</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
 <script>
   var stopid=<%= params[:id] %>;
   var mapcenter = {

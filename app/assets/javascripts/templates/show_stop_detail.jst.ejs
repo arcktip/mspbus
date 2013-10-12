@@ -1,0 +1,7 @@
+<% _.each(data, function(item) { %> 
+  <tr style="background: <%= item.priority %>" class="route-item" data-route="<%= item.Route %>">
+    <td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td>
+    <td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td>
+    <td class="time"><i><%= item.StopText %></i> </td>
+  </tr>
+<% }); %>

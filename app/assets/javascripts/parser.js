@@ -1,7 +1,7 @@
 var Parsers = {
   utils: {
     parseQueryString: function( url ) {
-      var parser = document.createElement('a'); //TODO: Why are we creating an element here?
+      var parser = document.createElement('a');
       parser.href = url;
       
       var params = {}, queries, temp, i, l;
@@ -45,7 +45,8 @@ Parsers.nextrip = function(content) {
       'DepartureTime':  content[i].DepartureTime.substr(6,10),
       'RouteDirection': content[i].RouteDirection,
       'Route':          content[i].Route,
-      'Description':    content[i].Description
+      'Description':    content[i].Description,
+      'Terminal':       content[i].Terminal
     });
   }
 

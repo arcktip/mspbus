@@ -2,15 +2,13 @@ class CreateStopTimes < ActiveRecord::Migration
   def up
     create_table :stop_times, id: false do |t|
       t.integer :source_id
-      t.integer :trip_id
-      t.date :arrival_time
-      t.date :departure_time
-      t.integer :stop_id
+      t.string :trip_id
+      t.string :arrival_time
+      t.string :departure_time
+      t.string :stop_id
       t.integer :stop_sequence
-
-      t.timestamps
     end
-    execute "ALTER TABLE stop_times ADD PRIMARY KEY (source_id, trip_id, stop_id);"
+    execute "ALTER TABLE stop_times ADD PRIMARY KEY (source_id, trip_id, stop_id, stop_sequence);"
   end
 
   def down
