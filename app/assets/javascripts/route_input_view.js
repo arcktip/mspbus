@@ -93,7 +93,7 @@ var RouteInputView = Backbone.View.extend({
         function(origin){
           geocode(self.destination.val(), bounds).done(
             function(destination) {
-              origin=new google.maps.LatLng(origin.lat, origin.lon);
+              origin     =new google.maps.LatLng(origin.lat, origin.lon);
               destination=new google.maps.LatLng(destination.lat, destination.lon);
               self.calculate_route(origin, destination, self.display_route);
             }
