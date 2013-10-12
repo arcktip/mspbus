@@ -1,7 +1,11 @@
-<% if @stops.results.empty? %>
+<% if not @in_bounds %>
+  <div class="alert alert-info">No stops found within 10 miles. I'll put you in central Minneapolis to demonstrate how I work. <a href="mailto:omgtransit@gmail.com">Email us</a> if you'd like to see us in your city!</div>
+
+<% elsif @stops.results.empty? %>
   <div class="alert alert-info">No stops found.</div>
 
 <% end %>
+
 <div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
     <div class="btn stopbutton <%= isBikeStop(stop.source_stops)?"niceride":""%>" data-stopid="<%= stop.id %>">
