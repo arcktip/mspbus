@@ -196,6 +196,8 @@ var RouteInputView = Backbone.View.extend({
   },
 
   display_route: function(data) {
+    this.directions_found_results.empty();
+
     if ( data.routes ) {
       console.log(data);
       this.route_displayed=1;
