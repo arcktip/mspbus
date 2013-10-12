@@ -353,10 +353,12 @@ var RouteInputView = Backbone.View.extend({
     var origin, destination;
     var dfd = $.Deferred();
 
+    var bounds=construct_bounding_box(center.lat, center.lon, 30);
+
     var bounds = new google.maps.LatLngBounds(
       //These bounds are definitely large enough for the whole Twin Cities area
-      new google.maps.LatLng(config.bounds.south,config.bounds.west),
-      new google.maps.LatLng(config.bounds.north,config.bounds.east)
+      new google.maps.LatLng(bounds.south,bounds.west),
+      new google.maps.LatLng(bounds.north,bounds.east)
     );
 
     if ( this.validate_inputs() ) {
