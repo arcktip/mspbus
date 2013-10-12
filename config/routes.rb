@@ -17,6 +17,7 @@ MspBus::Application.routes.draw do
   get '/fav'         => 'home#fav'
   post '/favlist'    => 'home#favlist'
   get 'route/:id'    => 'route#show'
+  get 'flat_route/:id'    => 'flat_route#show'
   get 'stop/bounds'  => 'stop#bounds'
   post '/sms'        => 'home#sms'
   post '/voice'      => 'home#voice'

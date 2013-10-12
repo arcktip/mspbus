@@ -1,6 +1,3 @@
-// Realtime Template
-var realtime_template = _.template('<% _.each(data, function(item) { %> <tr style="background: <%= item.priority %>"><td class="route" nowrap><i class="<%= item.direction %>"></i> <%= item.Route %><%= item.Terminal %></td><td><span class="desc" title="<%= item.Description %>"><%= item.sdesc %></span></td><td class="time"><i><%= item.StopText %></i> </td></tr><% }); %>');
-
 $(document).ready(function() {
   
   // Stop View
@@ -17,9 +14,9 @@ $(document).ready(function() {
 
   $("#mapshow").click(function(){$("#mapmodal").modal('show');});
   $("#mapmodal").click(function(){$("#mapmodal").modal('hide');});
-  $('#yelp-btn').on('click', function() {
-    yelpView.fetch();
-  });
+  // $('#yelp-btn').on('click', function() {
+  //   yelpView.fetch();
+  // });
 });
 
 /*
@@ -121,7 +118,9 @@ var FavortiesView = Backbone.View.extend({
 var StopView = Backbone.View.extend({
 
   el: '.result',
-  template: realtime_template,
+  template: JST['templates/show_stop_detail'],
+  stop_list_template: JST['templates/stop_list'],
+  flat_route_model: null,
   
   initialize: function() {
     _.bindAll(this);
@@ -144,6 +143,8 @@ var StopView = Backbone.View.extend({
       }
 
     }
+
+    this.$el.on('click', '.route-item', this.fetch_stop_list);
   },
 
   render: function(collection) {
@@ -155,15 +156,16 @@ var StopView = Backbone.View.extend({
 
     if( collection.length === 0 ) {
       //this.$el.parent().parent().hide();
-    } else if ( collection.stop_type==2 ){
-      var formatted=this.format_niceride_data(collection);
-      console.log(formatted);
+    } else if ( collection.stop_type === 2 ) {
+      var formatted = this.format_niceride_data(collection);
+      
       $('#niceride-disp .rental-status').html(formatted.bikes + " bikes, " + formatted.empty + " empty docks");
       $('#niceride-disp').show();
       $('.stop-table').hide();
+
     } else {
       var formatted=this.format_data(collection);
-      this.$el.html(realtime_template({ logo: collection.logo , data: formatted }));
+      this.$el.html(this.template({ logo: collection.logo , data: formatted }));
     }
   },
 
@@ -211,5 +213,17 @@ var StopView = Backbone.View.extend({
     );
 
     return data;
-  }
+  },
+
+  fetch_stop_list: function(e) {
+    var $target = $(e.currentTarget || e.srcElement);
+
+    this.flat_route_model = new FlatRouteModel({ id: $target.data('route') });
+    this.flat_route_model.fetch({ success: this.show_stop_list });
+  },
+
+  show_stop_list: function(list) {
+    $('#stop-table').find('tbody').html( this.stop_list_template({ data: list.toJSON(), lat: mapcenter.lat, lon: mapcenter.lon }) );
+    $('#stop-list').modal('show');
+  }  
 });

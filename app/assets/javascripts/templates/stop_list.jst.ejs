@@ -1,0 +1,6 @@
+<% _.each(data, function(item) { %> 
+  <tr <% if (item.stop_lat === lat && item.stop_lon === lon) { %>class="active"<% } %>>
+    <td> <%= item.stop_sequence %></td>
+    <td><%= item.stop_name %></td>
+  </tr>
+<% }); %>

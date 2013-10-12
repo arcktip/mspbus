@@ -25,6 +25,11 @@ span.desc {
     font-family: 'OpenSansRegular';
     color: #fff;
   }
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+  }
 }
 
 #yelp {
@@ -59,4 +64,18 @@ span.desc {
   margin-left: 0.5em;
   font-size: 90%;
   font-style: italic;
+}
+
+
+.routes-table {
+  font-size: 12px;
+  background: #fff;
+  color: #000;
+  border-radius: 7px;
+  
+  .active {
+    border-radius: 7px;
+    background: #08c;
+    color: #fff;
+  }
 }

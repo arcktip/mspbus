@@ -27,6 +27,7 @@
 
 //= require_tree ./templates
 //= require models/favorite
+//= require models/flat_route
 //= require views/realtime
 //= require views/navbar
 
