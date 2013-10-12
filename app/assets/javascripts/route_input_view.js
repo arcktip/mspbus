@@ -22,6 +22,9 @@ var RouteInputView = Backbone.View.extend({
     this.directions_found_results = this.$el.find('#directions-found');
     this.route_input = this.$el.find('.route-input');
 
+    this.flip_directions_left_btn     = this.$el.find('#flip-directions-left' );
+    this.flip_directions_right_btn    = this.$el.find('#flip-directions-right');
+
     this.$el.on('click', '#flip-directions-left',  this.flip_directions_left);
     this.$el.on('click', '#flip-directions-right', this.flip_directions_right);
 
@@ -166,17 +169,30 @@ var RouteInputView = Backbone.View.extend({
   flip_directions_left:  function() {
     if(this.routes_max && this.route_displayed>1){
       this.route_displayed--;
-      this.directions_found_results.children().hide();
-      this.directions_found_results.children('.directions-box:nth-child('+this.route_displayed.toString()+')').show();
+      this.set_flip_buttons();
     }
   },
 
   flip_directions_right: function() {
     if(this.routes_max && this.route_displayed<this.routes_max){
       this.route_displayed++;
-      this.directions_found_results.children().hide();
-      this.directions_found_results.children('.directions-box:nth-child('+this.route_displayed.toString()+')').show();
+      this.set_flip_buttons();
     }
+  },
+
+  set_flip_buttons: function() {
+    this.directions_found_results.children().hide();
+    this.directions_found_results.children('.directions-box:nth-child('+this.route_displayed.toString()+')').show();
+
+    if(this.route_displayed==this.routes_max)
+      this.flip_directions_right_btn.removeClass('btn-info');
+    else
+      this.flip_directions_right_btn.addClass('btn-info');
+
+    if(this.route_displayed==1)
+      this.flip_directions_left_btn.removeClass('btn-info');
+    else
+      this.flip_directions_left_btn.addClass('btn-info');
   },
 
   display_route: function(data) {
@@ -196,6 +212,7 @@ var RouteInputView = Backbone.View.extend({
         }) );
       }
 
+      this.flip_directions_left_btn.removeClass('btn-info');
       this.directions_found_head.show();
       this.directions_found_results.show();
       this.directions_found_results.children('.directions-box:nth-child(1)').show();
