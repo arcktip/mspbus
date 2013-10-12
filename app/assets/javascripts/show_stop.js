@@ -223,7 +223,7 @@ var StopView = Backbone.View.extend({
   },
 
   show_stop_list: function(list) {
-    $('#stop-table').find('tbody').html( this.stop_list_template({ data: list.toJSON() }) );
+    $('#stop-table').find('tbody').html( this.stop_list_template({ data: list.toJSON(), lat: mapcenter.lat, lon: mapcenter.lon }) );
     $('#stop-list').modal('show');
   }  
 });
