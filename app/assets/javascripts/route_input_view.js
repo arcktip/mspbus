@@ -128,9 +128,9 @@ var RouteInputView = Backbone.View.extend({
   calculate_route: function(origin, destination, callback) {
     var self = this;
     var request = {
-      origin: origin,
+      origin:      origin,
       destination: destination,
-      travelMode: google.maps.TravelMode.TRANSIT
+      travelMode:  google.maps.TravelMode.TRANSIT
     };
 
     //window.location.hash = '#map-list-item';
