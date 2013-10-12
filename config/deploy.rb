@@ -22,7 +22,7 @@ desc "Run on development server"
 task :development do
   set :branch,       "login"
   set :current_path, "/var/www/omgtransit-dev/current"
-  set :rails_env,    "development"
+  set :rails_env,    "onlinedev"
   set :deploy_to,    "/var/www/omgtransit-dev"
 end
 
