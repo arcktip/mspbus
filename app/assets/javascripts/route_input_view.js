@@ -19,7 +19,9 @@ var RouteInputView = Backbone.View.extend({
 
     this.directions_box = this.$el.find('.directions-box');
     this.route_input = this.$el.find('.route-input');
-    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
+
+    //Richard: Temporarily disabled map centering until we get back to drawing on the map
+//    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
 
     this.origin = this.$el.find('#origin');
     this.origin_container = this.$el.find('.origin-container');
