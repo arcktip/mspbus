@@ -168,6 +168,9 @@ var RouteInputView = Backbone.View.extend({
       
       this.directions_box.show();
 
+/////////////////
+//Richard: The code below draws the route on the map. I've temporarily disabled it.
+/*
       //this.map_parent.directions_display.setDirections(route);
       this.steps = steps;
       this.end_location = legs.end_location;
@@ -199,7 +202,7 @@ var RouteInputView = Backbone.View.extend({
           }
         });
         this.direction_markers.push(marker);
-      }
+      }*/
 
       got_coordinates(steps[0].start_point.lat(), steps[0].start_point.lng());
 
