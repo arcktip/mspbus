@@ -26,10 +26,6 @@ var HomeView = Backbone.View.extend({
     this.view_map_btn.on  ('click', this.show_map);
     this.view_route_btn.on('click', this.show_route);
 
-    // Tables
-    this.table_list_item = this.$el.find('#table-list-item');
-    this.map_list_item   = this.$el.find('#map-list-item');
-
     this.update_screen_size();
 
     // We are on a small screen, should determine view to show.
