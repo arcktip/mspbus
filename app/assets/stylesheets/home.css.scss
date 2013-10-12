@@ -37,6 +37,7 @@
   -webkit-border-radius: 0 !important;
   min-height: 2em;
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  position:relative;
   /*font-family: 'OpenSansRegular';*/
 }
 
@@ -63,6 +64,10 @@
   display:inline-block;
   width:auto;
   margin-left:1em;
+}
+
+.niceride .distance-label {
+  top:-4px;
 }
 
 .btn-group {
