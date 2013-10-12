@@ -23,10 +23,10 @@ var RouteInputView = Backbone.View.extend({
     //Richard: Temporarily disabled map centering until we get back to drawing on the map
 //    this.directions_box.on('click', '.directions-step', this.center_map_on_step);
 
-    this.origin = this.$el.find('#origin');
+    this.origin           = this.$el.find('#origin');
     this.origin_container = this.$el.find('.origin-container');
     
-    this.destination = this.$el.find('#destination');
+    this.destination           = this.$el.find('#destination');
     this.destination_container = this.$el.find('.destination-container');
     
     $(this.destination).enterKey( this.process_route_parameters );
