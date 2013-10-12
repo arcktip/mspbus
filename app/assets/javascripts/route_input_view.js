@@ -206,7 +206,7 @@ var RouteInputView = Backbone.View.extend({
         this.direction_markers.push(marker);
       }*/
 
-      got_coordinates(steps[0].start_point.lat(), steps[0].start_point.lng());
+//      got_coordinates(steps[0].start_point.lat(), steps[0].start_point.lng());
 
     } else {
       // Error with routes.
