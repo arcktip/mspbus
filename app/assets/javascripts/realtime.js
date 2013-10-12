@@ -8,6 +8,7 @@ var center;
 var geocenter;
 window.EventBus = _.extend({},Backbone.Events);
 var stops;
+var my_bounds=false;
 
 var RealTimeView = Backbone.View.extend({
 
@@ -128,17 +129,57 @@ function update_table(){
   });
 }
 
+/*
+displace_latlon(lat, lon, dist, angle)
+
+Given a central (latitude, longitude) pair, an offset (in miles), and a bearing
+angle (in degrees), this returns the {lat:XXX, lon:XXX} object of the point
+defined by this information.
+*/
+function displace_latlon(lat1, lon1, d, brng){
+  //Convert lat & lon & bearing angle (brng) to radians
+  lat1*=Math.PI/180;
+  lon1*=Math.PI/180;
+  brng*=Math.PI/180;
+  R=    3959; //Radius of the Earth in miles
+  var lat2 = Math.asin( Math.sin(lat1)*Math.cos(d/R) + 
+              Math.cos(lat1)*Math.sin(d/R)*Math.cos(brng) );
+  var lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(lat1), Math.cos(d/R)-Math.sin(lat1)*Math.sin(lat2));
+
+  //Convert angles back to degrees
+  lat2*=180/Math.PI;
+  lon2*=180/Math.PI;
+  return {lat:lat2, lon:lon2};
+}
+
+/*
+construct_bounding_box(lat, lon, offset_miles)
+
+Given a central (latitude, longitude) pair and an offset (in miles),
+this returns an object of the form: {south:XXX, north:XXX, east:XXX, west: XXX}
+which can be used to bias geocoding results, or for other nefarious purposes
+*/
+function construct_bounding_box(lat, lon, offset_miles){
+  var dist  = offset_miles * 1609.344;
+  var north = displace_latlon(lat,lon,dist,0  );
+  var east  = displace_latlon(lat,lon,dist,90 );
+  var south = displace_latlon(lat,lon,dist,180);
+  var west  = displace_latlon(lat,lon,dist,270);
+  return {north:north.lat, east:east.lng, south:south.lat, west:west.lat};
+}
+
 function got_coordinates(lat, lon) {
   center={'lat':lat, 'lon':lon};
 
   ga('send', 'event', 'location', 'coordinates', lat.toString() + "," +lon.toString());
 
-  $("#outside").hide();
+//TODO (from Richard): I've hidden the code below as we'll have to find a new way of determining when a user is out of bounds
+/*  $("#outside").hide();
   if(!(config.bounds.south<=lat && lat<=config.bounds.north && config.bounds.west<=lon && lon<=config.bounds.east)){
     $("#outside").show();
     setTimeout(function(){$("#outside").fadeOut();},5000);
     center = config.default_center;
-  }
+  }*/
 
   EventBus.trigger("center_map", center.lat, center.lon);
 
@@ -203,9 +244,11 @@ function address_search(address){
     return;
   }
 
+  var bounds=construct_bounding_box(center.lat, center.lon, 30);
+
   var bounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(config.bounds.south,config.bounds.west),
-    new google.maps.LatLng(config.bounds.north,config.bounds.east)
+    new google.maps.LatLng(bounds.south,bounds.west),
+    new google.maps.LatLng(bounds.north,bounds.east)
   );
 
   $.when(
