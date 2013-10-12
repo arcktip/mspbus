@@ -31,7 +31,7 @@ MspBus::Application.routes.draw do
   post '/voice_respond'           => 'home#voice_respond'
   
   # realtime apis
-  get 'realtime/niceride' => 'realtime#niceride'
+  get  'realtime/niceride'        => 'realtime#niceride'
 
   resources :favorite, :only => [:index, :show, :update, :create, :destroy]
 end
