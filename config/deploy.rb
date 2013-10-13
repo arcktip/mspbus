@@ -27,8 +27,8 @@ task :development do
 end
 
 task :production do
-  set :current_path, "/var/www/omgtransit/current"
   set :branch,       "master"
+  set :current_path, "/var/www/omgtransit/current"
   set :rails_env,    "production"
   set :deploy_to,    "/var/www/omgtransit"
 end
