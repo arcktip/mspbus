@@ -19,7 +19,7 @@ default_run_options[:pty] = true
 set :ssh_options, { :forward_agent => true }
 
 desc "Run on development server" 
-task :development do
+task :onlinedev do
   set :branch,       "login"
   set :current_path, "/var/www/omgtransit-dev/current"
   set :rails_env,    "onlinedev"
