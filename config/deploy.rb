@@ -5,7 +5,6 @@ require "bundler/capistrano"
 set :rvm_type, :system
 # Load Bundler's Capistrano plugin
 set :bundle_flags,    "--deployment"
-set :bundle_without,  [:development, :test, :tools]
 set :default_shell, :bash
 
 set :application, "omgtransit"
@@ -24,6 +23,7 @@ task :onlinedev do
   set :current_path, "/var/www/omgtransit-dev/current"
   set :rails_env,    "onlinedev"
   set :deploy_to,    "/var/www/omgtransit-dev"
+  set :bundle_without,  [:production, :development, :test, :tools]
 end
 
 task :production do
@@ -31,6 +31,7 @@ task :production do
   set :current_path, "/var/www/omgtransit/current"
   set :rails_env,    "production"
   set :deploy_to,    "/var/www/omgtransit"
+  set :bundle_without,  [:development, :onlindev, :test, :tools]
 end
 
 role :web, "omgtransit.com"
