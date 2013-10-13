@@ -9,10 +9,10 @@ class Stop < ActiveRecord::Base
   has_many :source_stops, :foreign_key => :stop_id
 
   mapping do
-    indexes :id, type: :string
-    indexes :stop_desc, type: :string
-    indexes :stop_name, type: :string
-    indexes :stop_city, type: :string
+    indexes :id,          type: :string
+    indexes :stop_desc,   type: :string
+    indexes :stop_name,   type: :string
+    indexes :stop_city,   type: :string
     indexes :stop_street, type: :string
 
     indexes :location, type: 'geo_point', as: 'location'
