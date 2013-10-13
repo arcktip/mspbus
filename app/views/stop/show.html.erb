@@ -7,9 +7,11 @@
   <span id="thestop" data-attr="<%= @stop.stop_id %>" style="font-weight:bold;margin:0"><%= @stop.stop_name %></span>
   <!-- <div class="btn pull-right" id="yelp-btn"><i class="icon-food"></i></div> -->
   <div class="btn pull-right" id="mapshow" style="margin-top:0;margin-right:5px;"><i class="icon-picture" style="font-size: 18px; color: grey;"></i></div>
+  <% if user_signed_in? %>
   <div class="btn pull-right" id="makefav" style="margin-top:0;margin-right:5px;" title="Make this stop a favorite">
     <i class="icon-star star"></i>
   </div>
+  <% end %>
 </div>
 
 <div id="yelp">
