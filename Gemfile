@@ -33,6 +33,14 @@ gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'
 
+group :test, :development do
+  gem 'rspec-rails' # testing framework
+  gem 'capybara' # user simulation
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'meta_request'
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
