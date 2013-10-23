@@ -8,31 +8,22 @@ namespace :omgtransit do
     require 'csv'
 
     # Remove all previous rows.
-    SourceStop.delete_all(["source_id = ?", args.source_id])
-    
-    # disable mass assignment restrictions
-    SourceStop.send(:attr_protected)
+    Stop.delete_all(["source_id = ?", args.source_id])
 
     puts "Adding/Updating Stops"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
-      SourceStop.find_or_initialize_by_source_id_and_external_stop_id(args.source_id, row["#{args.replace_column}"]) do |stop|
-
-        unless row["#{args.replace_column}"].nil?
-          stop.external_lat       = row['stop_lat']
-          stop.external_lon       = row['stop_lon']
-          stop.external_stop_name = row['stop_name']
-          stop.external_stop_desc = row['stop_desc']
-          stop.external_zone_id   = row['zone_id']
-          stop.external_stop_url  = args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"])
-          stop.external_stop_street   = row['stop_street']
-          stop.external_stop_city     = row['stop_city']
-          stop.external_stop_region   = row['stop_region']
-          stop.external_stop_postcode = row['stop_postcode']
-          stop.external_stop_country  = row['stop_country']
-          stop.stop_type              = 1
-          stop.save!
-        end
-      end
+      Stop.create!({
+        id: [row['stop_id'], args.source_id],
+        source_id: args.source_id,
+        stop_code: row['stop_code'],
+        stop_name: row['stop_name'],
+        stop_desc: row['stop_desc'],
+        stop_lat: row['stop_lat'],
+        stop_lon: row['stop_lon'],
+        zone_id: row['zone_id'],
+        url: args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"]),
+        stop_type: 1
+      })
     end
 
   end
@@ -139,12 +130,16 @@ namespace :omgtransit do
     end
   end
 
+  # ================================================================
+  # Reload individual cities gtfs based on the tasks above.
+  # ================================================================
+
   task :load_msp_gtfs => :environment do
     Rake::Task['omgtransit:load_gtfs_stops'].invoke(1, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id')
-    Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
-    Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
-    Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
-    Rake::Task['omgtransit:load_gtfs_calendar'].invoke(1, 'setup/msp_gtfs')
+    # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
+    # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
+    # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
+    # Rake::Task['omgtransit:load_gtfs_calendar'].invoke(1, 'setup/msp_gtfs')
   end
 
   task :load_portland_gtfs => :environment do
@@ -170,17 +165,17 @@ namespace :omgtransit do
   # Reindexes stops from master stops into the stops table.
   # ================================================================
 
-  task :reset_stops => :environment do
-    puts "Deleting Stops"
-    ActiveRecord::Base.connection.execute("DELETE FROM stops")
-    puts "Re-inserting Stops"
-    ActiveRecord::Base.connection.execute("INSERT INTO stops
-      (stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_street, stop_city, stop_region, stop_postcode, stop_country)
-      SELECT
-      external_stop_id, external_stop_name, external_stop_desc,external_lat, external_lon, external_zone_id, 
-      external_stop_street, external_stop_city, external_stop_region, external_stop_postcode, external_stop_country
-      FROM source_stops")
-    puts "Populating source stops from stops"
-    ActiveRecord::Base.connection.execute("UPDATE source_stops SET stop_id = (SELECT id FROM stops WHERE stop_code = external_stop_id AND stop_name = external_stop_name)")
-  end
+  # task :reset_stops => :environment do
+  #   puts "Deleting Stops"
+  #   ActiveRecord::Base.connection.execute("DELETE FROM stops")
+  #   puts "Re-inserting Stops"
+  #   ActiveRecord::Base.connection.execute("INSERT INTO stops
+  #     (stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_street, stop_city, stop_region, stop_postcode, stop_country)
+  #     SELECT
+  #     external_stop_id, external_stop_name, external_stop_desc,external_lat, external_lon, external_zone_id, 
+  #     external_stop_street, external_stop_city, external_stop_region, external_stop_postcode, external_stop_country
+  #     FROM source_stops")
+  #   puts "Populating source stops from stops"
+  #   ActiveRecord::Base.connection.execute("UPDATE source_stops SET stop_id = (SELECT id FROM stops WHERE stop_code = external_stop_id AND stop_name = external_stop_name)")
+  # end
 end

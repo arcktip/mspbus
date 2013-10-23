@@ -35,5 +35,8 @@ MspBus::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
   
+  config.twitter_consumer_key = "qsY4ECjkEzLTWMwpUyw"
+  config.twitter_consumer_secret = "I2Ar2l14MvWMwLP4blMR8dTJKk2L8YPO8Sd6lUpeIk"
+
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
 end

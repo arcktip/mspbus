@@ -91,8 +91,17 @@ You should secure `omgtransit.yml` so that it can only be read by the server.
 You can optionally encrypt the file as well.  For more information, see
 the [bcdatabase project](https://github.com/NUBIC/bcdatabase).
 
+Testing Setup
+===============================
+A seperate testing database will need to be setup to run tests. The rspec
+testing framework is used to run unit tests, while capabara is used to 
+simulate integration testing. In order to setup the testing environment,
+the following must be configured.
 
-
+1. In Postgres run `create database "omgtransit-test"`;
+2. Modify your `omgtransit.yml` file with the credentials the local test database.
+3. Run `rake db:test:prepare` to setup the test database.
+4. Run `rspec` to run test suite.
 
 Database Stops Table
 ==============================
