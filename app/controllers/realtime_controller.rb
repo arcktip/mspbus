@@ -4,7 +4,8 @@ class RealtimeController < ApplicationController
   def niceride
     url = 'https://secure.niceridemn.org/data2/bikeStations.xml'
     response = HTTParty.get(url)
-    stops = response.parsed_response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
+    response = MultiXml.parse(response.body)
+    stops = response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
     respond_with(stops.to_json)
   end
 
