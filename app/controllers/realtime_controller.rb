@@ -2,6 +2,7 @@ class RealtimeController < ApplicationController
   respond_to :xml, :json
 
   def umn
+    puts "GETTING UMN"
     url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=#{params[:a]}&stopId=#{params[:stop_id]}"
     response = HTTParty.get(url)
     raise response.parsed_response['body']['predictions'][1].to_yaml
@@ -26,6 +27,7 @@ class RealtimeController < ApplicationController
   end
 
   def nextrip
+    puts "GETTING NEXTRIP"
     url = "http://svc.metrotransit.org/NexTrip/#{params[:stop_id]}?format=json"
     response = HTTParty.get(url)
     respond_with(response)
@@ -34,7 +36,8 @@ class RealtimeController < ApplicationController
   def niceride
     url = 'https://secure.niceridemn.org/data2/bikeStations.xml'
     response = HTTParty.get(url)
-    stops = response.parsed_response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
+    response = MultiXml.parse(response.body)
+    stops = response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
     respond_with(stops.to_json)
   end
 

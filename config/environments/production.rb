@@ -66,4 +66,6 @@ MspBus::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
+
+  HTTParty::HTTPCache.perform_caching = true
 end

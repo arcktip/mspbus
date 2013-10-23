@@ -38,5 +38,4 @@ MspBus::Application.configure do
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
 
   HTTParty::HTTPCache.perform_caching = true
-  HTTParty::HTTPCache.logger = Rails.logger
 end

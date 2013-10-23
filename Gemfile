@@ -28,6 +28,8 @@ gem 'tire' # elasticsearch wrapper
 gem 'bcdatabase' # database credential management
 gem 'nokogiri'
 gem 'rvm-capistrano'
+gem 'cachebar'
+gem 'redis'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
