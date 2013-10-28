@@ -24,7 +24,7 @@ Installation
 
 Database Setup
 --------------
- 1. Create a PostgreSQL database (here we call it "omgtransit")
+ 1. Create a PostgreSQL database (here we call it "omgtransit"). See "Creating A Database"
  2. Enable PostGIS extensions on this database
  3. Run `sudo mkdir -p /etc/nubic/db`
  4. Create the file `/etc/nubic/db/omgtransit.yml`
@@ -59,6 +59,14 @@ Loading the Database
 Start the Server
 ----------------
  1. Run `rails s` in the project's base directory to start the server
+
+Creating the Database
+=====================
+
+1. Log in to the server using `sudo -u postgres psql`
+2. `CREATE USER user WITH PASSWORD 'password';`
+3. `CREATE DATABASE omgtransit;`
+4. `GRANT ALL PRIVILEGES ON DATABASE omgtransit TO user;`
 
 Setting Up Database Credentials
 ===============================
