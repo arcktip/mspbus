@@ -1,6 +1,7 @@
 class CreateRoutes < ActiveRecord::Migration
   def up
     create_table :routes, id: false do |t|
+      t.string :id #source_id-route_id-agency_id
       t.integer :source_id
       t.string :route_id
       t.integer :agency_id
@@ -12,7 +13,7 @@ class CreateRoutes < ActiveRecord::Migration
       t.string :route_color
       t.string :route_text_color
     end
-    execute "ALTER TABLE routes ADD PRIMARY KEY (source_id, route_id, agency_id);"
+    execute "ALTER TABLE routes ADD PRIMARY KEY (id);"
   end
 
   def down

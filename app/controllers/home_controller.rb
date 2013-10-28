@@ -3,7 +3,9 @@ class HomeController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:table]
 
   def index
+  end
 
+  def fav
   end
 
   def table
@@ -59,7 +61,7 @@ class HomeController < ApplicationController
       stopid=params[:Body]
       puts '===='
       puts stopid
-      stops=Stop.get_stop_by_id({:id=>stopid})
+      stops=Stop.get_stop_by_id({:id => "1-#{stopid}" })
       if stops.results.empty?
         @smess = "Couldn't find stop."
       end
@@ -95,7 +97,7 @@ class HomeController < ApplicationController
   def voice_respond
     if not params[:Digits].empty?
       stopid=params[:Digits]
-      stops=Stop.get_stop_by_id({:id=>stopid})
+      stops=Stop.get_stop_by_id({:id => "1-#{stopid}"})
       if stops.results.empty?
         smess = "Couldn't find stop."
       end
@@ -134,10 +136,8 @@ class HomeController < ApplicationController
   end
 
   def about
-
   end
   
   def feedback
-    
   end
 end

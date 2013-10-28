@@ -1,6 +1,7 @@
 class CreateTrips < ActiveRecord::Migration
   def up
     create_table :trips, id: false do |t|
+      t.string :id #source_id, route_id, service_id, trip_id
       t.integer :source_id
       t.string :route_id
       t.string :service_id
@@ -13,7 +14,7 @@ class CreateTrips < ActiveRecord::Migration
 
       t.timestamps
     end
-    execute "ALTER TABLE trips ADD PRIMARY KEY (source_id, route_id, service_id, trip_id);"
+    execute "ALTER TABLE trips ADD PRIMARY KEY (id);"
   end
 
   def down

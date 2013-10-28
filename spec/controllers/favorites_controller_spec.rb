@@ -3,8 +3,7 @@ require 'spec_helper'
 describe FavoriteController do
   
   before(:each) do
-    request.env["HTTP_ACCEPT"] = 'application/json'
-    
+    request.env["HTTP_ACCEPT"] = 'application/json'    
     @params = { :format => 'json' }
     @user = create(:favorite_user, favorite_count: rand(1..10))
     sign_in @user
@@ -17,7 +16,6 @@ describe FavoriteController do
 
       json = JSON.parse(response.body)
       expect(json.length).to equal(Favorite.all.count)
-      #expect(response).to render_template(:index)
     end
   end
 
@@ -26,14 +24,13 @@ describe FavoriteController do
       user_fav = User.first.favorites.first
       @params = {
         :format => 'json',
-        :id => user_fav.stop_id,
-        :source_id => user_fav.stop_source_id
+        :id => user_fav.stop_id
       }
 
       get :show, @params
 
       json = JSON.parse(response.body)
-      expect(json['stop_id']).to equal(user_fav.stop_id)
+      expect(json['stop_id']).to eq(user_fav.stop_id)
     end
   end
 
@@ -47,14 +44,13 @@ describe FavoriteController do
 
       @params = {
         :format => 'json',
-        :id => stop.id[0],
-        :source_id => stop.source_id
+        :stop_id => stop.id
       }
 
       post :create, @params
       json = JSON.parse(response.body)
       
-      expect(json['stop_id']).to equal(stop.id[0])
+      expect(json['stop_id']).to eq(stop.id)
       expect(User.first.favorites.count).to equal(fav_count+1)
     end
   end
@@ -67,8 +63,7 @@ describe FavoriteController do
 
       @params = {
         :format => 'json',
-        :id => user_fav.stop_id,
-        :source_id => user_fav.stop_source_id
+        :id => user_fav.stop_id
       }
 
       delete :destroy, @params

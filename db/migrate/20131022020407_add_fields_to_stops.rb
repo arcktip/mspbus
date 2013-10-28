@@ -1,15 +1,16 @@
 class AddFieldsToStops < ActiveRecord::Migration
   def up
     add_column :stops, :source_id, :integer
+    add_column :stops, :stop_id, :integer
     add_column :stops, :url, :string
-
-    execute "UPDATE stops set source_id = 1;"
-    execute "ALTER TABLE stops DROP CONSTRAINT stops_pkey;ALTER TABLE stops ADD PRIMARY KEY (id, source_id);"
+    
+    change_column :stops, :id, :string
+    execute "ALTER TABLE stops DROP CONSTRAINT IF EXISTS stops_pkey; ALTER TABLE stops ADD PRIMARY KEY (id);"
   end
 
   def down
     remove_column :stops, :source_id
     remove_column :stops, :url
-    execute "ALTER TABLE stops DROP CONSTRAINT stops_pkey;ALTER TABLE stops ADD PRIMARY KEY (id);"
+    remove_column :stops, :stop_id
   end
 end

@@ -23,22 +23,20 @@ var RealTimeView = Backbone.View.extend({
     }
 
     if ( this.realtime_sources ) {
-      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
-        this['collection' + i] = new BusETACollection();
-        
-        var r_collection          = this['collection' + i];
-        r_collection.stop_id      = this.realtime_sources[i].external_stop_id;
-        r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
-        var query_options         = Parsers.utils.parseQueryString( r_collection.realtime_url );
+      
+      this.collection = new BusETACollection();
+      this.collection.stop_id      = this.realtime_sources.stop_id;
+      this.collection.realtime_url = this.realtime_sources.url;
+      this.collection.stop_type    = this.realtime_sources.stop_type;
+      this.collection.source_id    = this.realtime_sources.source_id;
+      var query_options         = Parsers.utils.parseQueryString( this.collection.realtime_url );
 
-        r_collection.format = query_options.format;
-        r_collection.parser = query_options.parser;
-        r_collection.logo   = query_options.logo;
-       
-        if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
-          this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
-        }
-        
+      this.collection.format = query_options.format;
+      this.collection.parser = query_options.parser;
+      this.collection.logo   = query_options.logo;
+     
+      if ( !this.$el.find('.collection'+ this.collection.stop_id).length ) {
+        this.$el.append('<div class="clearfix collection' + this.collection.stop_id + '"></div>');
       }
 
     }
@@ -57,18 +55,13 @@ var RealTimeView = Backbone.View.extend({
     var self = this;
 
     if ( this.realtime_sources ) {
-      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
-        var realtime_collection = this['collection' + i];
-        
-        if( !skip_fetch && realtime_collection.length === 0 ) {
-          
-          realtime_collection.fetch({ success: function(collection) {
-            self.process_data(collection, 5);
-            if(callback) { callback(); }
-          } });
-        } else {
+      if( !skip_fetch && this.collection.length === 0 ) {        
+        this.collection.fetch({ success: function(collection) {
+          self.process_data(collection, 5);
           if(callback) { callback(); }
-        }
+        } });
+      } else {
+        if(callback) { callback(); }
       }
     }
     

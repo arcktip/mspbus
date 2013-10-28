@@ -13,9 +13,10 @@
 
 <%= javascript_include_tag "general_navbar" %>
 <script>
-  $(document).ready(function(){
+  $(document).ready(function() {
     $('#fav-list-item').addClass('active');
-  var RealTimeView = Backbone.View.extend({
+
+    var RealTimeView = Backbone.View.extend({
 
     eta_template: JST['templates/eta_label'],
     nice_ride_template: JST['templates/nice_ride'],
@@ -27,19 +28,21 @@
 
       if ( this.realtime_sources ) {
         for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
-          this['collection' + i] = new BusETACollection();
+          this.collection = new BusETACollection();
           
-          var r_collection          = this['collection' + i];
-          r_collection.stop_id      = this.realtime_sources[i].external_stop_id;
-          r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
-          var query_options         = Parsers.utils.parseQueryString( r_collection.realtime_url );
+          this.collection.stop_id      = this.realtime_sources.stop_id;
+          this.collection.realtime_url = this.realtime_sources.url;
+          this.collection.stop_type    = this.realtime_sources.stop_type;
+          this.collection.source_id    = this.realtime_sources.source_id;
 
-          r_collection.format = query_options.format;
-          r_collection.parser = query_options.parser;
-          r_collection.logo   = query_options.logo;
+          var query_options         = Parsers.utils.parseQueryString( this.collection.realtime_url );
+
+          this.collection.format = query_options.format;
+          this.collection.parser = query_options.parser;
+          this.collection.logo   = query_options.logo;
          
-          if ( !this.$el.find('.collection'+ r_collection.stop_id).length ) {
-            this.$el.append('<div class="clearfix collection' + r_collection.stop_id + '"></div>');
+          if ( !this.$el.find('.collection'+ this.collection.stop_id).length ) {
+            this.$el.append('<div class="clearfix collection' + this.collection.stop_id + '"></div>');
           }
           
         }
@@ -81,7 +84,7 @@
       this.render(collection);
     }
   });
-}
+});
 </script>
 
 <% if user_signed_in? %>
@@ -100,9 +103,11 @@
       });
 
       $("#table-results").on('click', '.trashstop', function() {
-        var par=$(this).parent();
-        var stopid=par.data("stopid");
+        var par = $(this).parent();
+        var stopid = par.data("id");
+        
         par.hide();
+        console.log(par);
 
         favoriteModel.set('id', stopid);
         favoriteModel.destroy();

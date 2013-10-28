@@ -63,7 +63,6 @@ var FavortiesView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this);
-
     this.model = new FavoriteModel({ id: stopid });
     this.model.fetch({ success: this.process_favorite });
   },
@@ -128,20 +127,17 @@ var StopView = Backbone.View.extend({
     this.realtime_sources = this.$el.data('realtime');
     if ( this.realtime_sources ) {
       
-      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
-        this['collection' + i] = new BusETACollection();
-          
-        var r_collection          = this['collection' + i];
-        r_collection.stop_id      = this.realtime_sources[i].external_stop_id;
-        r_collection.realtime_url = this.realtime_sources[i].external_stop_url;
-        r_collection.stop_type    = this.realtime_sources[i].stop_type;
-        var query_options = Parsers.utils.parseQueryString( r_collection.realtime_url );
+      this.collection = new BusETACollection();  
+      this.collection.stop_id      = this.realtime_sources.stop_id;
+      this.collection.realtime_url = this.realtime_sources.url;
+      this.collection.stop_type    = this.realtime_sources.stop_type;
+      this.collection.source_id    = this.realtime_sources.source_id;
 
-        r_collection.format    = query_options.format;
-        r_collection.parser    = query_options.parser;
-        r_collection.logo      = query_options.logo;
-      }
+      var query_options = Parsers.utils.parseQueryString( this.collection.realtime_url );
 
+      this.collection.format    = query_options.format;
+      this.collection.parser    = query_options.parser;
+      this.collection.logo      = query_options.logo;
     }
 
     this.$el.on('click', '.route-item', this.fetch_stop_list);
@@ -173,14 +169,10 @@ var StopView = Backbone.View.extend({
     var self = this;
     
     if ( this.realtime_sources ) {
-      for( var i=0, len=this.realtime_sources.length; i < len; i++ ) {
-          var realtime_collection = this['collection' + i];
-        
-          realtime_collection.fetch({ success: function(collection) {
-            self.process_data(collection);
-          } });
-      }
-
+      this.collection.fetch({ success: function(collection) {
+        self.process_data(collection);
+      } });
+      
       // this.collection.fetch({ success: function() {
       //   self.process_data();
       // } });

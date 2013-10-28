@@ -12,8 +12,10 @@ namespace :omgtransit do
 
     puts "Adding/Updating Stops"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
+      Stop.skip_callback(:save, :after)
       Stop.create!({
-        id: [row['stop_id'], args.source_id],
+        id: "#{args.source_id}-#{row['stop_id']}",
+        stop_id: row['stop_id'],
         source_id: args.source_id,
         stop_code: row['stop_code'],
         stop_name: row['stop_name'],
@@ -66,6 +68,7 @@ namespace :omgtransit do
     puts "Adding Trips for source_id = #{args.source_id}"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'trips.txt')), headers: true) do |row|
       Trip.create!({
+        :id => "#{args.source_id}-#{row['route_id']}-#{row['service_id']}-#{row['trip_id']}",
         :source_id => args.source_id,
         :route_id  => row['route_id'],
         :service_id => row['service_id'],
@@ -90,6 +93,7 @@ namespace :omgtransit do
     puts "Adding routes for source_id = #{args.source_id}"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'routes.txt')), headers: true) do |row|
       Route.create!({
+        :id => "#{args.source_id}-#{row['route_id']}-#{row['agency_id']}",
         :source_id => args.source_id,
         :route_id  => row['route_id'],
         :agency_id => row['agency_id'],
@@ -115,6 +119,7 @@ namespace :omgtransit do
     puts "Adding calendar for source_id = #{args.source_id}"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'calendar.txt')), headers: true) do |row|
       Calendar.create!({
+        :id => "#{args.source_id}-#{row['service_id']}",
         :source_id => args.source_id,
         :service_id  => row['service_id'],
         :monday => row['monday'],

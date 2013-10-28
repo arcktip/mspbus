@@ -3,39 +3,31 @@ class Stop < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
-  self.primary_keys = :id, :source_id
-  attr_accessible :id, :source_id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street, :url, :stop_type, :stop_code, :zone_id
+  self.primary_key = :id
+
+  attr_accessible :id, :stop_id, :source_id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street, :url, :stop_type, :stop_code, :zone_id
   
   belongs_to :source
-  has_many :favorites, :foreign_key => [:id, :source_id]
+  has_many :favorites
 
   # =============================================
   # ElasticSearch
+  # Get all indexes: curl http://localhost:9200/_aliases
+  # Sample Search: curl http://localhost:9200/mspbus_development_stops/_search
   # =============================================
 
   mapping do
-    indexes :id,          type: :string
-    #indexes :source_id,   type: :integer
+    indexes :stop_id, type: :integer
+    indexes :source_id,   type: :integer
     indexes :stop_desc,   type: :string
     indexes :stop_name,   type: :string
     indexes :stop_city,   type: :string
     indexes :stop_street, type: :string
 
     indexes :location, type: 'geo_point', as: 'location'
-    #indexes :url, type: :string
-
-
-    # indexes :source_stops do
-    #   indexes :source_id,         type: :string,  analyzer: 'snowball'
-    #   indexes :external_stop_id,  type: :string,  analyzer: 'snowball'
-    #   indexes :external_stop_url, type: :string,  analyzer: 'snowball'
-    #   indexes :stop_type,         type: :integer, analyzer: 'snowball'
-    # end
+    indexes :url, type: :string
+    indexes :stop_type, type: :integer
   end
-
-  #def to_indexed_json
-    #to_json(:include => { source_stops: { only: [:source_id, :external_stop_id, :external_stop_url, :stop_type] } }, :methods => [:location])
-  #end
 
   def location
     [stop_lon.to_f, stop_lat.to_f]
@@ -56,7 +48,7 @@ class Stop < ActiveRecord::Base
 
   def self.get_stop_by_id(params)
     tire.search(page: params[:page], per_page: 10) do
-      filter :term, :id => params[:id]
+      filter :term, :_id => params[:id]
     end
   end
 

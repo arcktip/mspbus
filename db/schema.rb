@@ -11,11 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131023142143) do
+ActiveRecord::Schema.define(:version => 20131028014010) do
 
   create_table "calendars", :id => false, :force => true do |t|
-    t.integer  "source_id",  :null => false
-    t.string   "service_id", :null => false
+    t.string   "id",         :null => false
+    t.integer  "source_id"
+    t.string   "service_id"
     t.boolean  "monday"
     t.boolean  "tuesday"
     t.boolean  "wednesday"
@@ -30,11 +31,10 @@ ActiveRecord::Schema.define(:version => 20131023142143) do
   end
 
   create_table "favorites", :force => true do |t|
-    t.integer  "stop_id"
+    t.string   "stop_id"
     t.integer  "user_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "stop_source_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "flat_routes", :id => false, :force => true do |t|
@@ -66,9 +66,10 @@ ActiveRecord::Schema.define(:version => 20131023142143) do
   add_index "flat_routes", ["trip_id"], :name => "trip_id"
 
   create_table "routes", :id => false, :force => true do |t|
-    t.integer "source_id",        :null => false
-    t.string  "route_id",         :null => false
-    t.integer "agency_id",        :null => false
+    t.string  "id",               :null => false
+    t.integer "source_id"
+    t.string  "route_id"
+    t.integer "agency_id"
     t.string  "route_short_name"
     t.string  "route_long_name"
     t.string  "route_desc"
@@ -122,7 +123,7 @@ ActiveRecord::Schema.define(:version => 20131023142143) do
     t.integer "stop_sequence",  :null => false
   end
 
-  create_table "stops", :force => true do |t|
+  create_table "stops", :id => false, :force => true do |t|
     t.string  "stop_code"
     t.string  "stop_name",                          :null => false
     t.string  "stop_desc"
@@ -137,16 +138,19 @@ ActiveRecord::Schema.define(:version => 20131023142143) do
     t.string  "stop_region"
     t.string  "stop_postcode",       :limit => 50
     t.string  "stop_country",        :limit => 100
-    t.integer "source_id",                          :null => false
+    t.integer "source_id"
+    t.integer "stop_id"
     t.string  "url"
     t.integer "stop_type"
+    t.string  "id"
   end
 
   create_table "trips", :id => false, :force => true do |t|
-    t.integer  "source_id",             :null => false
-    t.string   "route_id",              :null => false
-    t.string   "service_id",            :null => false
-    t.string   "trip_id",               :null => false
+    t.string   "id",                    :null => false
+    t.integer  "source_id"
+    t.string   "route_id"
+    t.string   "service_id"
+    t.string   "trip_id"
     t.string   "trip_headsign"
     t.integer  "block_id"
     t.integer  "shape_id"

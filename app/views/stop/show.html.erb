@@ -38,7 +38,7 @@
 <thead>
   <tr style="font-weight:bold"><th style="padding-left:33px">Rt</th><th>Description</th><th>Arrival</th></tr>
 </thead>
-<tbody id="<%= params[:id] %>" class="result" data-realtime='<%= @stop.source_stops.to_json.to_s %>'>
+<tbody id="<%= params[:id] %>" class="result" data-realtime='<%= @stop.to_json.to_s %>'>
 </tbody>
 </table>
 
@@ -73,7 +73,7 @@
   </div>
 </div>
 <script>
-  var stopid=<%= params[:id] %>;
+  var stopid="<%= params[:id] %>";
   var mapcenter = {
     lat: "<%= @lat %>",
     lon: "<%= @lon %>"

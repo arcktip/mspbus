@@ -1,6 +1,7 @@
 class CreateCalendars < ActiveRecord::Migration
   def up
     create_table :calendars, id: false do |t|
+      t.string :id #source_id, service_id
       t.integer :source_id
       t.string :service_id
       t.boolean :monday
@@ -15,7 +16,7 @@ class CreateCalendars < ActiveRecord::Migration
 
       t.timestamps
     end
-    execute "ALTER TABLE calendars ADD PRIMARY KEY (source_id, service_id);"
+    execute "ALTER TABLE calendars ADD PRIMARY KEY (id);"
   end
 
   def down
