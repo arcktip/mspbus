@@ -19,7 +19,7 @@
           <% end %>
           <%= stop.stop_name %>
         </span>
-        <div class="real-time clearfix" id="<%= stop.id %>" data-attr="<%= stop.id %>" data-name="<%= stop.stop_name %>" data-realtime="<%= stop.source_stops.to_json.to_s %>"></div>
+        <div class="real-time clearfix" id="<%= stop.id %>" data-attr="<%= stop.id %>" data-name="<%= stop.stop_name %>" data-realtime="<%= stop.source_stops.to_json.to_s %>"><img class="loadingimg" src="/assets/horz_loading.gif"></div>
       </a>
     </div>
   <% end %>

@@ -25,6 +25,7 @@ var RealTimeView = Backbone.View.extend({
       this.map_stop=true;
     } else {
       this.realtime_sources = this.$el.data('realtime');
+      this.loading_image=this.$el.find('.loadingimg');
       this.map_stop=false;
     }
 
@@ -98,6 +99,7 @@ var RealTimeView = Backbone.View.extend({
           
           realtime_collection.fetch({ success: function(collection) {
             self.process_data(collection, 5);
+            if(self.loading_image) self.loading_image.hide();
             if(callback) { callback(); }
           } });
         } else {
