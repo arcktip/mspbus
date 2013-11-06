@@ -56,4 +56,8 @@ namespace :omgtransit do
     end
   end
 
+  task :unload_mn_bikes => :environment do
+    SourceStop.delete_all("source_id = 3")
+  end
+
 end
