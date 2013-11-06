@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-MspBus::Application.load_tasks
+OmgTransit::Application.load_tasks
