@@ -8,6 +8,7 @@ var RealTimeView = Backbone.View.extend({
 
   eta_template: JST['templates/eta_label'],
   nice_ride_template: JST['templates/nice_ride'],
+  car2go_template: JST['templates/car2go'],
   
   initialize: function(args) {
     _.bindAll(this);

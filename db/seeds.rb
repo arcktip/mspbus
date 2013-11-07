@@ -13,7 +13,8 @@
  { id: 4, name: "PORTLAND_GTFS", url: 'http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true' },
  { id: 5, name: "CHICAGO_GTFS", url: '' },
  { id: 6, name: "ATLANTA_GTFS", url: '' },
- { id: 7, name: "WASHINGTONDC_GTFS", url: 'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes' }
+ { id: 7, name: "WASHINGTONDC_GTFS", url: 'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes' },
+ { id: 8, name: "CAR2GO", url: '' }
 ].each do |source|
   Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
 end

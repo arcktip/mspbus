@@ -1,9 +1,13 @@
 class StopController < ApplicationController
   def show
-    @stop = Stop.get_stop_by_id({ :id => params[:id], :source_id => params[:source_id] }).results.first
+    @stop = Stop.get_stop_by_id({ :id => params[:id] }).results.first
     @lat = @stop.location[1]
     @lon = @stop.location[0]
-    puts @lat
+    
+    respond_to do |format|
+      format.html
+      format.json { render :json => @stop.to_json }
+    end
   end
 
   def bounds

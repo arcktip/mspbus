@@ -13,7 +13,6 @@ class HomeController < ApplicationController
     @in_bounds=true
     params[:radius] = 10
     bounds_stops = Stop.search(params)
-
     #If there were no stops within 10 miles, probably the user is not part
     #of our service area. Make a note of this and give them a default location.
     if bounds_stops.results.empty?
@@ -28,7 +27,10 @@ class HomeController < ApplicationController
     @lat=params[:lat]
     @lon=params[:lon]
 
-    render :layout => false
+    respond_to do |format|
+      format.html { render :layout => false }
+      format.json { render :json => @stops.results.to_json }
+    end
   end
 
   def favlist

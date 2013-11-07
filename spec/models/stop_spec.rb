@@ -7,14 +7,21 @@ describe Stop do
 
   describe "search" do
     before(:each) do
+      Stop.tire.index.delete
+      Stop.create_elasticsearch_index
+
       create_list(:stop, 30)
+
+      Stop.all.each do |s|
+        s.tire.update_index 
+      end
+      Stop.tire.index.refresh
     end
 
     it "should search for stops based on lat/lon" do
       first = Stop.first
-      raise first.to_yaml
-      stops = Stop.search({ lat: first.stop_lat, lon: first.stop_lon })
-      raise stops.to_yaml
+      stops = Stop.search({ lat: first.stop_lat, lon: first.stop_lon, radius: 10 })
+      expect(stops.results.length).to be > 0
     end
   end
 end

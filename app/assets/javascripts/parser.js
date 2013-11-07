@@ -258,3 +258,20 @@ Parsers.mn_niceride = function(content) {
 
   return data;
 };
+
+/*
+|----------------------------------------------------------------------------------------------------
+| Car2Go API
+| Cities: Many Cities
+| Format: json
+|----------------------------------------------------------------------------------------------------
+*/
+
+Parsers.car2go = function(content) {
+  var data = {
+    template: 'car2go_template',
+    content: content
+  }
+
+  return data;
+};

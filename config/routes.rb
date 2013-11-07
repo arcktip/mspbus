@@ -25,13 +25,14 @@ MspBus::Application.routes.draw do
   get  'stop/get_stop_neighbours' => 'stop#get_stop_neighbours'
   get  'stop/:stopid/arrivals'    => 'stop#arrivals'
   get  'stop/:id'                 => 'stop#show'
-  post '/table'                   => 'home#table'
+  get '/table'                   => 'home#table'
   root :to                        => 'home#index'
   post '/voice'                   => 'home#voice'
   post '/voice_respond'           => 'home#voice_respond'
   
   # realtime apis
   get  'realtime/niceride'        => 'realtime#niceride'
+  get  'realtime/car2go/:id'      => 'realtime#car2go'
 
   resources :favorite, :only => [:index, :show, :update, :create, :destroy]
 end

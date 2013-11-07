@@ -1,0 +1,6 @@
+<div>
+  <span class="label label-info">Fuel <%= data[0].extra.fuel %>%</span>
+  <span class="label label-info">Interior <% if (data[0].extra.interior === 'GOOD') { %><i class="icon-thumbs-up"></i><% } else { %><i class="icon-thumbs-down"><% } %></span>
+  <span class="label label-info">Exterior <% if (data[0].extra.exterior === 'GOOD') { %><i class="icon-thumbs-up"></i><% } else { %><i class="icon-thumbs-down"><% } %></span>
+  <span class="label label-info">Engine - <%= data[0].extra.engineType %></span>
+</div>

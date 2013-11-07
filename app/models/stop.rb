@@ -17,7 +17,7 @@ class Stop < ActiveRecord::Base
   # =============================================
 
   mapping do
-    indexes :stop_id, type: :integer
+    indexes :stop_id, type: :string
     indexes :source_id,   type: :integer
     indexes :stop_desc,   type: :string
     indexes :stop_name,   type: :string
@@ -27,6 +27,7 @@ class Stop < ActiveRecord::Base
     indexes :location, type: 'geo_point', as: 'location'
     indexes :url, type: :string
     indexes :stop_type, type: :integer
+    indexes :extra, type: :object
   end
 
   def location
@@ -37,6 +38,7 @@ class Stop < ActiveRecord::Base
 
     tire.search(page: params[:page], per_page: 40) do
       filter :geo_distance, location: "#{params[:lat]},#{params[:lon]}", distance: "#{params[:radius]}mi"
+      #filter :term, :source_id => 8
       if params[:lat].blank?
         query { string params[:q], default_operator: "AND" } if params[:q].present?
       end

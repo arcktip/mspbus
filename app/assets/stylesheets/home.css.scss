@@ -79,22 +79,57 @@
   right:5px;
 }
 
+/* =====================================
+    NiceRide Bikes
+========================================*/
+
 .niceride {
   background: #C7E58C;
+
+  .real-time {
+    display:inline-block;
+    width:auto;
+    margin-left:1em;
+  }
+
+  .distance-label {
+    top:-4px;
+  }
 }
 
 .niceride:hover{
   background: #9FB770;
 }
 
-.niceride .real-time {
-  display:inline-block;
-  width:auto;
-  margin-left:1em;
+/* =====================================
+    Cars
+========================================*/
+
+.car {
+  background: #009fe4;
+  
+  a {
+    color: #fff;
+  }
+
+  .real-time {
+    display: block;
+    width: auto;
+    margin-left: 0;
+
+    .fuel {
+      width: 30%;
+    }
+  }
+
+  .distance-label {
+    top: -4px;
+    color: #fff;
+  }
 }
 
-.niceride .distance-label {
-  top:-4px;
+.car:hover{
+  background: #1598cf;
 }
 
 .btn-group {

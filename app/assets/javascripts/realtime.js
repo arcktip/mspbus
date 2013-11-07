@@ -75,7 +75,7 @@ function got_coordinates(lat, lon) {
 
   $.ajax({
     url: "/table",
-    method: "post",
+    method: "get",
     data: {
       lat:center.lat,
       lon:center.lon

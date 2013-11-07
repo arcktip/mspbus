@@ -8,16 +8,23 @@
 
 <div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
-    <div class="btn stopbutton <%= isBikeStop(stop)?"niceride":""%>" data-stopid="<%= stop.stop_id %>" data-sourceid="<%= stop.source_id %>">
+    <div class="btn stopbutton <%= determineStopClass(stop) %>" data-stopid="<%= stop.stop_id %>" data-sourceid="<%= stop.source_id %>">
       <a href="stop/<%= stop.id %>">
         <div class="distance-label">
           <%= calculate_distance(stop) %>
         </div>
         <span class="stop-name">
           <% if isBikeStop(stop) %>
-            <span class="pull-left directions-travel-mode-icon directions-bike-icon"></span>&nbsp; 
+            <span class="pull-left directions-travel-mode-icon directions-bike-icon"></span>&nbsp;
+          <% elsif isCarStop(stop) %>
+            <span class="pull-left directions-travel-mode-icon directions-driving-icon"></span>&nbsp;
           <% end %>
-          <%= stop.stop_name %>
+
+          <% if isCarStop(stop) %>
+            <%= stop.stop_name %><br>&nbsp;&nbsp;<%= stop.stop_street %>
+          <% else %>
+            <%= stop.stop_name %>
+          <% end %>
         </span>
         <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.to_json.to_s %>'></div>
       </a>

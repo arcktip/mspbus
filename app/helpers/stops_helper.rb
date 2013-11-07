@@ -8,6 +8,22 @@ module StopsHelper
     end
   end
 
+  def isCarStop(stop)
+    if stop.stop_type == 3
+      true
+    else
+      false
+    end
+  end
+
+  def determineStopClass(stop)
+    if isBikeStop(stop)
+      'niceride'
+    elsif isCarStop(stop)
+      'car'
+    end
+  end
+
   def calculate_distance(stop)
     if (stop.sort[0].nil?)
       ""
