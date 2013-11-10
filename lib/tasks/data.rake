@@ -1,14 +1,24 @@
 namespace :omgtransit do
 
   # =========================================================================
+  # Stop type constants (yes they are constants you don't need to check):
+  
+  ST_BUS   =1
+  ST_BIKE  =2
+  ST_CAR   =3
+  ST_TRAIN =4
+
+  # =========================================================================
   # Generic task to load gtfs data.  Should be called from helper methods.
   # =========================================================================
 
-  task :load_gtfs_stops, [:source_id, :path, :realtime_url, :replace_column] => :environment do |t, args|
+  task :load_gtfs_stops, [:source_id, :path, :realtime_url, :replace_column, :stop_type] => :environment do |t, args|
     require 'csv'
 
     # Remove all previous rows.
     Stop.delete_all(["source_id = ?", args.source_id])
+    
+    puts args.realtime_url
 
     puts "Adding/Updating Stops"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
@@ -24,7 +34,7 @@ namespace :omgtransit do
         stop_lon: row['stop_lon'],
         zone_id: row['zone_id'],
         url: args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"]),
-        stop_type: 1
+        stop_type: args.stop_type
       })
     end
 
@@ -140,7 +150,7 @@ namespace :omgtransit do
   # ================================================================
 
   task :load_msp_gtfs => :environment do
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(1, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id')
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(1, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
     # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
     # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
     # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
@@ -148,22 +158,26 @@ namespace :omgtransit do
   end
 
   task :load_portland_gtfs => :environment do
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(4, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id')
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(4, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
   end
 
   task :load_chicago_gtfs => :environment do
     # key - kPhyVbW2qnjqNfQSgvNXbxCsN
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(5, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id')
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(5, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
   end
 
   task :load_atlanta_gtfs => :environment do
     # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(6, 'setup/atlanta_gtfs', "", 'stop_id')
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(6, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
   end
 
   task :load_washington_dc_gtfs => :environment do
     # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(7, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code')
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(7, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
+  end
+  
+  task :load_amtrak_gtfs => :environment do
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(8, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
   end
 
   # ================================================================
