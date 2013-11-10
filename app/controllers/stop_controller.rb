@@ -12,7 +12,7 @@ class StopController < ApplicationController
 
   def bounds
     @stop = Stop.get_stop_by_bounds(params[:n], params[:s], params[:e], params[:w])
-    @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['id'].to_i, :name => i['stop_name'], :source_stops=>i['source_stops'] } }
+    @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['id'].to_i, :name => i['stop_name'], :stop_type => i['stop_type'] } }
 
     respond_to do |format|
       format.json { render :json => @stop }

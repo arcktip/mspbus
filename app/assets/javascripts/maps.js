@@ -103,6 +103,8 @@ var MapView = Backbone.View.extend({
     this.bus_hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));
     this.bike_normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
     this.bike_hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
+    this.train_normal_icon=new google.maps.MarkerImage(config.icons[4].icon);
+    this.train_hover_icon =new google.maps.MarkerImage(config.icons[4].hover);
   },
   
   render: function() {
@@ -146,7 +148,7 @@ var MapView = Backbone.View.extend({
     if(look_up!==false && typeof(stops[look_up].marker)!=='undefined')
       return; //Yes, it already has a marker. Don't make another!
 
-    var stop_type=new_stop.source_stops[0].stop_type;
+    var stop_type=new_stop.stop_type;
     var normal_icon='';
     var hover_icon=''
     if(stop_type==1){
@@ -155,6 +157,9 @@ var MapView = Backbone.View.extend({
     } else if(stop_type==2) {
       normal_icon=self.bike_normal_icon;
       hover_icon =self.bike_hover_icon;
+    } else if(stop_type==4) {
+      normal_icon=self.train_normal_icon;
+      hover_icon =self.train_hover_icon;
     }
 
     //Make a new marker
