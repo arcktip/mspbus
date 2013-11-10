@@ -275,3 +275,41 @@ Parsers.car2go = function(content) {
 
   return data;
 };
+
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------------------------------
+| NexTrip API
+| Cities: Amtrak
+| Format: json
+| Description: None, Richard & Louis built this from the ground up, yo.
+|----------------------------------------------------------------------------------------------------
+*/
+
+Parsers.amtrak = function(content) {
+  
+  var obj = [];
+
+  for(var i = 0, len = content.length; i < len; i++) {
+    obj.push({
+      'DepartureText':  content[i].arrival,
+      'DepartureTime':  content[i].arrival,
+      'RouteDirection': content[i].RouteDirection,
+      'Route':          content[i].Route,
+      'Description':    content[i].Description,
+    });
+  }
+
+
+  var data = {
+    template: 'eta_template',
+    callback: 'process_eta', 
+    content: obj
+  }
+
+  return data;
+};
