@@ -33,6 +33,7 @@ MspBus::Application.routes.draw do
   # realtime apis
   get  'realtime/niceride'        => 'realtime#niceride'
   get  'realtime/car2go/:id'      => 'realtime#car2go'
+  get  'realtime/amtrak/:id'      => 'realtime#amtrak'
 
   resources :favorite, :only => [:index, :show, :update, :create, :destroy]
 end
