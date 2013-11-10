@@ -40,11 +40,12 @@ Parsers.nextrip = function(content) {
   var obj = [];
 
   for(var i = 0, len = content.length; i < len; i++) {
+    console.log(content[i]);
     obj.push({
       'DepartureText':  content[i].DepartureText,
       'DepartureTime':  content[i].DepartureTime.substr(6,10),
       'RouteDirection': content[i].RouteDirection,
-      'Route':          content[i].Route,
+      'Route':          content[i].Route+content[i].Terminal,
       'Description':    content[i].Description
     });
   }
