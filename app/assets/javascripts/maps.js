@@ -217,7 +217,6 @@ var MapView = Backbone.View.extend({
       stops[look_up].marker=marker
     else {  //The stop is not in the array, so add it
       new_stop.marker=marker;
-      console.log('push', new_stop);
       stops.push(new_stop);
     }
   },

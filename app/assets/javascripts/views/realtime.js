@@ -14,7 +14,7 @@ var RealTimeView = Backbone.View.extend({
     _.bindAll(this);
 
     if ( args.map_stop ) {
-      this.realtime_sources = args.map_stop.source_stops;
+      this.realtime_sources = JSON.parse(args.map_stop.realtime);
       this.$el=$('<span></span>');
       this.$el.data('name',args.map_stop.name);
       this.map_stop=true;
