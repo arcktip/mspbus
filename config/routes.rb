@@ -25,7 +25,7 @@ MspBus::Application.routes.draw do
   get  'stop/get_stop_neighbours' => 'stop#get_stop_neighbours'
   get  'stop/:stopid/arrivals'    => 'stop#arrivals'
   get  'stop/:id'                 => 'stop#show'
-  get '/table'                   => 'home#table'
+  get '/table'                    => 'home#table'
   root :to                        => 'home#index'
   post '/voice'                   => 'home#voice'
   post '/voice_respond'           => 'home#voice_respond'
