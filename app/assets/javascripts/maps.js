@@ -90,7 +90,7 @@ var MapView = Backbone.View.extend({
       position: new google.maps.LatLng(mapcenter.lat, mapcenter.lon),
       map: this.map,
       draggable: false,
-      icon: '/assets/you-are-here.png'
+      icon: config.icons.YOU_ARE_HERE
     });
 
     //idle event fires once when the user stops panning/zooming
@@ -99,12 +99,24 @@ var MapView = Backbone.View.extend({
     this.route_input_view = new RouteInputView({ el: '#view-route', map_parent: this });
 
     //Precreate Marker Images
-    this.bus_normal_icon=new google.maps.MarkerImage(config.icons[1].icon, null, null, null, new google.maps.Size(22,22));
-    this.bus_hover_icon =new google.maps.MarkerImage(config.icons[1].hover, null, null, null, new google.maps.Size(22,22));
-    this.bike_normal_icon=new google.maps.MarkerImage(config.icons[2].icon);
-    this.bike_hover_icon =new google.maps.MarkerImage(config.icons[2].hover);
-    this.train_normal_icon=new google.maps.MarkerImage(config.icons[4].icon);
-    this.train_hover_icon =new google.maps.MarkerImage(config.icons[4].hover);
+    this.icons = {
+      1: { 
+        normal: new google.maps.MarkerImage(config.transit_mode_icons[1].icon, null, null, null, new google.maps.Size(22,22)),
+        hover: new google.maps.MarkerImage(config.transit_mode_icons[1].hover, null, null, null, new google.maps.Size(22,22))
+      },
+      2: {
+        normal: new google.maps.MarkerImage(config.transit_mode_icons[2].icon),
+        hover: new google.maps.MarkerImage(config.transit_mode_icons[2].hover)
+      },
+      3: {
+        normal: null,
+        hover: null
+      },
+      4: {
+        normal: new google.maps.MarkerImage(config.transit_mode_icons[4].icon),
+        hover: new google.maps.MarkerImage(config.transit_mode_icons[4].hover)
+      }
+    }
   },
   
   render: function() {
@@ -149,26 +161,14 @@ var MapView = Backbone.View.extend({
       return; //Yes, it already has a marker. Don't make another!
 
     var stop_type=new_stop.stop_type;
-    var normal_icon='';
-    var hover_icon=''
-    if(stop_type==1){
-      normal_icon=self.bus_normal_icon;
-      hover_icon =self.bus_hover_icon;
-    } else if(stop_type==2) {
-      normal_icon=self.bike_normal_icon;
-      hover_icon =self.bike_hover_icon;
-    } else if(stop_type==4) {
-      normal_icon=self.train_normal_icon;
-      hover_icon =self.train_hover_icon;
-    }
+    var icon = this.icons[stop_type];
 
-    //Make a new marker
-    
+    //Make a new marker    
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
       draggable: false,
-      icon: normal_icon,
+      icon: icon.normal,
       //animation: google.maps.Animation.DROP,
       stopid: new_stop.id,
       zIndex: 1
@@ -198,10 +198,10 @@ var MapView = Backbone.View.extend({
       });
     });
 
-    if(!HomeView.mobile){  //TODO: Is this attached to the right place?
+    if(!HomeView.mobile) {  //TODO: Is this attached to the right place?
       google.maps.event.addListener(marker, 'mouseover', function() {
         this.setOptions({zIndex:10});
-        this.setIcon( hover_icon );
+        this.setIcon( icon.hover );
         self.hover_on_marker(new_stop.id);
       });
 
@@ -209,7 +209,7 @@ var MapView = Backbone.View.extend({
         self.mapElement.html("");
         this.setOptions({zIndex:this.get("myZIndex")});  
         this.setOptions({zIndex:1});
-        this.setIcon( normal_icon );
+        this.setIcon( icon.normal );
       });
     }
 
@@ -217,6 +217,7 @@ var MapView = Backbone.View.extend({
       stops[look_up].marker=marker
     else {  //The stop is not in the array, so add it
       new_stop.marker=marker;
+      console.log('push', new_stop);
       stops.push(new_stop);
     }
   },
