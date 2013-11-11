@@ -52,17 +52,24 @@ namespace :omgtransit do
   end
 
   task :load_umn_stops => :environment do
-    SourceStop.delete_all("source_id = 2")
+    Stop.delete_all("source_id = 2")
     UMN_Connector::Route.get_routes.each do |route|
       route.stops.each do |stop|
-        SourceStop.find_or_initialize_by_source_id_and_external_stop_id(2, "#{stop.stop_id}") do |ss|
-          ss.external_stop_id   = "#{stop.stop_id}"
-          ss.external_lat       = "#{stop.latitude}"
-          ss.external_lon       = "#{stop.longitude}"
-          ss.external_stop_url  = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png"
-          ss.external_stop_name = "#{stop.title}"
-          ss.stop_type          = 1
-          ss.save!
+        Stop.skip_callback(:save, :after)
+        begin 
+          Stop.create!({
+            id:        "2-#{stop.stop_id}",
+            stop_id:   stop.stop_id,
+            source_id: 2,
+            stop_name: stop.title,
+            stop_desc: stop.title,
+            stop_lat:  "#{stop.latitude}",
+            stop_lon:  "#{stop.longitude}",
+            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png",
+            stop_type: 1
+          })
+        rescue ActiveRecord::RecordNotUnique => e
+          puts "Stop #{stop.stop_id} was not unique, but that's probably okay."
         end
       end
     end
