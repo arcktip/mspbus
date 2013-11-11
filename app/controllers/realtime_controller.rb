@@ -40,9 +40,9 @@ class RealtimeController < ApplicationController
           #puts train['properties'][key]['code']
           if train['properties'][key]['code']==params[:stop_id]
             ret<<{:Route          =>train['properties']['TrainNum'], 
-                  :Description     =>train['properties']['RouteName'],
-                  :RouteDirection  =>train['properties']['Heading'],
-                  :arrival         =>train['properties'][key]['postarr'] #When the train should arrive, in real-time
+                  :Description    =>train['properties']['RouteName'],
+                  :RouteDirection =>train['properties']['Heading'],
+                  :arrival        =>train['properties'][key]['postarr'] #When the train should arrive, in real-time
                 }
           end
         end
