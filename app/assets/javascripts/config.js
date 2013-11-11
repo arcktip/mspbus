@@ -18,8 +18,8 @@ var config = {
       hover: '/assets/car.png'
     },
     4: {
-      icon:'/assets/bike_station.png',
-      hover:'/assets/bike_station_hover.png'
+      icon:'/assets/train-icon.svg',
+      hover:'/assets/train-icon-hover.svg'
     }
   },
   icons: {

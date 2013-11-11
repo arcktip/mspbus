@@ -46,9 +46,9 @@ class RealtimeController < ApplicationController
             timezone=amtrak_timezones[timezone]
 
             if station['postarr'] #We have real-time data!
-              departureTime=station['postarr']
+              departureTime=station['postdep']
             else                  #Fall back to scheduled information
-              departureTime=station['scharr']
+              departureTime=station['schdep']
             end
 
             departureTime=DateTime.strptime(departureTime+" #{timezone}", '%m/%d/%Y %H:%M:%S %Z')
