@@ -16,8 +16,6 @@ class RealtimeController < ApplicationController
     require 'json'
     require 'open-uri'
 
-    puts params[:stop_id]
-
     #Fetch the data
     url="https://www.googleapis.com/mapsengine/v1/tables/01382379791355219452-08584582962951999356/features?version=published&key=AIzaSyCVFeFQrtk-ywrUE0pEcvlwgCqS6TJcOW4&maxResults=250&callback=jQuery19105907959912437946_1383770388074&dataType=jsonp&jsonpCallback=retrieveTrainsData&contentType=application%2Fjson&_=1383770388076"
     r=open(url).read
@@ -40,7 +38,7 @@ class RealtimeController < ApplicationController
       train['properties'].keys.each do |key|
         if key[0..6]=='Station'
           #puts train['properties'][key]['code']
-          if train['properties'][key]['code']==params[:id]
+          if train['properties'][key]['code']==params[:stop_id]
             ret<<{:Route          =>train['properties']['TrainNum'], 
                   :Description     =>train['properties']['RouteName'],
                   :RouteDirection  =>train['properties']['Heading'],
