@@ -31,6 +31,7 @@ class RealtimeController < ApplicationController
       end
     end
 
+    amtrak_timezones={"E"=>"EST", "C"=>"CST", "M"=>"MST", "P"=>"PST"}
 
     #Parse the data
     ret=[]
@@ -39,10 +40,31 @@ class RealtimeController < ApplicationController
         if key[0..6]=='Station'
           #puts train['properties'][key]['code']
           if train['properties'][key]['code']==params[:stop_id]
+            puts "-------------"
+            station=train['properties'][key]
+            timezone=station['tz']
+            timezone=amtrak_timezones[timezone]
+
+            if station['postarr'] #We have real-time data!
+              departureTime=station['postarr']
+            else                  #Fall back to scheduled information
+              departureTime=station['scharr']
+            end
+
+            departureTime=DateTime.strptime(departureTime+" #{timezone}", '%m/%d/%Y %H:%M:%S %Z')
+
+            if departureTime<DateTime.now #Train has already left
+              next
+            end
+
+            departureText=departureTime.strftime("%b %-d %-I:%M %p")
+            departureTime=departureTime.strftime("%s").to_i
+            
             ret<<{:Route          =>train['properties']['TrainNum'], 
                   :Description    =>train['properties']['RouteName'],
                   :RouteDirection =>train['properties']['Heading'],
-                  :arrival        =>train['properties'][key]['postarr'] #When the train should arrive, in real-time
+                  :DepartureTime  =>departureTime,
+                  :DepartureText  =>departureText
                 }
           end
         end

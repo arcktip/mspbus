@@ -296,8 +296,8 @@ Parsers.amtrak = function(content) {
 
   for(var i = 0, len = content.length; i < len; i++) {
     obj.push({
-      'DepartureText':  content[i].arrival,
-      'DepartureTime':  content[i].arrival,
+      'DepartureText':  content[i].DepartureText,
+      'DepartureTime':  content[i].DepartureTime,
       'RouteDirection': content[i].RouteDirection,
       'Route':          content[i].Route,
       'Description':    content[i].Description,
