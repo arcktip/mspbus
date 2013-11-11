@@ -15,7 +15,7 @@ var config = {
     },
     3: {
       icon: '/assets/car.png',
-      hover: '/assets/car-hover.png'
+      hover: '/assets/car.png'
     },
     4: {
       icon:'/assets/bike_station.png',

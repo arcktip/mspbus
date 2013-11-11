@@ -109,8 +109,8 @@ var MapView = Backbone.View.extend({
         hover: new google.maps.MarkerImage(config.transit_mode_icons[2].hover)
       },
       3: {
-        normal: null,
-        hover: null
+        normal: new google.maps.MarkerImage(config.transit_mode_icons[3].icon, null, null, null, new google.maps.Size(30,30)),
+        hover: new google.maps.MarkerImage(config.transit_mode_icons[3].hover, null, null, null, new google.maps.Size(30,30))
       },
       4: {
         normal: new google.maps.MarkerImage(config.transit_mode_icons[4].icon),
