@@ -45,7 +45,7 @@ class RealtimeController < ApplicationController
             timezone=station['tz']
             timezone=amtrak_timezones[timezone]
 
-            if station['postarr'] #We have real-time data!
+            if station['postdep'] #We have real-time data!
               departureTime=station['postdep']
             else                  #Fall back to scheduled information
               departureTime=station['schdep']
