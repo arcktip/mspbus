@@ -2,11 +2,13 @@ namespace :omgtransit do
 
   # =========================================================================
   # Stop type constants (yes they are constants you don't need to check):
+  # =========================================================================
   
   ST_BUS   =1
   ST_BIKE  =2
   ST_CAR   =3
   ST_TRAIN =4
+  INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
 
   # =========================================================================
   # Generic task to load gtfs data.  Should be called from helper methods.
@@ -17,10 +19,18 @@ namespace :omgtransit do
 
     # Remove all previous rows.
     Stop.delete_all(["source_id = ?", args.source_id])
-    
-    puts args.realtime_url
 
-    puts "Adding/Updating Stops"
+    # Remove all from elasticsearch as well.
+    query = Tire.search do |search|
+      search.query do |q|
+        q.terms :source_id, [args.source_id]
+      end
+    end
+    
+    index = Tire.index(INDEX_NAME)
+    Tire::Configuration.client.delete "#{index.url}/_query?source=#{Tire::Utils.escape(query.to_hash[:query].to_json)}"
+
+    puts "Adding/Updating Stops for #{args.path}"
     csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
       Stop.skip_callback(:save, :after)
       Stop.create!({
@@ -150,7 +160,12 @@ namespace :omgtransit do
   # ================================================================
 
   task :load_msp_gtfs => :environment do
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(1, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
+    source = Source.find_by_name('MSP')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
     # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
     # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
     # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
@@ -158,43 +173,51 @@ namespace :omgtransit do
   end
 
   task :load_portland_gtfs => :environment do
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(4, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
+    source = Source.find_by_name('PORTLAND')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
   end
 
   task :load_chicago_gtfs => :environment do
     # key - kPhyVbW2qnjqNfQSgvNXbxCsN
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(5, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
+    source = Source.find_by_name('CHICAGO')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
   end
 
   task :load_atlanta_gtfs => :environment do
     # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(6, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
+    source = Source.find_by_name('ATLANTA')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
   end
 
   task :load_washington_dc_gtfs => :environment do
     # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(7, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
+    source = Source.find_by_name('WASHINGTONDC')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
   end
   
   task :load_amtrak_gtfs => :environment do
-    Rake::Task['omgtransit:load_gtfs_stops'].invoke(8, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
+    source = Source.find_by_name('AMTRAK')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
   end
 
-  # ================================================================
-  # Reindexes stops from master stops into the stops table.
-  # ================================================================
-
-  # task :reset_stops => :environment do
-  #   puts "Deleting Stops"
-  #   ActiveRecord::Base.connection.execute("DELETE FROM stops")
-  #   puts "Re-inserting Stops"
-  #   ActiveRecord::Base.connection.execute("INSERT INTO stops
-  #     (stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_street, stop_city, stop_region, stop_postcode, stop_country)
-  #     SELECT
-  #     external_stop_id, external_stop_name, external_stop_desc,external_lat, external_lon, external_zone_id, 
-  #     external_stop_street, external_stop_city, external_stop_region, external_stop_postcode, external_stop_country
-  #     FROM source_stops")
-  #   puts "Populating source stops from stops"
-  #   ActiveRecord::Base.connection.execute("UPDATE source_stops SET stop_id = (SELECT id FROM stops WHERE stop_code = external_stop_id AND stop_name = external_stop_name)")
-  # end
 end

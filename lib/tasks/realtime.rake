@@ -1,6 +1,12 @@
 namespace :omgtransit do
   require 'httparty'
 
+  ST_BUS   =1
+  ST_BIKE  =2
+  ST_CAR   =3
+  ST_TRAIN =4
+  INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
+
   # =================================================
   # Car2go
   # =================================================
@@ -9,8 +15,8 @@ namespace :omgtransit do
     CONSUMER_KEY = 'OMGTransit'
     CAR2GO_LOCATIONS_URL = "https://www.car2go.com/api/v2.1/locations?oauth_consumer_key=#{CONSUMER_KEY}&format=json"
     CAR2GO_VEHICLES_URL = "https://www.car2go.com/api/v2.1/vehicles?loc=minneapolis&oauth_consumer_key=#{CONSUMER_KEY}&format=json"
-    INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
 
+    start = Time.now
     source_id = Source.get_source_by_key('CAR2GO').first.id
 
     cars = []
@@ -27,7 +33,7 @@ namespace :omgtransit do
         stop_street: car['address'],
         location: [car['coordinates'][0], car['coordinates'][1]],
         url: "/realtime/car2go/#{source_id}-#{car['vin']}?format=json&parser=car2go",
-        stop_type: 3,
+        stop_type: ST_CAR,
         extra: {
           engineType: car['engineType'],
           exterior: car['exterior'],
@@ -49,6 +55,9 @@ namespace :omgtransit do
     Tire.index INDEX_NAME do
       import cars
     end
+
+    execution_time_in_seconds = Time.now - start
+    puts "** Car2go reload (#{execution_time_in_seconds})s @ #{DateTime.now} **"
   end
 
   # =================================================

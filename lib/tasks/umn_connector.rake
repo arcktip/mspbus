@@ -5,6 +5,16 @@ namespace :omgtransit do
   require 'nokogiri'
   require 'httparty'
 
+  # =========================================================================
+  # Stop type constants (yes they are constants you don't need to check):
+  # =========================================================================
+  
+  ST_BUS   =1
+  ST_BIKE  =2
+  ST_CAR   =3
+  ST_TRAIN =4
+  INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
+
   module UMN_Connector
     class Route
       attr_accessor :xml_data, :stops
@@ -52,27 +62,47 @@ namespace :omgtransit do
   end
 
   task :load_umn_stops => :environment do
-    Stop.delete_all("source_id = 2")
-    UMN_Connector::Route.get_routes.each do |route|
-      route.stops.each do |stop|
-        Stop.skip_callback(:save, :after)
-        begin 
-          Stop.create!({
-            id:        "2-#{stop.stop_id}",
-            stop_id:   stop.stop_id,
-            source_id: 2,
-            stop_name: "#{stop.title}",
-            stop_desc: "#{stop.title}",
-            stop_lat:  "#{stop.latitude}",
-            stop_lon:  "#{stop.longitude}",
-            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png",
-            stop_type: 1
-          })
-        rescue ActiveRecord::RecordNotUnique => e
-          puts "Stop #{stop.stop_id} was not unique, but that's probably okay."
+    
+    source = Source.find_by_name('UMN')
+
+    unless source.nil?
+      Stop.delete_all("source_id = #{source.id}")
+
+      # Remove all from elasticsearch as well.
+      query = Tire.search do |search|
+        search.query do |q|
+          q.terms :source_id, [source.id]
         end
       end
+      
+      index = Tire.index(INDEX_NAME)
+      Tire::Configuration.client.delete "#{index.url}/_query?source=#{Tire::Utils.escape(query.to_hash[:query].to_json)}"
+
+
+      UMN_Connector::Route.get_routes.each do |route|
+        route.stops.each do |stop|
+          Stop.skip_callback(:save, :after)
+          begin 
+            Stop.create!({
+              id:        "#{source.id}-#{stop.stop_id}",
+              stop_id:   stop.stop_id,
+              source_id: source.id,
+              stop_name: "#{stop.title}",
+              stop_desc: "#{stop.title}",
+              stop_lat:  "#{stop.latitude}",
+              stop_lon:  "#{stop.longitude}",
+              url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png",
+              stop_type: ST_BUS
+            })
+          rescue ActiveRecord::RecordNotUnique => e
+            puts "Stop #{stop.stop_id} was not unique, but that's probably okay."
+          end
+        end
+      end
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
+
   end
 
 end
