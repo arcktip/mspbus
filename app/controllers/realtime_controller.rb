@@ -57,12 +57,16 @@ class RealtimeController < ApplicationController
             #TODO: Discuss the appropriate order here and whether arrivals should be made visually distinct from departures
             if station['postdep']    #We have real-time departure data!
               departureTime=station['postdep']
+              timetype=""
             elsif station['schdep']  #Fall back to scheduled departure information
               departureTime=station['schdep']
+              timetype=""
             elsif station['postarr'] #Fall back to real-time arrival information
               departureTime=station['postarr']
+              timetype="A"
             elsif station['scharr']  #fall back to scheduled arrival information
               departureTime=station['scharr']
+              timetype="A"
             else
               puts "Station error ", station
               next
@@ -81,7 +85,8 @@ class RealtimeController < ApplicationController
                   :Description    =>train['properties']['RouteName'],
                   :RouteDirection =>train['properties']['Heading'],
                   :DepartureTime  =>departureTime,
-                  :DepartureText  =>departureText
+                  :DepartureText  =>departureText,
+                  :TimeType       =>timetype
                 }
           end
         end
