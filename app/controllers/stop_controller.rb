@@ -11,8 +11,18 @@ class StopController < ApplicationController
   end
 
   def bounds
-    @stop = Stop.get_stop_by_bounds(params[:n], params[:s], params[:e], params[:w])
-    @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['id'], :name => i['stop_name'], :stop_type => i['stop_type'], :realtime=>i.to_json.to_s } }
+    #Each degree of latitude is ~69 miles from another
+    if    (params[:n].to_f-params[:s].to_f).abs*69>30
+      @stop = [] #They are trying to see too large an area
+
+    #Each degree of longitude is 69*cos(Latitude) miles apart
+    elsif (params[:e].to_f-params[:w].to_f).abs*69*Math.cos(params[:n].to_f*3.14159/180)>30
+      @stop = [] #They are trying to see too large an area
+
+    else
+      @stop = Stop.get_stop_by_bounds(params[:n], params[:s], params[:e], params[:w])
+      @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['id'], :name => i['stop_name'], :stop_type => i['stop_type'], :realtime=>i.to_json.to_s } }
+    end
 
     respond_to do |format|
       format.json { render :json => @stop }
