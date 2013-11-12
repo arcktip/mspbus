@@ -181,6 +181,7 @@ GEM
     rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    redis (3.0.6)
     ref (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -256,6 +257,7 @@ DEPENDENCIES
   pg
   polylines
   rails (= 3.2.14)
+  redis
   rspec-rails
   rvm-capistrano
   sass-rails (~> 3.2.3)

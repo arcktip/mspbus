@@ -27,6 +27,7 @@ gem 'tire' # elasticsearch wrapper
 gem 'bcdatabase' # database credential management
 gem 'nokogiri'
 gem 'rvm-capistrano'
+gem 'redis'
 
 # User profiles
 gem 'devise'
