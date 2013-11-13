@@ -49,7 +49,7 @@ var RealTimeView = Backbone.View.extend({
     if ( collection.length === 0 && !this.map_stop ) {
       this.$el.parent().parent().hide(); //TODO: Should generalize this out of here
     } else {
-      this.loading_image.hide();
+      if(!this.map_stop) this.loading_image.hide();
       this.$el.find('.collection' + collection.stop_id ).html(this[collection.template]({ logo: collection.logo , data: collection.toJSON() }));
     }
   },
