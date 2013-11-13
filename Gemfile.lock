@@ -38,12 +38,12 @@ GEM
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-x86-mingw32)
     builder (3.0.4)
-    callsite (0.0.11)
     cachebar (1.1.0)
       activesupport
       httparty (~> 0.8.3)
       redis
       redis-namespace
+    callsite (0.0.11)
     capistrano (2.15.5)
       highline
       net-scp (>= 1.0.0)
@@ -244,8 +244,8 @@ PLATFORMS
 
 DEPENDENCIES
   bcdatabase
-  capybara
   cachebar
+  capybara
   coffee-rails (~> 3.2.1)
   compass-rails
   composite_primary_keys
