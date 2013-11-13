@@ -624,3 +624,10 @@ rs.shape.getListByTrip
 Other APIs
 ==============================
 [Massachusetts Department of Transportation](http://www.massdot.state.ma.us/DevelopersData.aspx)
+
+
+Amtrak
+======
+Stops: http://www.gtfs-data-exchange.com/agency/amtrak/
+Get list of routes: http://www.amtrak.com/rttl/js/RoutesList.json
+Get route properties: http://www.amtrak.com/rttl/js/route_properties.json
