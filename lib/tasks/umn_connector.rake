@@ -47,12 +47,13 @@ namespace :omgtransit do
       attr_accessor :xml_data, :stop_id, :title, :short_title, :latitude, :longitude
 
       def initialize(stop)
-        @xml_data = stop
-        @stop_id = xml_data.attributes['stopId']
-        @title = xml_data.attributes['title']
+        @xml_data    = stop
+        @stop_id     = xml_data.attributes['stopId']
+                puts  @stop_id
+        @title       = xml_data.attributes['title']
         @short_title = xml_data.attributes['shortTitle']
-        @latitude = xml_data.attributes['lat']
-        @longitude = xml_data.attributes['lon']
+        @latitude    = xml_data.attributes['lat']
+        @longitude   = xml_data.attributes['lon']
         # xml_data.attributes['latMin']
         # xml_data.attributes['latMax']
         # xml_data.attributes['lonMin']
@@ -85,7 +86,7 @@ namespace :omgtransit do
           begin 
             Stop.create!({
               id:        "#{source.id}-#{stop.stop_id}",
-              stop_id:   stop.stop_id,
+              stop_id:   "#{stop.stop_id}",
               source_id: source.id,
               stop_name: "#{stop.title}",
               stop_desc: "#{stop.title}",
