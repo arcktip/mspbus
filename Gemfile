@@ -27,8 +27,9 @@ gem 'tire' # elasticsearch wrapper
 gem 'bcdatabase' # database credential management
 gem 'nokogiri'
 gem 'rvm-capistrano'
-<<<<<<< HEAD
+
 gem 'redis'
+gem 'cachebar'
 
 # User profiles
 gem 'devise'
@@ -43,10 +44,7 @@ group :test, :development do
   gem 'faker'
   gem 'meta_request'
 end
-=======
-gem 'cachebar'
-gem 'redis'
->>>>>>> 85b315a... Added caching to NiceRide bikes
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
