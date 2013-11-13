@@ -26,7 +26,7 @@
             <%= stop.stop_name %>
           <% end %>
         </span>
-        <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.to_json.to_s %>'></div>
+        <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>" data-realtime="<%= stop.to_json.to_s %>"></div>
       </a>
     </div>
   <% end %>
