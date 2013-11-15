@@ -158,17 +158,20 @@ var StopView = Backbone.View.extend({
       //this.$el.parent().parent().hide();
     }
 
-    if ( collection.stop_type === 1 ) {
+    // Bus or Train?
+    if ( collection.stop_type === 1 || collection.stop_type === 4 ) {
       
       var formatted = this.format_data(collection);
       this.$el.html(this.template({ logo: collection.logo , data: formatted }));
       $('.stop-table').show();
 
+    // Bike?
     } else if ( collection.stop_type === 2 ) {
       
       var formatted = this.format_niceride_data(collection);
       $('#alternate-template').html(this.nice_rice_template({ data: formatted }));
     
+    // Car?
     } else if ( collection.stop_type === 3 ) {
       console.log(collection.models);
       $('#alternate-template').html(this.car2go_template({ data: collection.models[0] }));
