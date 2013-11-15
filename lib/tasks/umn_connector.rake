@@ -78,10 +78,9 @@ namespace :omgtransit do
       index = Tire.index(INDEX_NAME)
       Tire::Configuration.client.delete "#{index.url}/_query?source=#{Tire::Utils.escape(query.to_hash[:query].to_json)}"
 
-
       UMN_Connector::Route.get_routes.each do |route|
         route.stops.each do |stop|
-          Stop.skip_callback(:save, :after)
+          #Stop.skip_callback(:save, :after)
           begin 
             Stop.create!({
               id:        "#{source.id}-#{stop.stop_id}",
@@ -91,6 +90,7 @@ namespace :omgtransit do
               stop_desc: "#{stop.title}",
               stop_lat:  "#{stop.latitude}",
               stop_lon:  "#{stop.longitude}",
+              stop_url: "umn/#{stop.stop_id}",
               url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId=#{stop.stop_id}&format=xml&parser=nextbus&logo=umn.png",
               stop_type: ST_BUS
             })

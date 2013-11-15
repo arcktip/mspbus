@@ -119,6 +119,9 @@ var StopView = Backbone.View.extend({
   el: '.result',
   template: JST['templates/show_stop_detail'],
   stop_list_template: JST['templates/stop_list'],
+  nice_rice_template: JST['templates/show_nice_ride_detail'],
+  car2go_template: JST['templates/show_car2go_detail'],
+
   flat_route_model: null,
   
   initialize: function() {
@@ -150,18 +153,25 @@ var StopView = Backbone.View.extend({
     //   return;
     // }
 
-    if( collection.length === 0 ) {
+    if ( collection.length === 0 ) {
+      return;
       //this.$el.parent().parent().hide();
-    } else if ( collection.stop_type === 2 ) {
-      var formatted = this.format_niceride_data(collection);
-      
-      $('#niceride-disp .rental-status').html(formatted.bikes + " bikes, " + formatted.empty + " empty docks");
-      $('#niceride-disp').show();
-      $('.stop-table').hide();
+    }
 
-    } else {
-      var formatted=this.format_data(collection);
+    if ( collection.stop_type === 1 ) {
+      
+      var formatted = this.format_data(collection);
       this.$el.html(this.template({ logo: collection.logo , data: formatted }));
+      $('.stop-table').show();
+
+    } else if ( collection.stop_type === 2 ) {
+      
+      var formatted = this.format_niceride_data(collection);
+      $('#alternate-template').html(this.nice_rice_template({ data: formatted }));
+    
+    } else if ( collection.stop_type === 3 ) {
+      console.log(collection.models);
+      $('#alternate-template').html(this.car2go_template({ data: collection.models[0] }));
     }
   },
 

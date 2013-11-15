@@ -20,6 +20,8 @@
 //= require jquery.cookie
 //= require jquery.throttle
 //= require jquery.getUrlParam
+//= require raphael.min.js
+//= require justgage.1.0.1.min.js
 //= require config
 //= require url-parser
 //= require matchMedia

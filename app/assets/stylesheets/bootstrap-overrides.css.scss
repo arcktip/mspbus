@@ -105,6 +105,36 @@
     }
   }
 
+  #alternate-template {
+    h2 {
+      font-size: 24px;
+    }
+    .info {
+      .span2 {
+        width: 50px;
+        margin-left: 10px;
+        font-weight: bold;
+        color: #009fe4;
+      }
+      .descr {
+        margin-left: 10px;
+      }
+    }
+    .rental-status {
+      margin-left: 30px;
+      font-size: 24px !important;
+      .dash-nopad {
+        margin-top: 10px;
+      }
+      .dash {
+        margin-top: 10px;
+        // margin-right: 10px !important;
+        // padding: 15px !important;
+        height: 60px !important;
+      }
+    }
+  }
+
 }
 
 @media (max-width: 979px) and (min-width: 768px) {

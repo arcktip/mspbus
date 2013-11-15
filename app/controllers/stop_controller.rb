@@ -1,6 +1,9 @@
 class StopController < ApplicationController
   def show
-    @stop = Stop.get_stop_by_id({ :id => params[:id] }).results.first
+    source_id = Source.where({ name: params[:source].upcase }).first.id
+    @id = "#{source_id}-#{params[:id]}"
+
+    @stop = Stop.get_stop_by_id({ :id => @id }).results.first
     @lat = @stop.location[1]
     @lon = @stop.location[0]
     
@@ -21,7 +24,14 @@ class StopController < ApplicationController
 
     else
       @stop = Stop.get_stop_by_bounds(params[:n], params[:s], params[:e], params[:w])
-      @stop = @stop.map{ |i| {:lon=>i['location'][0],:lat=>i['location'][1],:id=>i['id'], :name => i['stop_name'], :stop_type => i['stop_type'], :realtime=>i.to_json.to_s } }
+      @stop = @stop.map{ |i| {
+        :lon=>i['location'][0],
+        :lat=>i['location'][1],:id=>i['id'],
+        :name => i['stop_name'],
+        :stop_type => i['stop_type'],
+        :stop_url => i['stop_url'],
+        :realtime=>i.to_json.to_s }
+      }
     end
 
     respond_to do |format|

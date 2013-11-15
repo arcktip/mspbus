@@ -5,7 +5,7 @@ class Stop < ActiveRecord::Base
 
   self.primary_key = :id
 
-  attr_accessible :id, :stop_id, :source_id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street, :url, :stop_type, :stop_code, :zone_id
+  attr_accessible :id, :stop_id, :source_id, :stop_name, :stop_desc, :stop_lat, :stop_lon, :stop_city, :stop_street, :url, :stop_type, :stop_code, :zone_id, :stop_url
   
   belongs_to :source
   has_many :favorites
@@ -18,6 +18,7 @@ class Stop < ActiveRecord::Base
 
   mapping do
     indexes :stop_id, type: :string
+    indexes :stop_url, type: :string
     indexes :source_id,   type: :integer
     indexes :stop_desc,   type: :string
     indexes :stop_name,   type: :string

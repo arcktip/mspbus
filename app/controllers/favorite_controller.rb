@@ -4,7 +4,7 @@ class FavoriteController < ApplicationController
   respond_to :json
 
   def index
-    favorites = Favorite.select('user_id, favorites.stop_id, stops.stop_name, stops.url, stops.stop_type')
+    favorites = Favorite.select('user_id, favorites.stop_id, stops.stop_name, stops.url, stops.stop_type, stops.stop_url')
                         .joins([:stop])
                         .where({ user_id: current_user.id })
 

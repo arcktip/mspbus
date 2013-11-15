@@ -79,3 +79,55 @@ span.desc {
     color: #fff;
   }
 }
+
+#alternate-template {
+  hr {
+    margin: 15px 0;
+  }
+
+  .info {
+    .span2 {
+      font-weight: bold;
+      color: #009fe4;
+      width: 110px;
+      margin-left: 10px;
+    }
+  }
+
+  .rental-status {
+    font-size: 30px;
+    width: 100%;
+    
+    span {
+      font-size: 12px;
+    }
+
+    .dash-nopad {
+      background: #009fe4;
+      border-radius: 20px;
+      height: 90px;
+      border: 2px solid #fff;
+      margin-right: 30px;
+      box-shadow: 0 1px 2px 1px rgba(0,0,0,0.3);
+    }
+
+    .dash {
+      background: #009fe4;
+      border-radius: 20px;
+      padding: 15px 30px 15px 30px;
+      margin-right: 30px;
+      text-align: center;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 2px 1px rgba(0,0,0,0.3);
+      color: #fff;
+      height: 90px;
+      display: table;
+
+      p {
+        display: table-cell; 
+        vertical-align: middle; 
+        text-align: center;
+      }
+    }
+  }
+}

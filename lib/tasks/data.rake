@@ -20,6 +20,9 @@ namespace :omgtransit do
     # Remove all previous rows.
     Stop.delete_all(["source_id = ?", args.source_id])
 
+    # Lookup the source name to use for pretty urls.
+    source_name = Source.find(args.source_id).name.downcase
+
     # Remove all from elasticsearch as well.
     query = Tire.search do |search|
       search.query do |q|
@@ -43,6 +46,7 @@ namespace :omgtransit do
         stop_lat: row['stop_lat'],
         stop_lon: row['stop_lon'],
         zone_id: row['zone_id'],
+        stop_url: "#{source_name}/#{row['stop_id']}",
         url: args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"]),
         stop_type: args.stop_type
       })
@@ -220,4 +224,15 @@ namespace :omgtransit do
     end
   end
 
+  # ================================================================
+  # RELOAD EVERYTHING: Major database changes only
+  # ================================================================
+
+
+  task :reload_everything => :environment do
+    Rake::Task['omgtransit:load_msp_gtfs'].invoke()
+    Rake::Task['omgtransit:load_umn_stops'].invoke()
+    Rake::Task['omgtransit:reload_car2go'].invoke()
+    Rake::Task['omgtransit:load_amtrak_gtfs'].invoke()
+  end
 end

@@ -1,0 +1,51 @@
+<h2>
+  <span style="display:inline-block;border-radius:100%;width:50px;height:50px;position:relative;">
+    <img src="/assets/car.png" width="50">
+  </span> Car2Go Rental   
+</h2>
+<p class="info clearfix">
+  <span class="span2">License #</span>
+  <span class="descr"><%= data.get('stop_name') %></span><br>
+  <span class="span2">Address</span>
+  <span class="descr"><%= data.get('stop_street') %></span>
+</p>
+<hr>
+  <div class="rental-status clearfix">
+    <div class='pull-left dash-nopad'>
+      <div id="fuel" class="" style="width: 100px;height: 80px;"></div>
+    </div>
+    <div class='pull-left dash'>
+      <p>
+        <% if (data.get('extra').interior === 'GOOD') { %><i class="icon-thumbs-up"></i><% } else { %><i class="icon-thumbs-down"><% } %><br>
+        <span>Interior</span>
+      </p>
+    </div>
+    <div class='pull-left dash'>
+      <p>
+        <% if (data.get('extra').exterior === 'GOOD') { %><i class="icon-thumbs-up"></i><% } else { %><i class="icon-thumbs-down"><% } %><br>
+        <span>Exterior</span>
+      </p>
+    </div>
+    <div class='pull-left dash'>
+      <p>
+        <%= data.get('extra').engineType %><br>
+        <span>Engine</span>
+      </p>
+    </div>
+  </div>
+  <hr>
+  <br>
+  <!-- <span><a href="https://www.niceridemn.org/how_it_works/" class="btn btn-primary btn-large">Rent Now</a></span> -->
+<script>
+  var g = new JustGage({
+    id: "fuel", 
+    value: <%= data.get('extra').fuel %>, 
+    min: 0,
+    max: 100,
+    title: "Fuel",
+    titleFontColor: '#fff',
+    valueFontColor: '#fff',
+    labelFontColor: '#fff',
+    levelColors: ['#bfd208']
+  }); 
+</script>

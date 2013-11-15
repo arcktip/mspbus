@@ -9,7 +9,7 @@
 <div class="" style="width:100%;">
   <% @stops.results.first(10).each do |stop| %>
     <div class="btn stopbutton <%= determineStopClass(stop) %>" data-stopid="<%= stop.stop_id %>" data-sourceid="<%= stop.source_id %>">
-      <a href="stop/<%= stop.id %>">
+      <a href="stop/<%= stop.stop_url %>">
         <div class="distance-label">
           <%= calculate_distance(stop) %>
         </div>

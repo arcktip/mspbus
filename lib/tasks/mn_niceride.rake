@@ -52,6 +52,7 @@ namespace :omgtransit do
     #     ss.external_stop_url  = "/realtime/niceride?stop_id=#{stop.stop_id}&format=json&parser=mn_niceride"
     #     ss.external_stop_name = "#{stop.title}"
     #     ss.stop_type          = 2
+    #      stop_url: "#{source_name}/#{row['stop_id']}",
     #     ss.save!
     #   end
     # end

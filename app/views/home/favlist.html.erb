@@ -17,11 +17,11 @@
     <% else %>
       <div class="btn stopbutton" data-stopid="<%= stop.id %>">
         <div class="btn btn-danger trashstop pull-right" style="font-size:30px"><i class="icon-trash"></i></div>
-        <a href="stop/<%= stop.id %>">
+        <a href="stop/<%= stop.stop_url %>">
           <span class="stop-name">
             <%= stop.stop_name %>
           </span>
-          <div class="real-time clearfix" id="<%= stop.id %>" data-attr="<%= stop.id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.source_stops.to_json.to_s %>'></div>
+          <div class="real-time clearfix" id="<%= stop.stop_id %>" data-attr="<%= stop.stop_id %>" data-name="<%= stop.stop_name %>" data-realtime='<%= stop.to_json.to_s %>'></div>
         </a>
       </div>
     <% end %>

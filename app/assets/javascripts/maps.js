@@ -163,7 +163,8 @@ var MapView = Backbone.View.extend({
     var stop_type=new_stop.stop_type;
     var icon = this.icons[stop_type];
 
-    //Make a new marker    
+    //Make a new marker
+    console.log(new_stop);
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(new_stop.lat,new_stop.lon),
       map: this.map,
@@ -183,7 +184,7 @@ var MapView = Backbone.View.extend({
       
       var view = views[new_stop.id];
       view.update(function() {	
-        var data = '<a class="marker-header clearfix" href="/stop/'  + new_stop.id + '">' + view.$el.data('name') + '</a><br>';
+        var data = '<a class="marker-header clearfix" href="/stop/'  + new_stop.stop_url + '">' + view.$el.data('name') + '</a><br>';
         data += '<div class="clearfix">' + view.$el.html() + '</div>';
         data = '<div class="infocontents">'+data+'</div>';
         self.infobox.setContent(data);
