@@ -319,15 +319,37 @@ Parsers.amtrak = function(content) {
 | LA Metro
 | Cities: Los Angeles
 | Format: json
-| Description: None, Louis built this from the ground up, yoyo.
+| Description: None, Louis built this from the ground up, yo yo.
 |----------------------------------------------------------------------------------------------------
+*/
+
+/*
+
+JSON Format:
+
+block_id: "4601000"
+is_departing: false
+minutes: 3
+route_id: "460"
+run_id: "460_124_0"
+seconds: 18
 */
 
 Parsers.lametro = function(content) {
   
   var obj = [];
-  
-  console.log(content);
+
+  items=content.items
+
+  for(var i = 0, len = items.length; i < len; i++) {
+    obj.push({
+      'DepartureText':  items[i].minutes + " Min",
+      'DepartureTime':  ((new Date).getTime()/1000)+(items[i].minutes*60),
+      'RouteDirection': "",
+      'Route':          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+items[i].route_id,
+      'Description':    items[i].route_id,
+    });
+  }
   
   var data = {
     template: 'eta_template',
