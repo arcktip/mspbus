@@ -339,15 +339,22 @@ Parsers.lametro = function(content) {
   
   var obj = [];
 
-  items=content.items
+  var items=content.items;
 
   for(var i = 0, len = items.length; i < len; i++) {
+    $.getJSON("http://api.metro.net/agencies/lametro/routes/"+items[i].route_id+"/", function(rdata){
+      $("tr[data-route='"+rdata.id+"']").each(function(i, el){
+        $(el).children().eq(1).children().eq(0).text(
+          rdata.display_name.replace(rdata.display_name.split(" ")[0], "")
+          );
+      });
+    });
     obj.push({
       'DepartureText':  items[i].minutes + " Min",
       'DepartureTime':  ((new Date).getTime()/1000)+(items[i].minutes*60),
       'RouteDirection': "",
       'Route':          items[i].route_id,
-      'Description':    items[i].route_id,
+      'Description':    "Loading..."
     });
   }
   
