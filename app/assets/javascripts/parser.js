@@ -346,7 +346,7 @@ Parsers.lametro = function(content) {
       'DepartureText':  items[i].minutes + " Min",
       'DepartureTime':  ((new Date).getTime()/1000)+(items[i].minutes*60),
       'RouteDirection': "",
-      'Route':          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+items[i].route_id,
+      'Route':          items[i].route_id,
       'Description':    items[i].route_id,
     });
   }
