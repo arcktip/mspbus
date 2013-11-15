@@ -220,4 +220,13 @@ namespace :omgtransit do
     end
   end
 
+  task :load_la_gtfs => :environment do
+    source = Source.find_by_name('LA')
+    unless source.nil?
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/la_gtfs', "http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro", 'stop_id', ST_BUS)
+    else
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+    end
+  end
+
 end
