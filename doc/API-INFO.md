@@ -624,3 +624,62 @@ rs.shape.getListByTrip
 Other APIs
 ==============================
 [Massachusetts Department of Transportation](http://www.massdot.state.ma.us/DevelopersData.aspx)
+
+
+Amtrak
+======
+Stops: http://www.gtfs-data-exchange.com/agency/amtrak/
+Get list of routes: http://www.amtrak.com/rttl/js/RoutesList.json
+Get route properties: http://www.amtrak.com/rttl/js/route_properties.json
+
+
+AirLine
+==============================
+FAA ASDI: http://www.fly.faa.gov/ASDI/asdi.html
+
+Airport statuses: http://services.faa.gov/docs/services/airport/
+
+Example return:
+
+    <AirportStatus>
+         <!-- Airport Name -->
+        <Name>San Francisco Int'l</Name>
+        <!-- International Civil Aviation Organization Airport Code -->
+        <ICAO>KSFO</ICAO> 
+        <!-- International Association of Travel Agents Airport Code -->    
+        <IATA>SFO</IATA> 
+        <!-- Is there a delay? -->
+        <Delay>true</Delay> 
+        <!-- Status -->
+        <Status> 
+            <!-- Types: Airport Closure, Ground Stop, Ground Delay, Arrival and/or Departure -->
+            <Type>Ground Delay</Type> 
+            <!-- For use with All types -->
+            <Reason>LOW CEILINGS</Reason> 
+            <!-- For use with Ground Delay -->
+            <AvgDelay>32 minutes</AvgDelay>  
+            <!-- For use with Airport Closures -->
+            <ClosureEnd/> 
+            <ClosureBegin/> 
+            <!-- For use with Arrival and/or Departure Delays -->
+            <MinDelay/> 
+            <Trend/> 
+            <MaxDelay/>
+            <!-- For use with Ground Stops --> 
+            <EndTime/> 
+        </Status>
+        <!-- Weather from NOAA -->
+        <Weather> 
+            <Weather>Mostly Cloudy</Weather> 
+            <Meta>
+                <Credit>NOAA's National Weather Service</Credit>
+                <Url>http://weather.gov/</Url>
+                <!-- Update Time is local to airport itself -->
+                <Updated>11:56 AM Local</Updated> 
+            </Meta>
+            <Wind>South at 9.2mph</Wind> 
+            <Temp>66.0 F (18.9 C)</Temp>
+            <Visibility>10.00</Visibility>
+        </Weather>
+    </AirportStatus>
+    

@@ -299,7 +299,7 @@ Parsers.amtrak = function(content) {
       'DepartureText':  content[i].DepartureText,
       'DepartureTime':  content[i].DepartureTime,
       'RouteDirection': content[i].RouteDirection,
-      'Route':          content[i].Route,
+      'Route':          content[i].Route+"<sup>"+content[i].TimeType+"</sup>",
       'Description':    content[i].Description,
     });
   }

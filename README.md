@@ -14,17 +14,27 @@ Installation
  3. Install Rails
    * Be sure that Rails is not trying to use Ruby 1.8, it will not work
  4. Install postgresql
- 5. Install Bundle
- 6. Run `bundle`
+ 5. Install PostGIS (`sudo apt-get install postgresql-9.1-postgis`)
+ 6. Install Bundle
+ 7. Install Redis (`sudo apt-get install redis-server`)
+ 8. Run `bundle`
    * May need `sudo apt-get install libpq-dev`
- 7. Start Elastic Search with `sudo service elasticsearch start`
- 8. Set up the configuration variables in `app/assets/javascripts/config.js`
- 9. Set your own `config.google_maps_api_key` inside **development.rb**, **production.rb** and **test.rb** located in `config/environments`
+ 9. Start Elastic Search with `sudo service elasticsearch start`
+ 10. Set up the configuration variables in `app/assets/javascripts/config.js`
+ 11. Set your own `config.google_maps_api_key` inside **development.rb**, **production.rb** and **test.rb** located in `config/environments`
 
 Database Setup
 --------------
- 1. Create a PostgreSQL database (here we call it "omgtransit")
- 2. Enable PostGIS extensions on this database
+
+ 1. Create a PostGRES database
+   1. Log in to the server using `sudo -u postgres psql`
+   2. `CREATE USER user WITH PASSWORD 'password';`
+   3. `CREATE DATABASE omgtransit;`
+   4. `GRANT ALL PRIVILEGES ON DATABASE omgtransit TO user;`
+ 2. Load the PostGIS extension
+   1. `sudo -u postgres createlang plpgsql omgtransit;`
+   2. `sudo -u postgres psql -d omgtransit -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql`
+   3. `sudo -u postgres psql -d omgtransit -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql`
  3. Run `sudo mkdir -p /etc/nubic/db`
  4. Create the file `/etc/nubic/db/omgtransit.yml`
  5. Set up `/etc/nubic/db/omgtransit.yml` according to **Setting up Database Credentials**

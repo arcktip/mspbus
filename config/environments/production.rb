@@ -69,4 +69,6 @@ MspBus::Application.configure do
   config.twitter_consumer_secret = "dTLn27V2KxrIhfk7gm6rL5nadg1l7wFOTNcHrV2hL2E"
   
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
+
+  HTTParty::HTTPCache.perform_caching = true
 end

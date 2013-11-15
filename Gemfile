@@ -29,6 +29,9 @@ gem 'nokogiri'
 gem 'rvm-capistrano'
 gem 'whenever'
 
+gem 'redis'
+gem 'cachebar'
+
 # User profiles
 gem 'devise'
 gem 'omniauth'
@@ -42,6 +45,7 @@ group :test, :development do
   gem 'faker'
   gem 'meta_request'
 end
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

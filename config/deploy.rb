@@ -20,10 +20,14 @@ set :ssh_options, { :forward_agent => true }
 desc "Run on development server" 
 task :onlinedev do
   set :branch,       "login"
-  set :current_path, "/var/www/omgtransit-dev/current"
-  set :rails_env,    "onlinedev"
-  set :deploy_to,    "/var/www/omgtransit-dev"
-  set :bundle_without,  [:production, :development, :test, :tools]
+  set :current_path, "/var/www/omgtransit/current"
+  set :rails_env,    "development"
+  set :deploy_to,    "/var/www/omgtransit"
+  set :bundle_without,  [:development, :onlinedev, :test, :tools]
+
+  role :web, "dev.omgtransit.com"
+  role :app, "dev.omgtransit.com"
+  role :db,  "dev.omgtransit.com", :primary => true
 end
 
 task :production do
@@ -31,12 +35,12 @@ task :production do
   set :current_path, "/var/www/omgtransit/current"
   set :rails_env,    "production"
   set :deploy_to,    "/var/www/omgtransit"
-  set :bundle_without,  [:development, :onlindev, :test, :tools]
-end
+  set :bundle_without,  [:development, :onlinedev, :test, :tools]
 
-role :web, "omgtransit.com"
-role :app, "omgtransit.com"
-role :db,  "omgtransit.com", :primary => true
+  role :web, "omgtransit.com"
+  role :app, "omgtransit.com"
+  role :db,  "omgtransit.com", :primary => true
+end
 
 # if you want to clean up old releases on each deploy uncomment this:
 #after 'deploy:update_code', :setup_group
