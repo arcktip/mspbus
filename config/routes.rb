@@ -1,4 +1,4 @@
-MspBus::Application.routes.draw do
+OmgTransit::Application.routes.draw do
   
   devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks" }
 

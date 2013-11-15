@@ -13,7 +13,7 @@ class Stop < ActiveRecord::Base
   # =============================================
   # ElasticSearch
   # Get all indexes: curl http://localhost:9200/_aliases
-  # Sample Search: curl http://localhost:9200/mspbus_development_stops/_search
+  # Sample Search: curl http://localhost:9200/omgtransit_development_stops/_search
   # =============================================
 
   mapping do
