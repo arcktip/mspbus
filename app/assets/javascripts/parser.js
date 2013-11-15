@@ -283,7 +283,7 @@ Parsers.car2go = function(content) {
 
 /*
 |----------------------------------------------------------------------------------------------------
-| NexTrip API
+| Amtrak
 | Cities: Amtrak
 | Format: json
 | Description: None, Richard & Louis built this from the ground up, yo.
@@ -303,6 +303,35 @@ Parsers.amtrak = function(content) {
       'Description':    content[i].Description,
     });
   }
+
+
+  var data = {
+    template: 'eta_template',
+    callback: 'process_eta', 
+    content: obj
+  }
+
+  return data;
+};
+
+/*
+|----------------------------------------------------------------------------------------------------
+| LA Metro
+| Cities: Los Angeles
+| Format: json
+| Description: None, Louis built this from the ground up, yo.
+|----------------------------------------------------------------------------------------------------
+*/
+
+Parsers.lametro = function(content) {
+  
+  var obj = [{
+      'DepartureText':  "TEST_TXT",
+      'DepartureTime':  1000,
+      'RouteDirection': "TEST_DESC",
+      'Route':          "TEST_RT",
+      'Description':    "TEST_DESC"
+    }];
 
 
   var data = {
