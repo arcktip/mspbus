@@ -162,6 +162,7 @@ namespace :omgtransit do
   # ================================================================
   # Reload individual cities gtfs based on the tasks above.
   # ================================================================
+  # Run these using, e.g., "rake omgtransit:load_gtfs[AMTRAK]"
 
   task :load_gtfs, [:which_gtfs] => :environment do |t, args|
     source = Source.find_by_name(args.which_gtfs)
