@@ -173,7 +173,7 @@ namespace :omgtransit do
   end
 
 
-   task :update_pbsbike_info => :environment do
+  task :update_pbsbike_info => :environment do
     sources = Source.where('transit_type=2') #Get all bike shares
     sources.each do |source|
       if    source.dataparser=='pbsbikes_xml'
