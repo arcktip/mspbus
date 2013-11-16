@@ -1,6 +1,6 @@
 class StopController < ApplicationController
   def show
-    source_id = Source.where({ name: params[:source].upcase }).first.id
+    source_id = Source.where({ name: params[:source] }).first.id
     @id = "#{source_id}-#{params[:id]}"
 
     @stop = Stop.get_stop_by_id({ :id => @id }).results.first
