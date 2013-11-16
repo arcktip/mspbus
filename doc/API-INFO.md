@@ -683,3 +683,65 @@ Example return:
         </Weather>
     </AirportStatus>
     
+
+
+
+ATLANTA
+============================
+
+Thank you Richard Barnes  for your request .  Our BRD Web service is provided in both REST and SOAP formats. 
+MARTA Bus Real-time Data RESTful Web Service:
+http://developer.itsmarta.com/BRDRestService/BRDRestService.svc/help
+MARTA Bus Real-time Data SOAP Web Service:
+http://developer.itsmarta.com/BRDWebService/BRDWebService.asmx
+
+Method 1:
+
+Method GetBRD  is used to return the Bus Real Time Data as XML by inputting a Route Number.
+
+Example:
+
+Input: 1
+
+Output XML:
+
+    <?xml version="1.0" encoding="utf-8" ?>
+     <NewDataSet> 
+      <Table> 
+          <MSGTIME> 2012-10-22T10:26:17-07:00 </MSGTIME> 
+          <DIRECTION> Northbound </DIRECTION> 
+          <ROUTE> 1 </ROUTE> 
+          <TIMEPOINT> Luckie St & North Ave. </TIMEPOINT> 
+          <VEHICLE> 2551 </VEHICLE> 
+          <LATITUDE> 337771955 </LATITUDE> 
+          <LONGITUDE> -844075435 </LONGITUDE> 
+          <Adherence> -2 </Adherence> 
+      </Table>
+      <Table> 
+          <MSGTIME> 2012-10-22T10:31:06-07:00 </MSGTIME> 
+          <DIRECTION> Southbound </DIRECTION> 
+          <ROUTE> 1 </ROUTE> 
+          <TIMEPOINT> Coronet Way & Moores Mill Road </TIMEPOINT> 
+          <VEHICLE> 2978 </VEHICLE> 
+          <LATITUDE> 338209075 </LATITUDE> 
+          <LONGITUDE> -844507644 </LONGITUDE> 
+          <Adherence> -4 </Adherence> 
+      </Table>
+     </NewDataSet>
+    </xml>
+
+Method 2:
+
+Method GetBRDJSON is used to return the Bus Real Time Data as JSON by inputting a Route Number.
+
+Example:
+
+Input: 1
+
+Output String :
+
+    <?xml version="1.0" encoding="utf-8" ?>
+    <string xmlns=" http://tempuri.org/ ">[["11/1/2012 3:29:32 PM","Northbound","1","Coronet Way & Moores Mill Road","2975","338211472","-844498907","0"],["11/1/2012 3:32:41 PM","Southbound","1","Luckie St & North Ave.","2979","337691695","-843921733","-3"],["11/1/2012 3:26:13 PM","Northbound","1","Alabama & Broad St.","2517","337672724","-843918601","-3"]]</string>
+    </xml>
+ 
+If you have any specific questions with the BRD web service please send an email to MartaDevReq@itsmarta.com .  Thank you for your interest.
