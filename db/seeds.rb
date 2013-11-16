@@ -6,6 +6,11 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+ST_BUS   =1
+ST_BIKE  =2
+ST_CAR   =3
+ST_TRAIN =4
+
 [
  {
     id: 1, 
