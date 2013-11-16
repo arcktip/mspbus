@@ -3,14 +3,14 @@ namespace :omgtransit do
   require 'httparty'
   require 'json'
 
-  task :load_pbsbikes_xml, [:which] => :environment do |t, args|
-    source = Source.find_by_name(args.which)
+  def load_pbsbikes_xml(which_bikes)
+    source = Source.find_by_name(which_bikes)
     if source.nil?
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'      
-      next
+      return
     elsif source.dataparser!='pbsbikes_xml'
       puts '** Note: This source cannot be parsed as a Public Bike Systems XML'
-      next
+      return
     end
 
     puts "Downloading stops data for #{source.name}"
@@ -49,17 +49,14 @@ namespace :omgtransit do
     end
   end
 
-
-
-
-  task :load_pbsbikes_json, [:which] => :environment do |t, args|
-    source = Source.find_by_name(args.which)
+  def load_pbsbikes_json(which_bikes)
+    source = Source.find_by_name(which_bikes)
     if source.nil?
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'      
-      next
+      return
     elsif source.dataparser!='pbsbikes_json'
       puts '** Note: This source cannot be parsed as a Public Bike Systems JSON'
-      next
+      return
     end
 
     puts "Downloading stops data for #{source.name}"
@@ -89,14 +86,22 @@ namespace :omgtransit do
     end
   end
 
+  task :load_pbsbikes_xml, [:which] => :environment do |t, args|
+    load_pbsbikes_xml(args.which)
+  end
+
+  task :load_pbsbikes_json, [:which] => :environment do |t, args|
+    load_pbsbikes_json(args.which)
+  end
+
 
   task :load_pbsbikes => :environment do
     sources = Source.where('transit_type=2') #Get all bike shares
     sources.each do |source|
       if    source.dataparser=='pbsbikes_xml'
-        Rake::Task['omgtransit:load_pbsbikes_xml'].invoke(source.name)
+        load_pbsbikes_xml(source.name)
       elsif source.dataparser=='pbsbikes_json'
-        Rake::Task['omgtransit:load_pbsbikes_json'].invoke(source.name)
+        load_pbsbikes_json(source.name)
       else
         puts "Can't parse #{source.name}."
       end
