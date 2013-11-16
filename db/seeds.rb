@@ -18,7 +18,7 @@
  {
     id: 2, 
     name:         "UMN", 
-    url:          'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId={stop_id}&format=xml&parser=nextbus' 
+    url:          'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId={stop_id}&format=xml&parser=nextbus',
     stopdata:     '',
     dataparser:   'gtfs',
     transit_type: ST_BUS
