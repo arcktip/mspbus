@@ -246,5 +246,3 @@ namespace :omgtransit do
     Rake::Task['omgtransit:load_amtrak_gtfs'].invoke()
   end
 end
-
-end
