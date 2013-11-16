@@ -7,16 +7,86 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 [
- { id: 1, name: "MSP", url: 'http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip' },
- { id: 2, name: "UMN", url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId={stop_id}&format=xml&parser=nextbus' },
- { id: 3, name: "NICERIDE", url: '/realtime/niceride?stop_id={stop_id}&format=json&parser=mn_niceride' },
- { id: 4, name: "PORTLAND", url: 'http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true' },
- { id: 5, name: "CHICAGO", url: '' },
- { id: 6, name: "ATLANTA", url: '' },
- { id: 7, name: "WASHINGTONDC", url: 'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes' },
- { id: 8, name: "CAR2GO", url: '/realtime/car2go/{stop_id}?format=json&parser=car2go' },
- { id: 9, name: "AMTRAK", url: '/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak' },
- { id: 10, name: "LA", url: 'http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro' }
+ {
+    id: 1, 
+    name:         "MSP", 
+    url:          'http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip',
+    stopdata:     'ftp://gisftp.metc.state.mn.us/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 2, 
+    name:         "UMN", 
+    url:          'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=umn-twin&stopId={stop_id}&format=xml&parser=nextbus' 
+    stopdata:     '',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 3, 
+    name:         "NICERIDE", 
+    url:          '/realtime/niceride?stop_id={stop_id}&format=json&parser=mn_niceride',
+    stopdata:     'https://secure.niceridemn.org/data2/bikeStations.xml',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 4, 
+    name:         "PORTLAND", 
+    url:          'http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true',
+    stopdata:     'http://developer.trimet.org/schedule/gtfs.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 5, 
+    name:         "CHICAGO", 
+    url:          'http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever',
+    stopdata:     'http://www.transitchicago.com/downloads/sch_data/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 6, 
+    name:         "ATLANTA", 
+    url:          '',
+    stopdata:     'http://www.itsmarta.com/google_transit_feed/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 7, 
+    name:         "WASHINGTONDC", 
+    url:          'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes',
+    stopdata:     'http://lrg.wmata.com/GTFS_data/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 8, 
+    name:         "CAR2GO", 
+    url:          '/realtime/car2go/{stop_id}?format=json&parser=car2go',
+    stopdata:     '',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ },
+ {
+    id: 9, 
+    name:         "AMTRAK", 
+    url:          '/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak',
+    stopdata:     'http://www.itsmarta.com/google_transit_feed/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_TRAIN
+ },
+ {
+    id: 10,
+    name:         "LA",
+    url:          'http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro',
+    stopdata:     'http://developer.metro.net/gtfs/google_transit.zip',
+    dataparser:   'gtfs',
+    transit_type: ST_BUS
+ }
 ].each do |source|
   Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
 end
