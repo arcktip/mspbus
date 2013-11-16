@@ -39,11 +39,6 @@ GEM
     bcrypt-ruby (3.1.2)
     bcrypt-ruby (3.1.2-x86-mingw32)
     builder (3.0.4)
-    cachebar (1.1.0)
-      activesupport
-      httparty (~> 0.8.3)
-      redis
-      redis-namespace
     callsite (0.0.11)
     capistrano (2.15.5)
       highline
@@ -189,8 +184,6 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     redis (3.0.6)
-    redis-namespace (1.3.2)
-      redis (~> 3.0.4)
     ref (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -254,7 +247,6 @@ PLATFORMS
 
 DEPENDENCIES
   bcdatabase
-  cachebar
   capybara
   coffee-rails (~> 3.2.1)
   compass-rails

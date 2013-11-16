@@ -39,6 +39,4 @@ OmgTransit::Application.configure do
   config.twitter_consumer_secret = "8UJQLpj2G3GNs6aNYggTx4zwZLVWHWUpIWh7D0JTFs"
 
   config.google_maps_api_key     = "AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
-
-  HTTParty::HTTPCache.perform_caching = true
 end

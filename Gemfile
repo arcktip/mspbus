@@ -32,7 +32,6 @@ gem 'whenever'
 gem 'rubyzip'
 
 gem 'redis'
-gem 'cachebar'
 
 # User profiles
 gem 'devise'

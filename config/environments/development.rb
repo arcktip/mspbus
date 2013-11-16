@@ -39,7 +39,4 @@ OmgTransit::Application.configure do
   config.twitter_consumer_secret = "I2Ar2l14MvWMwLP4blMR8dTJKk2L8YPO8Sd6lUpeIk"
 
   config.google_maps_api_key="AIzaSyBz7GjhrxP5ntdxLX79fi6LaLdn9Lc6LFY"
-
-  HTTParty::HTTPCache.perform_caching = true
-  HTTParty::HTTPCache.logger = Rails.logger
 end
