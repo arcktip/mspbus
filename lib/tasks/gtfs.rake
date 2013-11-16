@@ -171,10 +171,7 @@ namespace :omgtransit do
     if source.nil?
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'      
       next
-    end
-
-    puts source.to_json
-    if source.dataparser!='gtfs'
+    elsif source.dataparser!='gtfs'
       puts '** Note: This source cannot be parsed as GTFS'
       next
     end
