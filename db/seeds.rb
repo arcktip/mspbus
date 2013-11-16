@@ -26,7 +26,7 @@
  {
     id: 3, 
     name:         "NICERIDE", 
-    url:          '/realtime/niceride?stop_id={stop_id}&format=json&parser=mn_niceride',
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
     stopdata:     'https://secure.niceridemn.org/data2/bikeStations.xml',
     dataparser:   'gtfs',
     transit_type: ST_BUS
@@ -58,7 +58,7 @@
  {
     id: 7, 
     name:         "WASHINGTONDC", 
-    url:          'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes',
+    url:          'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_id}&api_key=qbvfs2bv6ad55mjshrw8pjes',
     stopdata:     'http://lrg.wmata.com/GTFS_data/google_transit.zip',
     dataparser:   'gtfs',
     transit_type: ST_BUS
@@ -86,6 +86,70 @@
     stopdata:     'http://developer.metro.net/gtfs/google_transit.zip',
     dataparser:   'gtfs',
     transit_type: ST_BUS
+ },
+ { #Washington, DC
+    id: 11, 
+    name:         "CapitolBikeShare", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://capitalbikeshare.com/data/stations/bikeStations.xm',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE
+ },
+ { #Boston
+    id: 12, 
+    name:         "TheHubway", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://thehubway.com/data/stations/bikeStations.xml',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE
+ },
+ { #San Francisco
+    id: 13, 
+    name:         "BayAreaBikeShare", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://bayareabikeshare.com/stations/json/ ',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #New York City
+    id: 14, 
+    name:         "CitiBike", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://citibikenyc.com/stations/json/',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #Chicago
+    id: 15, 
+    name:         "DivvyBikes", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://divvybikes.com/stations/json/',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #Chattanooga
+    id: 16, 
+    name:         "BikeChattanooga", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://www.bikechattanooga.com/stations/json/',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #Columbus, OH
+    id: 17, 
+    name:         "CoGo", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://www.cogobikeshare.com/stations/json/',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #Apsen
+    id: 18, 
+    name:         "We-Cycle", 
+    url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://www.we-cycle.org/pbsc/stations.php/',
+    dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
  }
 ].each do |source|
   Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
