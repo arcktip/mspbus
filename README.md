@@ -57,12 +57,11 @@ Loading the Database
 --------------------
  1. Run `rake db:migrate`
  2. Run `rake db:seed`
- 3. Run `rake omgtransit:load_msp_gtfs` (Or what have you, this draws from the `setup/` folders).
+ 3. Run `rake omgtransit:load_gtfs[MSP]` (Or what have you, this draws from the `setup/` folders).
   * Run `rake omgtransit:load_mn_bikes`
   * Run `rake omgtransit:load_umn_stops`
  4. Repeat Step 3 as needed
- 5. Run `rake omgtransit:reset_stops`
- 6. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
+ 5. Index GeoData `rake environment tire:import CLASS='Stop' FORCE=true`
   * Occasionally, it may be useful to force the environment with `rake environment tire:import CLASS='Stop' FORCE=true RAILS_ENV=production`
 
 Start the Server
