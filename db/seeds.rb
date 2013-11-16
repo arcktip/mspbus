@@ -15,7 +15,8 @@
  { id: 6, name: "ATLANTA", url: '' },
  { id: 7, name: "WASHINGTONDC", url: 'http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes' },
  { id: 8, name: "CAR2GO", url: '/realtime/car2go/{stop_id}?format=json&parser=car2go' },
- { id: 9, name: "AMTRAK", url: '/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak' }
+ { id: 9, name: "AMTRAK", url: '/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak' },
+ { id: 10, name: "LA", url: 'http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro' }
 ].each do |source|
   Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
 end
