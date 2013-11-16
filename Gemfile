@@ -29,6 +29,8 @@ gem 'nokogiri'
 gem 'rvm-capistrano'
 gem 'whenever'
 
+gem 'rubyzip'
+
 gem 'redis'
 gem 'cachebar'
 
