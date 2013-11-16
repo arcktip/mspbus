@@ -152,5 +152,12 @@
     transit_type: ST_BIKE
  }
 ].each do |source|
-  Source.find_or_create_by_name(id: source[:id], name: source[:name], realtime_url: source[:url])
+  Source.find_or_create_by_name(
+    id:           source[:id], 
+    name:         source[:name], 
+    realtime_url: source[:url],
+    stopdata:     source[:stopdata],
+    dataparser:   source[:dataparser],
+    transit_type: source[:transit_type]
+  )
 end
