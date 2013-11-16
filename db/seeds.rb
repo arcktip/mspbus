@@ -91,7 +91,7 @@
     id: 11, 
     name:         "CapitolBikeShare", 
     url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
-    stopdata:     'https://capitalbikeshare.com/data/stations/bikeStations.xm',
+    stopdata:     'https://capitalbikeshare.com/data/stations/bikeStations.xml',
     dataparser:   'pbsbikes_xml',
     transit_type: ST_BIKE
  },
