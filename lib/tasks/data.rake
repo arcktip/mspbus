@@ -163,73 +163,33 @@ namespace :omgtransit do
   # Reload individual cities gtfs based on the tasks above.
   # ================================================================
 
-  task :load_msp_gtfs => :environment do
-    source = Source.find_by_name('MSP')
-    unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-    # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_calendar'].invoke(1, 'setup/msp_gtfs')
-  end
 
-  task :load_portland_gtfs => :environment do
-    source = Source.find_by_name('PORTLAND')
-    unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-  end
 
-  task :load_chicago_gtfs => :environment do
-    # key - kPhyVbW2qnjqNfQSgvNXbxCsN
-    source = Source.find_by_name('CHICAGO')
-    unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-  end
 
-  task :load_atlanta_gtfs => :environment do
-    # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
-    source = Source.find_by_name('ATLANTA')
-    unless source.nil?
+  task :load_gtfs, [:which_gtfs] => :environment do |t, args|
+    source = Source.find_by_name(args.which_gtfs)
+    if source.nil?
+      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'      
+      next
+    end
+
+    case args.which_gtfs
+    when 'AMTRAK'
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
+    when 'ATLANTA' # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
       Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-  end
-
-  task :load_washington_dc_gtfs => :environment do
-    # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
-    source = Source.find_by_name('WASHINGTONDC')
-    unless source.nil?
+    when 'CHICAGO' # key - kPhyVbW2qnjqNfQSgvNXbxCsN
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
+    when 'LA'
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/la_gtfs', "http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro", 'stop_id', ST_BUS)
+    when 'MSP'
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
+    when 'PORTLAND'
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
+    when 'WASHINGTONDC' # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
       Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
     else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-  end
-
-  task :load_la_gtfs => :environment do
-    source = Source.find_by_name('LA')
-    unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/la_gtfs', "http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro", 'stop_id', ST_BUS)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
-    end
-  end
-  
-  task :load_amtrak_gtfs => :environment do
-    source = Source.find_by_name('AMTRAK')
-    unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
-    else
-      puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
+      puts "I couldn't find that GTFS source!"
     end
   end
 
