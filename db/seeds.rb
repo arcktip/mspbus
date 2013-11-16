@@ -34,7 +34,7 @@ ST_TRAIN =4
     url:          '/realtime/pbsbikes?stop_id={stop_id}&format=json&parser=pbsbikes',
     stopdata:     'https://secure.niceridemn.org/data2/bikeStations.xml',
     dataparser:   'gtfs',
-    transit_type: ST_BUS
+    transit_type: ST_BIKE
  },
  {
     id: 4, 
