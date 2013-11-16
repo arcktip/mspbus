@@ -66,5 +66,6 @@ module OmgTransit
     config.assets.version = '1.0'
 
 	config.assets.paths << "#{Rails.root}/app/assets/fonts"
+    config.transit_data_path = '/etc/omgtransit/setup'
   end
 end

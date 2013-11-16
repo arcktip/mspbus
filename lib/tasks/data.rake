@@ -17,6 +17,12 @@ namespace :omgtransit do
   task :load_gtfs_stops, [:source_id, :path, :realtime_url, :replace_column, :stop_type] => :environment do |t, args|
     require 'csv'
 
+    begin
+      file = File.read(Rails.root.join(args.path, 'stops.txt'))
+    rescue
+      raise "Error: No file found. #{args.path}/stops.txt"
+    end
+    
     # Remove all previous rows.
     Stop.delete_all(["source_id = ?", args.source_id])
 
@@ -34,7 +40,7 @@ namespace :omgtransit do
     Tire::Configuration.client.delete "#{index.url}/_query?source=#{Tire::Utils.escape(query.to_hash[:query].to_json)}"
 
     puts "Adding/Updating Stops for #{args.path}"
-    csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
+    csv = CSV.parse(file, headers: true) do |row|
       Stop.skip_callback(:save, :after)
       Stop.create!({
         id: "#{args.source_id}-#{row['stop_id']}",
@@ -166,20 +172,20 @@ namespace :omgtransit do
   task :load_msp_gtfs => :environment do
     source = Source.find_by_name('MSP')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/msp_gtfs", "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
-    # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, 'setup/msp_gtfs')
-    # Rake::Task['omgtransit:load_gtfs_calendar'].invoke(1, 'setup/msp_gtfs')
+    # Rake::Task['omgtransit:load_gtfs_stop_times'].invoke(1, "#{Rails.application.config.transit_data_path}/msp_gtfs")
+    # Rake::Task['omgtransit:load_gtfs_trips'].invoke(1, "#{Rails.application.config.transit_data_path}/msp_gtfs")
+    # Rake::Task['omgtransit:load_gtfs_routes'].invoke(1, "#{Rails.application.config.transit_data_path}/msp_gtfs")
+    # Rake::Task['omgtransit:load_gtfs_calendar'].invoke(1, "#{Rails.application.config.transit_data_path}/msp_gtfs")
   end
 
   task :load_portland_gtfs => :environment do
     source = Source.find_by_name('PORTLAND')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/portland_gtfs", "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
@@ -189,7 +195,7 @@ namespace :omgtransit do
     # key - kPhyVbW2qnjqNfQSgvNXbxCsN
     source = Source.find_by_name('CHICAGO')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/chicago_gtfs", "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
@@ -199,7 +205,7 @@ namespace :omgtransit do
     # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
     source = Source.find_by_name('ATLANTA')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/atlanta_gtfs", "", 'stop_id', ST_BUS)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
@@ -209,7 +215,7 @@ namespace :omgtransit do
     # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
     source = Source.find_by_name('WASHINGTONDC')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/washington_dc_gtfs", "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end
@@ -218,7 +224,7 @@ namespace :omgtransit do
   task :load_amtrak_gtfs => :environment do
     source = Source.find_by_name('AMTRAK')
     unless source.nil?
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
+      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, "#{Rails.application.config.transit_data_path}/amtrak_gtfs", "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
     else
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'
     end

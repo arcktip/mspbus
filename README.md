@@ -47,17 +47,17 @@ Specification (GTFS) files. More information on these files is available
 
 GTFS data is available at the [GTFS Exchange](http://www.gtfs-data-exchange.com/).
 
-Download these data files and put them in appropriately named folders in `setup/`.
+Download these data files and put them in appropriately named folders in `/etc/omgtransit/setup/`.
 
 For instance, you can download the Minneapolis Metro Transit feed from
 [here](ftp://gisftp.metc.state.mn.us/google_transit.zip). And unzip this into
-the folder `setup/msp_gtfs`.
+the folder `/etc/omgtransit/setup/msp_gtfs`.
 
 Loading the Database
 --------------------
  1. Run `rake db:migrate`
  2. Run `rake db:seed`
- 3. Run `rake omgtransit:load_msp_gtfs` (Or what have you, this draws from the `setup/` folders).
+ 3. Run `rake omgtransit:load_msp_gtfs` (Or what have you, this draws from the `etc/omgtransit/setup/` folders).
   * Run `rake omgtransit:load_mn_bikes`
   * Run `rake omgtransit:load_umn_stops`
  4. Repeat Step 3 as needed
