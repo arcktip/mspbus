@@ -33,7 +33,7 @@ ST_TRAIN =4
     name:         "NICERIDE", 
     url:          '/realtime/pbsbikes?source_id=3&stop_id={stop_id}&format=json&parser=pbsbikes',
     stopdata:     'https://secure.niceridemn.org/data2/bikeStations.xml',
-    dataparser:   'gtfs',
+    dataparser:   'pbsbikes_xml',
     transit_type: ST_BIKE
  },
  {
