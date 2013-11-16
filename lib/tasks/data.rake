@@ -163,9 +163,6 @@ namespace :omgtransit do
   # Reload individual cities gtfs based on the tasks above.
   # ================================================================
 
-
-
-
   task :load_gtfs, [:which_gtfs] => :environment do |t, args|
     source = Source.find_by_name(args.which_gtfs)
     if source.nil?
@@ -194,10 +191,11 @@ namespace :omgtransit do
   end
 
 
+
+
   # ================================================================
   # RELOAD EVERYTHING: Major database changes only
   # ================================================================
-
 
   task :reload_everything => :environment do
     Rake::Task['omgtransit:load_gtfs'].invoke('MSP')
