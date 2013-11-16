@@ -4,10 +4,6 @@ namespace :omgtransit do
   # Stop type constants (yes they are constants you don't need to check):
   # =========================================================================
   
-  ST_BUS   =1
-  ST_BIKE  =2
-  ST_CAR   =3
-  ST_TRAIN =4
   INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
 
   # =========================================================================
@@ -33,23 +29,27 @@ namespace :omgtransit do
     index = Tire.index(INDEX_NAME)
     Tire::Configuration.client.delete "#{index.url}/_query?source=#{Tire::Utils.escape(query.to_hash[:query].to_json)}"
 
-    puts "Adding/Updating Stops for #{args.path}"
-    csv = CSV.parse(File.read(Rails.root.join(args.path, 'stops.txt')), headers: true) do |row|
-      Stop.skip_callback(:save, :after)
-      Stop.create!({
-        id: "#{args.source_id}-#{row['stop_id']}",
-        stop_id: row['stop_id'],
-        source_id: args.source_id,
-        stop_code: row['stop_code'],
-        stop_name: row['stop_name'],
-        stop_desc: row['stop_desc'],
-        stop_lat: row['stop_lat'],
-        stop_lon: row['stop_lon'],
-        zone_id: row['zone_id'],
-        stop_url: "#{source_name}/#{row['stop_id']}",
-        url: args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"]),
-        stop_type: args.stop_type
-      })
+    puts 'Opening zip file'
+    require 'zip/filesystem'
+    Zip::File.open(args.path) do |zipfile|
+      puts "Adding/Updating Stops for #{args.path}"
+      csv = CSV.parse(zipfile.file.read("stops.txt"), headers: true) do |row|
+        Stop.skip_callback(:save, :after)
+        Stop.create!({
+          id: "#{args.source_id}-#{row['stop_id']}",
+          stop_id: row['stop_id'],
+          source_id: args.source_id,
+          stop_code: row['stop_code'],
+          stop_name: row['stop_name'],
+          stop_desc: row['stop_desc'],
+          stop_lat: row['stop_lat'],
+          stop_lon: row['stop_lon'],
+          zone_id: row['zone_id'],
+          stop_url: "#{source_name}/#{row['stop_id']}",
+          url: args.realtime_url.gsub("{#{args.replace_column}}", row["#{args.replace_column}"]),
+          stop_type: args.stop_type
+        })
+      end
     end
 
   end
@@ -165,30 +165,34 @@ namespace :omgtransit do
   # Run these using, e.g., "rake omgtransit:load_gtfs[AMTRAK]"
 
   task :load_gtfs, [:which_gtfs] => :environment do |t, args|
+    require "httparty"
+
     source = Source.find_by_name(args.which_gtfs)
     if source.nil?
       puts '** Note: There was no source definition for this task. Please add a source to the seeds file and run rake db:seed'      
       next
     end
 
-    case args.which_gtfs
-    when 'AMTRAK'
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/amtrak_gtfs', "/realtime/amtrak?stop_id={stop_id}&format=json&parser=amtrak", 'stop_id', ST_TRAIN)
-    when 'ATLANTA' # GTFS URL - http://www.itsmarta.com/google_transit_feed/google_transit.zip
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/atlanta_gtfs', "", 'stop_id', ST_BUS)
-    when 'CHICAGO' # key - kPhyVbW2qnjqNfQSgvNXbxCsN
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/chicago_gtfs', "http://www.ctabustracker.com/bustime/api/v1/getpredictions?key=kPhyVbW2qnjqNfQSgvNXbxCsN&stpid={stop_id}&format=xml&parser=clever", 'stop_id', ST_BUS)
-    when 'LA'
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/la_gtfs', "http://api.metro.net/agencies/lametro/stops/{stop_id}/predictions/?format=json&parser=lametro", 'stop_id', ST_BUS)
-    when 'MSP'
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/msp_gtfs', "http://svc.metrotransit.org/NexTrip/{stop_id}?callback=?&format=json&parser=nextrip", 'stop_id', ST_BUS)
-    when 'PORTLAND'
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/portland_gtfs', "http://developer.trimet.org/ws/V1/arrivals?locIDs={stop_id}&appID=B032DC6A5D4FBD9A8318F7AB1&json=true&format=json&parser=trimet", 'stop_id', ST_BUS)
-    when 'WASHINGTONDC' # GTFS URL - http://www.wmata.com/rider_tools/developer_resources.cfm
-      Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, 'setup/washington_dc_gtfs', "http://api.wmata.com/NextBusService.svc/json/jPredictions?StopID={stop_code}&api_key=qbvfs2bv6ad55mjshrw8pjes&callback=?&format=json&parser=wmata", 'stop_code', ST_BUS)
-    else
-      puts "I couldn't find that GTFS source!"
+    puts source.to_json
+    if source.dataparser!='gtfs'
+      puts '** Note: This source cannot be parsed as GTFS'
+      next
     end
+
+    zippath=Rails.root.join('setup',source.name.gsub(/ /,'')+'_gtfs.zip')
+
+    #Download only if it isn't there or hasn't been updated in a day
+    if not File.exist?(zippath) or Time.now()-File.mtime(zippath)>=3600*24
+      File.open(zippath, "wb") do |f| 
+        puts "Acquiring zip file from '#{source.stopdata}' and saving to '#{zippath}'"
+        f.write HTTParty.get(source.stopdata)
+        puts 'Acquired.'
+      end
+    else
+      puts 'A recent download of this data source has been found. Loading it.'
+    end
+
+    Rake::Task['omgtransit:load_gtfs_stops'].invoke(source.id, zippath, source.realtime_url, 'stop_id', source.transit_type)
   end
 
 
