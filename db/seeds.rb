@@ -28,7 +28,7 @@ ST_TRAIN =4
     dataparser:   'gtfs',
     transit_type: ST_BUS
  },
- {
+ { #Minneapolis Bicycle Share
     id: 3, 
     name:         "NICERIDE", 
     url:          '/realtime/pbsbikes?source_id=3&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -92,7 +92,7 @@ ST_TRAIN =4
     dataparser:   'gtfs',
     transit_type: ST_BUS
  },
- { #Washington, DC
+ { #Washington, DC Bicycle Share
     id: 11, 
     name:         "CapitolBikeShare", 
     url:          '/realtime/pbsbikes?source_id=11&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -100,7 +100,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_xml',
     transit_type: ST_BIKE
  },
- { #Boston
+ { #Boston Bicycle Share
     id: 12, 
     name:         "TheHubway", 
     url:          '/realtime/pbsbikes?source_id=12&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -108,7 +108,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_xml',
     transit_type: ST_BIKE
  },
- { #San Francisco
+ { #San Francisco Bicycle Share
     id: 13, 
     name:         "BayAreaBikeShare", 
     url:          '/realtime/pbsbikes?ssource_id=13&top_id={stop_id}&format=json&parser=pbsbikes',
@@ -116,7 +116,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_json',
     transit_type: ST_BIKE
  },
- { #New York City
+ { #New York City Bicycle Share
     id: 14, 
     name:         "CitiBike", 
     url:          '/realtime/pbsbikes?source_id=14&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -124,7 +124,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_json',
     transit_type: ST_BIKE
  },
- { #Chicago
+ { #Chicago Bicycle Share
     id: 15, 
     name:         "DivvyBikes", 
     url:          '/realtime/pbsbikes?source_id=15&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -132,7 +132,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_json',
     transit_type: ST_BIKE
  },
- { #Chattanooga
+ { #Chattanooga Bicycle Share
     id: 16, 
     name:         "BikeChattanooga", 
     url:          '/realtime/pbsbikes?source_id=16&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -140,7 +140,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_json',
     transit_type: ST_BIKE
  },
- { #Columbus, OH
+ { #Columbus, OH Bicycle Share
     id: 17, 
     name:         "CoGo", 
     url:          '/realtime/pbsbikes?source_id=17&stop_id={stop_id}&format=json&parser=pbsbikes',
@@ -148,7 +148,7 @@ ST_TRAIN =4
     dataparser:   'pbsbikes_json',
     transit_type: ST_BIKE
  },
- { #Apsen
+ { #Apsen Bicycle Share
     id: 18, 
     name:         "We-Cycle", 
     url:          '/realtime/pbsbikes?source_id=18&stop_id={stop_id}&format=json&parser=pbsbikes',
