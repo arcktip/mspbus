@@ -200,9 +200,9 @@ namespace :omgtransit do
 
 
   task :reload_everything => :environment do
-    Rake::Task['omgtransit:load_msp_gtfs'].invoke()
+    Rake::Task['omgtransit:load_gtfs'].invoke('MSP')
     Rake::Task['omgtransit:load_umn_stops'].invoke()
     Rake::Task['omgtransit:reload_car2go'].invoke()
-    Rake::Task['omgtransit:load_amtrak_gtfs'].invoke()
+    Rake::Task['omgtransit:load_gtfs'].invoke('AMTRAK')
   end
 end
