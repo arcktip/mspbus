@@ -1,9 +1,5 @@
 namespace :omgtransit do
 
-  # =========================================================================
-  # Stop type constants (yes they are constants you don't need to check):
-  # =========================================================================
-  
   INDEX_NAME = "#{Rails.application.class.parent_name.downcase}_#{Rails.env.to_s.downcase}_stops"
 
   # =========================================================================
