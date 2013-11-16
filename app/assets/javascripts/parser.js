@@ -250,7 +250,7 @@ Parsers.nextbus = function(content) {
 |----------------------------------------------------------------------------------------------------
 */
 
-Parsers.mn_niceride = function(content) {
+Parsers.pbsbikes = function(content) {
   var data = {
     template: 'nice_ride_template',
     content: content

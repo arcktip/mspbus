@@ -1,12 +1,11 @@
 class RealtimeController < ApplicationController
   respond_to :xml, :json
 
-  def niceride
-    url = 'https://secure.niceridemn.org/data2/bikeStations.xml'
-    response = HTTParty.get(url)
-    response = MultiXml.parse(response.body)
-    stops = response['stations']['station'].select { |station| station['id'] == "#{params[:stop_id]}" }
-    respond_with(stops.to_json)
+  def pbsbikes
+    puts "Looking for bike stop #{params[:source_id]}-#{params[:stop_id]}"
+    puts params.to_json
+    puts $redis.get("#{params[:source_id]}-#{params[:stop_id]}")
+    respond_with($redis.get("#{params[:source_id]}-#{params[:stop_id]}"))
   end
 
   def car2go

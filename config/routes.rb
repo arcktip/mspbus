@@ -31,7 +31,7 @@ OmgTransit::Application.routes.draw do
   post '/voice_respond'           => 'home#voice_respond'
   
   # realtime apis
-  get  'realtime/niceride'        => 'realtime#niceride'
+  get  'realtime/pbsbikes'        => 'realtime#pbsbikes'
   get  'realtime/car2go/:id'      => 'realtime#car2go'
   get  'realtime/amtrak'          => 'realtime#amtrak'
 

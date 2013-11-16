@@ -29,7 +29,6 @@ every 5.minutes do
   # Reload Car2go stops
   rake "omgtransit:reload_car2go", :environment => "#{Rails.env.to_s.downcase}"
 
-  # When in season, reload NiceRide
-  # rake "omgtransit:reload_nicerice RAILS_ENV=#{Rails.env.to_s.downcase}"
-
+  # Update PBS Bike Share data
+  rake "omgtransit:update_pbsbike_info RAILS_ENV=#{Rails.env.to_s.downcase}"
 end
