@@ -31,4 +31,6 @@ every 5.minutes do
 
   # Update PBS Bike Share data
   rake "omgtransit:update_pbsbike_info RAILS_ENV=#{Rails.env.to_s.downcase}"
+
+  rake "omgtransit:update_bcycle_info RAILS_ENV=#{Rails.env.to_s.downcase}"
 end

@@ -11,6 +11,8 @@ ST_BIKE  =2
 ST_CAR   =3
 ST_TRAIN =4
 
+Source.delete_all()
+
 [
  {
     id: 1, 
@@ -154,6 +156,14 @@ ST_TRAIN =4
     url:          '/realtime/pbsbikes?source_id=18&stop_id={stop_id}&format=json&parser=pbsbikes',
     stopdata:     'https://www.we-cycle.org/pbsc/stations.php/',
     dataparser:   'pbsbikes_json',
+    transit_type: ST_BIKE
+ },
+ { #Bcycle Bicycle Share (covers _many_ cities) TODO: Give this its own parser at some point
+    id: 19, 
+    name:         "Bcycle", 
+    url:          '/realtime/bcycle?source_id=19&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'http://api.bcycle.com/services/mobile.svc/ListKiosks',
+    dataparser:   'bcycle',
     transit_type: ST_BIKE
  }
 ].each do |source|

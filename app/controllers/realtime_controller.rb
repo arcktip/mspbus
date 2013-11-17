@@ -8,6 +8,13 @@ class RealtimeController < ApplicationController
     respond_with($redis.get("#{params[:source_id]}-#{params[:stop_id]}"))
   end
 
+  def bcycle
+    puts "Looking for bike stop #{params[:source_id]}-#{params[:stop_id]}"
+    puts params.to_json
+    puts $redis.get("#{params[:source_id]}-#{params[:stop_id]}")
+    respond_with($redis.get("#{params[:source_id]}-#{params[:stop_id]}"))
+  end
+
   def car2go
     respond_with(Stop.get_stop_by_id(params))
   end

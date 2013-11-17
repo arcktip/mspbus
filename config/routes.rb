@@ -32,6 +32,7 @@ OmgTransit::Application.routes.draw do
   
   # realtime apis
   get  'realtime/pbsbikes'        => 'realtime#pbsbikes'
+  get  'realtime/bcycle'          => 'realtime#bcycle'
   get  'realtime/car2go/:id'      => 'realtime#car2go'
   get  'realtime/amtrak'          => 'realtime#amtrak'
 
