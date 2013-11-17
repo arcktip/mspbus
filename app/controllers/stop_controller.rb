@@ -1,7 +1,11 @@
 class StopController < ApplicationController
   def show
     source_id = Source.where({ name: params[:source] }).first.id
-    @id = "#{source_id}-#{params[:id]}"
+    if not params[:contract]
+      @id = "#{source_id}-#{params[:id]}"
+    else
+      @id = "#{source_id}-#{params[:contract]}/#{params[:id]}"
+    end
 
     @stop = Stop.get_stop_by_id({ :id => @id }).results.first
     @lat = @stop.location[1]
