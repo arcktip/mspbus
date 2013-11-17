@@ -20,6 +20,10 @@ var config = {
     4: {
       icon:'/assets/train-icon.svg',
       hover:'/assets/train-icon-hover.svg'
+    },
+    5: {
+      icon:'/assets/airport.svg',
+      hover:'/assets/airport-hover.svg'
     }
   },
   icons: {

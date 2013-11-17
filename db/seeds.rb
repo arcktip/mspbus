@@ -6,10 +6,11 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-ST_BUS   =1
-ST_BIKE  =2
-ST_CAR   =3
-ST_TRAIN =4
+ST_BUS     =1
+ST_BIKE    =2
+ST_CAR     =3
+ST_TRAIN   =4
+ST_AIRPORT =5
 
 Source.delete_all()
 
@@ -221,6 +222,14 @@ Source.delete_all()
     stopdata:     'http://dynamisch.citybikewien.at/citybike_xml.php',
     dataparser:   'gewista_citybike',
     transit_type: ST_BIKE 
+ },
+ { #All airports everywhere
+    id: 27, 
+    name:         "air",
+    url:          '/realtime/airport?stop_id={stop_id}&format=json&parser=airport',
+    stopdata:     'https://api.flightstats.com/flex/airports/rest/v1/json/active?appId=8fe7e679&appKey=5cd7c987bd942a9b7ea86ad17b13243b',
+    dataparser:   'flightstats',
+    transit_type: ST_AIRPORT
  }
 ].each do |source|
   Source.find_or_create_by_name(
