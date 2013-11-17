@@ -165,6 +165,62 @@ Source.delete_all()
     stopdata:     'http://api.bcycle.com/services/mobile.svc/ListKiosks',
     dataparser:   'bcycle',
     transit_type: ST_BIKE
+ },
+ { #Montreal Bike Share
+    id: 20, 
+    name:         "BixiMontreal", 
+    url:          '/realtime/pbsbikes?source_id=20&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://montreal.bixi.com/data/bikeStations.xml',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE 
+ },
+ { #London, UK Bike Share
+    id: 21, 
+    name:         "BarclaysCycleHire", 
+    url:          '/realtime/pbsbikes?source_id=21&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'http://www.tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE 
+ },
+ { #Ottawa, ON, Canada Bike Share
+    id: 22, 
+    name:         "CapitalBixi", 
+    url:          '/realtime/pbsbikes?source_id=22&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://capital.bixi.com/data/bikeStations.xml',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE 
+ },
+ { #Toronto, ON, Canada Bike Share
+    id: 23, 
+    name:         "BixiToronto", 
+    url:          '/realtime/pbsbikes?source_id=23&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://toronto.bixi.com/data/bikeStations.xml',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE 
+ },
+ { #Melbourne, Australia Bike Share
+    id: 24, 
+    name:         "MelbourneBikeShare", 
+    url:          '/realtime/pbsbikes?source_id=24&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'http://www.melbournebikeshare.com.au/stationmap/data',
+    dataparser:   'pbsbikes_xml',
+    transit_type: ST_BIKE 
+ },
+ { #Melbourne, Australia Bike Share
+    id: 25, 
+    name:         "CycloCity", 
+    url:          '/realtime/pbsbikes?source_id=25&stop_id={contract}/{stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'https://api.jcdecaux.com/vls/v1/contracts?apiKey=6a532d98e0ec45b44c8007d1d342d3abd44ecfcc',
+    dataparser:   'cyclocity',
+    transit_type: ST_BIKE 
+ },
+ { #Vienna, Austria City Bike Share
+    id: 26, 
+    name:         "CitybikeWien", 
+    url:          '/realtime/pbsbikes?source_id=26&stop_id={stop_id}&format=json&parser=pbsbikes',
+    stopdata:     'http://dynamisch.citybikewien.at/citybike_xml.php',
+    dataparser:   'gewista_citybike',
+    transit_type: ST_BIKE 
  }
 ].each do |source|
   Source.find_or_create_by_name(
