@@ -109,7 +109,6 @@ GEM
     json (1.8.0)
     jwt (0.1.8)
       multi_json (>= 1.5)
-    libv8 (3.11.8.17)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -188,7 +187,8 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     redis (3.0.6)
-    ref (1.0.5)
+    redis-namespace (1.3.2)
+      redis (~> 3.0.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec-core (2.14.4)
@@ -214,9 +214,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    therubyracer (0.12.0)
-      libv8 (~> 3.16.14.0)
-      ref
     thor (0.18.1)
     tilt (1.4.1)
     tire (0.6.1)
@@ -271,7 +268,6 @@ DEPENDENCIES
   rspec-rails
   rvm-capistrano
   sass-rails (~> 3.2.3)
-  therubyracer
   tire
   uglifier (>= 1.0.3)
   whenever
