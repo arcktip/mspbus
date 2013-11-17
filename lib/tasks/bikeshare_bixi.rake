@@ -32,7 +32,7 @@ namespace :omgtransit do
       updated   = stop.xpath('latestUpdateTime').text.to_i/1000 #Convert timestamp to seconds
 
       #If we haven't heard from a station in more than a week, remove it.
-      if Time.now.getutc.to_i-updated>3600*24*7
+      if updated>0 and Time.now.getutc.to_i-updated>3600*24*7
         puts "Ignoring stop #{stop_id} as it has not recently been updated."
         next
       end
