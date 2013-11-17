@@ -49,9 +49,6 @@ namespace :omgtransit do
     data=HTTParty.get(source.stopdata).body
     data=JSON.parse(data)
 
-    puts 'Clearing old data'
-    Stop.delete_all(["source_id = ?", source.id])
-
     puts 'Parsing bike stations'
     data.each do |stop|
       $redis.set "#{source.id}-#{stop['id']}", {:nbBikes=>"#{stop['nbBikes']}", :nbEmptyDocks=>"#{stop['nbEmptyDocks']}"}.to_json

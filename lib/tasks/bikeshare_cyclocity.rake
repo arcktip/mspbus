@@ -52,9 +52,6 @@ namespace :omgtransit do
       return
     end
 
-    puts 'Clearing old data'
-    Stop.delete_all(["source_id = ?", source.id])
-
     puts "Downloading contracts data for #{source.name}"
     data=HTTParty.get(source.stopdata).body
     data=JSON.parse(data)
