@@ -33,4 +33,10 @@ every 5.minutes do
   rake "omgtransit:update_pbsbike_info RAILS_ENV=#{Rails.env.to_s.downcase}"
 
   rake "omgtransit:update_bcycle_info RAILS_ENV=#{Rails.env.to_s.downcase}"
+
+  rake "omgtransit:update_cyclocity_info RAILS_ENV=#{Rails.env.to_s.downcase}"
+
+  rake "omgtransit:update_gewista_citybike_info RAILS_ENV=#{Rails.env.to_s.downcase}"
+
+  rake "omgtransit:update_bikeshare_melbourne_info RAILS_ENV=#{Rails.env.to_s.downcase}"
 end
