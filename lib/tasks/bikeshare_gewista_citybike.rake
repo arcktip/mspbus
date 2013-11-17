@@ -51,9 +51,6 @@ namespace :omgtransit do
     puts "Downloading stops data for #{source.name}"
     data=Nokogiri::XML(HTTParty.get(source.stopdata).body)
 
-    puts 'Clearing old data'
-    Stop.delete_all(["source_id = ?", source.id])
-
     puts 'Parsing bike stations'
     data.xpath('//station').each do |stop|
       stop_id      = stop.xpath('id'  ).text
