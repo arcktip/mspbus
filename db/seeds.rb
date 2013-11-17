@@ -203,10 +203,10 @@ Source.delete_all()
     name:         "MelbourneBikeShare", 
     url:          '/realtime/pbsbikes?source_id=24&stop_id={stop_id}&format=json&parser=pbsbikes',
     stopdata:     'http://www.melbournebikeshare.com.au/stationmap/data',
-    dataparser:   'pbsbikes_xml',
+    dataparser:   'bikeshare_melbourne',
     transit_type: ST_BIKE 
  },
- { #Melbourne, Australia Bike Share
+ { #France, all of it.
     id: 25, 
     name:         "CycloCity", 
     url:          '/realtime/pbsbikes?source_id=25&stop_id={contract}/{stop_id}&format=json&parser=pbsbikes',
