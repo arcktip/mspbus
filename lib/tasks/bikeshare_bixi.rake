@@ -163,7 +163,7 @@ namespace :omgtransit do
 
 
   task :load_pbsbikes => :environment do
-    sources = Source.where('transit_type=2') #Get all bike shares
+    sources = Source.where("dataparser LIKE ?","pbsbikes%")
     sources.each do |source|
       if    source.dataparser=='pbsbikes_xml'
         load_pbsbikes_xml(source.name)
@@ -177,7 +177,7 @@ namespace :omgtransit do
 
 
   task :update_pbsbike_info => :environment do
-    sources = Source.where('transit_type=2') #Get all bike shares
+    sources = Source.where("dataparser LIKE ?","pbsbikes%")
     sources.each do |source|
       if    source.dataparser=='pbsbikes_xml'
         load_pbsbike_info_xml(source.name)
