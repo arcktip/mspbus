@@ -3,6 +3,9 @@ namespace :omgtransit do
   require 'httparty'
   require 'json'
 
+  #TODO: Add warnings if various of the fields we're trying to add are missing,
+  #this way we can contribute to QC of the incoming data
+
   def load_pbsbikes_xml(which_bikes)
     source = Source.find_by_name(which_bikes)
     if source.nil?
