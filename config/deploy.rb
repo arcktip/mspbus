@@ -17,6 +17,8 @@ set :group_writable, true
 default_run_options[:pty] = true
 set :ssh_options, { :forward_agent => true }
 
+set :git_shallow_clone, "1"
+
 desc "Run on development server" 
 task :onlinedev do
   set :branch,       "login"
