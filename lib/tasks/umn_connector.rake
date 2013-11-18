@@ -49,7 +49,6 @@ namespace :omgtransit do
       def initialize(stop)
         @xml_data    = stop
         @stop_id     = xml_data.attributes['stopId']
-                puts  @stop_id
         @title       = xml_data.attributes['title']
         @short_title = xml_data.attributes['shortTitle']
         @latitude    = xml_data.attributes['lat']
