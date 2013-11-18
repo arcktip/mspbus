@@ -15,16 +15,19 @@ var HomeView = Backbone.View.extend({
     this.view_table = this.$el.find('#view-table');
     this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
+    this.view_about = this.$el.find('#view-about');
 
     // Buttons
     this.view_table_btn = $('#view-table-btn');
     this.view_map_btn   = $('#view-map-btn');
     this.view_route_btn = $('#view-route-btn');
+    this.view_about_btn = $('#view-about-btn');
 
     // Events
     this.view_table_btn.on('click', this.show_table);
     this.view_map_btn.on  ('click', this.show_map);
     this.view_route_btn.on('click', this.show_route);
+    this.view_about_btn.on('click', this.show_about);
 
     this.update_screen_size();
 
@@ -50,6 +53,8 @@ var HomeView = Backbone.View.extend({
       this.show_map();
     } else if ( view_state === 'route-list-item') {
       this.show_route();
+    } else if ( view_state === 'about-view') {
+      this.show_about();
     } else {
       this.show_table();
     }
@@ -80,6 +85,10 @@ var HomeView = Backbone.View.extend({
 
   show_table: function() {
     this.swap_view( this.view_table, this.view_table_btn, 'table-list-item' );
+  },
+
+  show_about: function() {
+    this.swap_view( this.view_about, this.view_about_btn, 'about-view' );
   },
 
   show_map: function() {

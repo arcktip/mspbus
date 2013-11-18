@@ -154,6 +154,12 @@
   text-align: center;
 }
 
+
+/* =====================================
+    About Page
+========================================*/
+#view-about h3 {margin-top:1em}
+
 .prof {
   display:inline-block;
   width:250px;
@@ -163,7 +169,16 @@
   font-weight:bold;
 }
 
-.prof img {
+.aboutprof {
+  display:inline-block;
+  width:120px;
+  height:120px;
+  text-align:center;
+  font-size:80%;
+  font-weight:bold;
+}
+
+.prof img, .aboutprof img {
   border-radius:20px;
   margin-bottom:5px;
 }

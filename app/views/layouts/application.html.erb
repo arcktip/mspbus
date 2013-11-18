@@ -42,15 +42,6 @@
 <body>
   <%= render('shared/sidebar') %>
   <%= render('shared/navbar') %>
-  <div class="modal hide fade" id="confused_modal">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3>Confused?</h3>
-    </div>
-    <div class="modal-body">
-      <%= render 'shared/legend' %>
-    </div>
-  </div>
   <div class="navbar-secondary">
     <div class="container clearfix">
       <a id="view-table-btn" href="/#table-list-item" class="pull-left" title="Table view of nearby stops">
@@ -66,7 +57,7 @@
       <a id="fav-list-item" href="/fav" class="pull-right" title="My favorite stops">
         <i class="icon-star"></i>
       </a>
-      <a id="btn-help"      href="#"    class="pull-right" title="Show help information">
+      <a id="view-about-btn" href="/#about-view" class="pull-right" title="Show help information">
         <i class="icon-info-sign"></i>
       </a>
     </div>
@@ -90,8 +81,6 @@
   ga('create', 'UA-41367617-3', 'omgtransit.com'); // Updated 9/22
   ga('send', 'pageview');
 
-  function show_confused() { $("#confused_modal").modal('show'); }
-  $("#btn-help").click(show_confused);
   $("#confused_modal").click(function(){$("#confused_modal").modal('hide');});
 </script>
 
