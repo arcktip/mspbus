@@ -52,11 +52,11 @@
 
         <h3>Click Stop Buttons</h3>
         <div style="position:relative;">
-          <%= image_tag("cursor-hand.png", :size=>"32x32", :alt => "Hand Cursor", :style => "position:absolute;left:300px;top:35px;z-index:10000;") %>
+          <%= image_tag("cursor-hand.png", :size=>"32x32", :alt => "Hand Cursor", :style => "position:absolute;left:310px;top:35px;z-index:10000;") %>
           <div class="btn stopbutton ">
             <a href="#" onclick="return false;">
               <div class="distance-label">1086 ft</div>
-              <span class="stop-name">Pleasant St &amp; Jones Hall</span>
+              <span class="stop-name">Nicollet Mall &amp; 7 St S</span>
               <div class="real-time clearfix">
                 <span class="label route-chip p0">
                   <i class="icon-arrow-right"></i> 
@@ -64,19 +64,14 @@
                   <span class="route-chip-italic">– 4 Min</span>
                 </span>
                 <span class="label route-chip p5">
-                  <i class="icon-arrow-right"></i> 
-                  <b>2C</b>
-                  <span class="route-chip-italic">– 11 Min</span>
+                  <i class="icon-arrow-up"></i> 
+                  <b>10H</b>
+                  <span class="route-chip-italic">– 11 Min <i title="Real-time data unavailable" class="icon-question-sign"></i></span>
                 </span>
-                <span class="label route-chip p20">
-                  <i class="icon-arrow-right"></i> 
-                  <b>16</b>
-                  <span class="route-chip-italic"></span>
-                </span>
-                <span class="label route-chip p20">
-                  <i class="icon-arrow-right"></i> 
-                  <b>16</b>
-                  <span class="route-chip-italic"></span>
+                <span class="label route-chip p12">
+                  <i class="icon-arrow-up"></i> 
+                  <b>11B</b>
+                  <span class="route-chip-italic">– 15 Min</span>
                 </span>
                 <span class="label route-chip p20">
                   <i class="icon-arrow-right"></i> 
@@ -89,7 +84,6 @@
         </div>
 
         <h3>For Detailed Information</h3>
-        <%= image_tag("about-detailed-stop.png", :size => "438x211", :alt => "Bus Icon", :style => "zoom:120%;") %>
 
         <div style="text-align:left">
           <div class="stop-header">
@@ -103,15 +97,15 @@
             </thead>
             <tbody class="result"> 
               <tr class="route-item p0" data-route="4">
-                <td class="route" nowrap=""><i class="icon-arrow-up"></i> 4B</td>
+                <td class="route" nowrap=""><i class="icon-arrow-right"></i> 2C</td>
                 <td><span class="desc" title="Johnson St / Silver Lk Vlg">Johnson St / Silver Lk Vlg</span></td>
-                <td class="time"><i>2 Min</i> </td>
+                <td class="time"><i>4 Min</i> </td>
               </tr>
              
               <tr class="route-item p5" data-route="10">
                 <td class="route" nowrap=""><i class="icon-arrow-up"></i> 10H</td>
                 <td><span class="desc" title="Central-51">Central-51</span></td>
-                <td class="time"><i>6 Min <i title="Real-time data unavailable" class="icon-question-sign"></i></i> </td>
+                <td class="time"><i>11 Min <i title="Real-time data unavailable" class="icon-question-sign"></i></i> </td>
               </tr>
              
               <tr class="route-item p12" data-route="11">
@@ -121,7 +115,7 @@
               </tr>
              
               <tr class="route-item p20" data-route="18">
-                <td class="route" nowrap=""><i class="icon-arrow-up"></i> 18</td>
+                <td class="route" nowrap=""><i class="icon-arrow-right"></i> 16</td>
                 <td><span class="desc" title="Downtown">Downtown</span></td>
                 <td class="time"><i>1:55</i> </td>
               </tr>
@@ -130,12 +124,6 @@
                 <td class="route" nowrap=""><i class="icon-arrow-up"></i> 10H</td>
                 <td><span class="desc" title="Central-51">Central-51</span></td>
                 <td class="time"><i>2:10</i> </td>
-              </tr>
-             
-              <tr class="route-item p20" data-route="18">
-                <td class="route" nowrap=""><i class="icon-arrow-up"></i> 18</td>
-                <td><span class="desc" title="Downtown">Downtown</span></td>
-                <td class="time"><i>4:50</i> </td>
               </tr>
 
             </tbody>
