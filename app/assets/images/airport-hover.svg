@@ -14,7 +14,7 @@
    inkscape:version="0.48.4 r9939"
    width="547.64618"
    height="547.64618"
-   sodipodi:docname="airport.svg"
+   sodipodi:docname="airport-hover.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.1">
   <metadata
@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <dc:creator>
           <cc:Agent>
             <dc:title>Mohamed Ibrahim</dc:title>
@@ -112,7 +112,7 @@
      id="base"
      showgrid="false"
      inkscape:zoom="0.43901235"
-     inkscape:cx="-20.866076"
+     inkscape:cx="-438.84976"
      inkscape:cy="238.37958"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -129,7 +129,7 @@
      inkscape:connector-curvature="0" />
   <path
      d="m 482.14809,547.6462 c 36.12924,0 65.49811,-29.31345 65.49811,-65.4427 l 0,-416.816221 C 547.6462,29.258039 518.27733,-1e-6 482.14809,-1e-6 l -416.81622,0 C 29.20262,-1e-6 0,29.258039 0,65.387279 L 0,482.2035 c 0,36.12925 29.20263,65.4427 65.33187,65.4427 z"
-     style="fill:#ff8c00;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     style="fill:#ffc200;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="path6810"
      inkscape:connector-curvature="0" />
   <path
