@@ -20,12 +20,6 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 		<priority>0.7</priority>
 	</url>
 	<url>
-		<loc>http://www.omgtransit.com/legal</loc>
-		<lastmod>2013-11-10</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
-	</url>
-	<url>
 		<loc>http://www.omgtransit.com/feedback</loc>
 		<lastmod>2013-11-10</lastmod>
 		<changefreq>daily</changefreq>
