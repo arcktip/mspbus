@@ -2,7 +2,10 @@
 <h2>Forgot your password?</h2>
 
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= devise_error_messages! %>
+
+  <% unless resource.errors.full_messages.empty? %>
+    <div class="alert alert-danger">Error: <%= resource.errors.full_messages.first %></div>
+  <% end %>
 
   <div>
   <%= f.email_field :email, :autofocus => true, :placeholder => 'Email' %></div>
