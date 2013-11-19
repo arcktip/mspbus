@@ -17,7 +17,6 @@ OmgTransit::Application.routes.draw do
   get  '/fav'                     => 'home#fav'
   post '/favlist'                 => 'home#favlist'
   get  'flat_route/:id'           => 'flat_route#show'
-  get  'legal'                    => 'home#legal'
   get  'route/:id'                => 'route#show'
   post '/sms'                     => 'home#sms'
   get  'stop/bounds'              => 'stop#bounds'
