@@ -39,7 +39,8 @@ var MapView = Backbone.View.extend({
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       panControl: false,
       mapTypeControl: false,
-      zoomControlOptions: { position: google.maps.ControlPosition.LEFT_CENTER }
+      zoomControlOptions: { position: google.maps.ControlPosition.LEFT_CENTER },
+      streetViewControl: false
     };
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), map_options);
