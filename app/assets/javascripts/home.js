@@ -15,19 +15,20 @@ var HomeView = Backbone.View.extend({
     this.view_table = this.$el.find('#view-table');
     this.view_map   = this.$el.find('#view-map');
     this.view_route = this.$el.find('#view-route');
-    this.view_about = this.$el.find('#view-about');
+    this.view_help  = this.$el.find('#view-help');
+    this.view_legal = this.$el.find('#view-legal');
 
     // Buttons
     this.view_table_btn = $('#view-table-btn');
     this.view_map_btn   = $('#view-map-btn');
     this.view_route_btn = $('#view-route-btn');
-    this.view_about_btn = $('#view-about-btn');
+    this.view_help_btn  = $('#view-help-btn');
 
     // Events
     this.view_table_btn.on('click', this.show_table);
     this.view_map_btn.on  ('click', this.show_map);
     this.view_route_btn.on('click', this.show_route);
-    this.view_about_btn.on('click', this.show_about);
+    this.view_help_btn.on ('click', this.show_help);
 
     this.update_screen_size();
 
@@ -53,8 +54,10 @@ var HomeView = Backbone.View.extend({
       this.show_map();
     } else if ( view_state === 'route-list-item') {
       this.show_route();
-    } else if ( view_state === 'about-view') {
-      this.show_about();
+    } else if ( view_state === 'help-view') {
+      this.show_help();
+    } else if ( view_state === 'legalese-view') {
+      this.show_legalese();
     } else {
       this.show_table();
     }
@@ -64,13 +67,15 @@ var HomeView = Backbone.View.extend({
     
     if ( this.current_view ) {
       this.current_view.hide();
-      this.current_view_btn.removeClass('active');
+      if (this.current_view_btn)
+        this.current_view_btn.removeClass('active');
     }
 
     this.current_view = view;
     this.current_view_btn = view_btn;
     
-    view_btn.addClass('active');
+    if (view_btn)
+      view_btn.addClass('active');
     view.show();
 
     $.cookie('home_current_view', cookie_key);
@@ -87,8 +92,8 @@ var HomeView = Backbone.View.extend({
     this.swap_view( this.view_table, this.view_table_btn, 'table-list-item' );
   },
 
-  show_about: function() {
-    this.swap_view( this.view_about, this.view_about_btn, 'about-view' );
+  show_help: function() {
+    this.swap_view( this.view_help, this.view_help_btn, 'help-view' );
   },
 
   show_map: function() {
@@ -100,6 +105,10 @@ var HomeView = Backbone.View.extend({
   show_route: function(e) {
     this.swap_view( this.view_route, this.view_route_btn, 'route-list-item' );
     this.init_map();
+  },
+
+  show_legalese: function(e) {
+    this.swap_view( this.view_legal, null, 'view-legal' );
   },
 
   resize_helper: function() {
@@ -125,7 +134,8 @@ var HomeView = Backbone.View.extend({
 
 });
 
+var home_view;
 $(document).ready(function() {
-  var home_view = new HomeView();
+  home_view = new HomeView();
   $(window).resize( $.throttle( 100, home_view.resize_helper.bind(home_view) ) );
 });

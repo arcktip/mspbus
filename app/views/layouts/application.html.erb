@@ -57,7 +57,7 @@
       <a id="fav-list-item" href="/fav" class="pull-right" title="My favorite stops">
         <i class="icon-star"></i>
       </a>
-      <a id="view-about-btn" href="/#about-view" class="pull-right" title="Show help information">
+      <a id="view-help-btn" href="/#help-view" class="pull-right" title="Show help information">
         <i class="icon-info-sign"></i>
       </a>
     </div>
@@ -67,7 +67,7 @@
     
     <%= yield %>
     <div class="footer">
-      <a href="/about">About</a> &bull; <a href="/legal">Legal</a> &bull; <a href="#" onClick="show_confused()">Help</a> &bull; <a href="/feedback">Feedback</a>
+      <a href="/about">About</a> &bull; <a href="/#legalese-view" onClick="home_view.show_legalese()">Legal</a> &bull; <a href="/#help-view" onClick="home_view.show_help()">Help</a> &bull; <a href="/feedback">Feedback</a>
     </div>
   </div>
   <%= yield :javascript %>
